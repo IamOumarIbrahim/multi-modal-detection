@@ -12,6 +12,7 @@ from mmsar.annotation.label_studio_config import generate_label_studio_config
 from mmsar.annotation.label_studio_client import LabelStudioManager
 from mmsar.annotation.rgb_to_thermal_copy import copy_annotations_rgb_to_thermal
 from mmsar.training.train import run_training, DEFAULT_DATA_CONFIG, DEFAULT_HYPERPARAMS_PATH
+from mmsar.reporting.fill_readme_tables import fill_readme_tables
 
 app = typer.Typer(
     name="mmsar",
@@ -137,6 +138,41 @@ def train(
         typer.echo(f"Dry run successful for model '{model}' with batch size {result['batch']}.")
     else:
         typer.echo(f"Training completed for model '{model}'.")
+
+
+@app.command(name="fill-results")
+def fill_results(
+    metrics_file: Optional[Path] = typer.Option(None, "--metrics", "-m", help="Path to JSON metrics file."),
+    readme: Path = typer.Option(Path("README.md"), "--readme", "-r", help="Path to README.md file."),
+    dry_run: bool = typer.Option(False, "--dry-run", flag_value=True, help="Dry run: print diff without modifying README."),
+    yes: bool = typer.Option(False, "--yes", "-y", flag_value=True, help="Explicit confirmation to write results to README.md."),
+) -> None:
+    """Fill TBD cells in README.md results tables from metrics file."""
+    metrics_data = {}
+    if metrics_file and metrics_file.exists():
+        metrics_data = json.loads(metrics_file.read_text(encoding="utf-8"))
+
+    if not dry_run and not yes:
+        confirmed = typer.confirm("Are you sure you want to write results to README.md?")
+        if not confirmed:
+            typer.echo("Aborted by user.")
+            raise typer.Abort()
+        confirm_write = True
+    else:
+        confirm_write = yes
+
+    diff = fill_readme_tables(
+        readme_path=readme,
+        metrics=metrics_data,
+        confirm=confirm_write,
+        dry_run=dry_run,
+    )
+
+    if dry_run:
+        typer.echo("Dry run results diff:")
+        typer.echo(diff if diff else "No changes proposed.")
+    elif confirm_write:
+        typer.echo(f"Successfully updated results in {readme}")
 
 
 if __name__ == "__main__":
