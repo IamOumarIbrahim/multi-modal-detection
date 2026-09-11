@@ -2,3 +2,11 @@ AGENT.md
 docs/manuscript/official_template/
 prompt.md
 AGENT/
+data/raw/**/*.mp4
+data/raw/**/*.mov
+data/processed/**
+!data/processed/.gitkeep
+*.pt
+.venv/
+__pycache__/
+*.egg-info/

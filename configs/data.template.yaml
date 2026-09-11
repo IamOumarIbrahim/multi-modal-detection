@@ -1,0 +1,8 @@
+# Ultralytics dataset configuration template for MMSAR
+path: data/processed
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: Person_Detected

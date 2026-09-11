@@ -1,0 +1,62 @@
+{
+  "desert": {
+    "positive": {
+      "condition": "desert",
+      "scenario": "positive",
+      "count": 5,
+      "target": 5
+    },
+    "hard_negative": {
+      "condition": "desert",
+      "scenario": "hard_negative",
+      "count": 3,
+      "target": 5
+    },
+    "clear_negative": {
+      "condition": "desert",
+      "scenario": "clear_negative",
+      "count": 0,
+      "target": 5
+    }
+  },
+  "forest": {
+    "positive": {
+      "condition": "forest",
+      "scenario": "positive",
+      "count": 0,
+      "target": 5
+    },
+    "hard_negative": {
+      "condition": "forest",
+      "scenario": "hard_negative",
+      "count": 0,
+      "target": 5
+    },
+    "clear_negative": {
+      "condition": "forest",
+      "scenario": "clear_negative",
+      "count": 0,
+      "target": 5
+    }
+  },
+  "altitude": {
+    "positive": {
+      "condition": "altitude",
+      "scenario": "positive",
+      "count": 0,
+      "target": 5
+    },
+    "hard_negative": {
+      "condition": "altitude",
+      "scenario": "hard_negative",
+      "count": 0,
+      "target": 5
+    },
+    "clear_negative": {
+      "condition": "altitude",
+      "scenario": "clear_negative",
+      "count": 0,
+      "target": 5
+    }
+  }
+}
