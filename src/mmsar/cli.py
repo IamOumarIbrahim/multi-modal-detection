@@ -11,7 +11,13 @@ from mmsar.preprocessing.frame_sampler import sample_frames_from_manifest
 from mmsar.annotation.label_studio_config import generate_label_studio_config
 from mmsar.annotation.label_studio_client import LabelStudioManager
 from mmsar.annotation.rgb_to_thermal_copy import copy_annotations_rgb_to_thermal
-from mmsar.training.train import run_training, DEFAULT_DATA_CONFIG, DEFAULT_HYPERPARAMS_PATH
+from mmsar.training.train import (
+    run_training,
+    run_training_plan,
+    get_model_plan,
+    DEFAULT_DATA_CONFIG,
+    DEFAULT_HYPERPARAMS_PATH,
+)
 from mmsar.reporting.fill_readme_tables import fill_readme_tables
 
 app = typer.Typer(
@@ -122,22 +128,41 @@ def import_annotations(
 
 @app.command()
 def train(
-    model: str = typer.Option("yolo11n.yaml", "--model", help="YOLO architecture YAML (e.g. yolo11n.yaml, yolo26n.yaml)."),
+    model: Optional[str] = typer.Option(
+        None,
+        "--model",
+        "-m",
+        help="Specific YOLO architecture YAML to train (e.g. yolo11n.yaml, yolo26n.yaml). If omitted, uses plan.",
+    ),
+    include_optional: bool = typer.Option(
+        False,
+        "--include-optional",
+        "-o",
+        flag_value=True,
+        help="Include optional models (e.g. YOLO26n) in training plan if time permits.",
+    ),
     data: Path = typer.Option(DEFAULT_DATA_CONFIG, "--data", help="Dataset YAML configuration path."),
     hyperparams: Path = typer.Option(DEFAULT_HYPERPARAMS_PATH, "--hyperparams", help="Hyperparameters YAML path."),
     dry_run: bool = typer.Option(False, "--dry-run", flag_value=True, help="Dry run: validate config and instantiate model without training."),
 ) -> None:
-    """Train YOLO detector or run a dry-run validation."""
-    result = run_training(
-        model_arch=model,
+    """Train YOLO detector or run a dry-run validation (YOLO11n primary, YOLO26n optional)."""
+    if model:
+        models_to_run = [model]
+    else:
+        models_to_run = get_model_plan(include_optional=include_optional, hyperparams_path=hyperparams)
+
+    results = run_training_plan(
+        model_list=models_to_run,
         data_config=data,
         hyperparams_path=hyperparams,
         dry_run=dry_run,
     )
-    if dry_run:
-        typer.echo(f"Dry run successful for model '{model}' with batch size {result['batch']}.")
-    else:
-        typer.echo(f"Training completed for model '{model}'.")
+    for res in results:
+        m_name = res["model_arch"]
+        if dry_run:
+            typer.echo(f"Dry run successful for model '{m_name}' with batch size {res['batch']}.")
+        else:
+            typer.echo(f"Training completed for model '{m_name}'.")
 
 
 @app.command(name="fill-results")

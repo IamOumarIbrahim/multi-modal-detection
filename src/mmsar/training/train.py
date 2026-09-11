@@ -20,6 +20,47 @@ def load_hyperparams(path: Union[str, Path] = DEFAULT_HYPERPARAMS_PATH) -> dict[
         return yaml.safe_load(f) or {}
 
 
+def get_model_plan(
+    include_optional: Optional[bool] = None,
+    hyperparams_path: Union[str, Path] = DEFAULT_HYPERPARAMS_PATH,
+) -> list[str]:
+    """Determine list of model architectures to train.
+
+    YOLO11n is always the primary model. YOLO26n is optional and only
+    included if include_optional is True or if configured in hyperparams.yaml.
+
+    Args:
+        include_optional: Explicit override. If True, includes optional models.
+                          If False, excludes optional models. If None, reads config.
+        hyperparams_path: Path to hyperparams.yaml.
+
+    Returns:
+        List of model architecture filenames (e.g. ['yolo11n.yaml'] or ['yolo11n.yaml', 'yolo26n.yaml']).
+    """
+    try:
+        hyperparams = load_hyperparams(hyperparams_path)
+    except FileNotFoundError:
+        hyperparams = {}
+
+    primary = str(hyperparams.get("primary_model", "yolo11n.yaml"))
+    optional_models = hyperparams.get("optional_models", ["yolo26n.yaml"])
+    if isinstance(optional_models, str):
+        optional_models = [optional_models]
+
+    if include_optional is None:
+        include = bool(hyperparams.get("include_optional", False))
+    else:
+        include = bool(include_optional)
+
+    plan = [primary]
+    if include:
+        for opt in optional_models:
+            if opt not in plan:
+                plan.append(opt)
+
+    return plan
+
+
 def run_training(
     model_arch: str = "yolo11n.yaml",
     data_config: Union[str, Path] = DEFAULT_DATA_CONFIG,
@@ -91,3 +132,42 @@ def run_training(
                 current_batch = new_batch
             else:
                 raise
+
+
+def run_training_plan(
+    model_list: Optional[list[str]] = None,
+    include_optional: Optional[bool] = None,
+    data_config: Union[str, Path] = DEFAULT_DATA_CONFIG,
+    hyperparams_path: Union[str, Path] = DEFAULT_HYPERPARAMS_PATH,
+    dry_run: bool = False,
+    min_batch: int = 1,
+) -> list[dict[str, Any]]:
+    """Run training for a sequence of models specified by plan.
+
+    Args:
+        model_list: Optional explicit list of model architecture strings.
+                    If omitted, resolved via get_model_plan().
+        include_optional: Flag passed to get_model_plan if model_list is None.
+        data_config: Path to dataset YAML configuration.
+        hyperparams_path: Path to hyperparams.yaml.
+        dry_run: If True, executes dry run validation.
+        min_batch: Minimum allowable batch size.
+
+    Returns:
+        List of result summaries, one per model executed.
+    """
+    if model_list is None:
+        model_list = get_model_plan(include_optional=include_optional, hyperparams_path=hyperparams_path)
+
+    results: list[dict[str, Any]] = []
+    for arch in model_list:
+        res = run_training(
+            model_arch=arch,
+            data_config=data_config,
+            hyperparams_path=hyperparams_path,
+            dry_run=dry_run,
+            min_batch=min_batch,
+        )
+        results.append(res)
+    return results
+

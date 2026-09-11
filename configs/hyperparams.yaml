@@ -4,3 +4,10 @@ epochs: 100
 early_stopping: false
 imgsz: 640
 device: 0
+
+# Model configurations: YOLO11n is primary; YOLO26n is optional based on available time
+primary_model: "yolo11n.yaml"
+optional_models:
+  - "yolo26n.yaml"
+include_optional: false
+
