@@ -30,11 +30,21 @@
 ## Research
 
 ### Research Question
+How do different post-processing methods compare in reducing false alarms while maintaining reliable positive detections in lightweight object detection systems operating on synthetic multimodal search-and-rescue video data?
 
 ### Contribution
-This work contributes through the following: 
-1. Generation of synthetic multi-modal multi-scenario video dataset for training object detection models for search and rescue domain.
-2. Evaluation of Mamba-based post-processing for reliable alarm generation. Benhcmarked against single-mode raw confidence based alarm generation
+
+This work contributes the following:
+
+1. **A synthetic multimodal search-and-rescue video dataset** containing RGB and thermal video across desert, forest, and snow/altitude conditions, with positive, hard-negative, and clear-negative scenarios.
+
+2. **A multimodal object detection benchmark** using lightweight YOLO models to evaluate person detection across the generated RGB and thermal data.
+
+3. **A comparative evaluation of post-processing methods** for converting frame-level object detections into reliable alarm decisions, with emphasis on reducing false alarms.
+
+4. **An analysis of false-alarm reduction versus positive-detection reliability**, examining how different post-processing methods affect alarm generation rather than relying solely on frame-level detection metrics.
+
+5. **An evaluation of the practical implications of false detections** for downstream operations in autonomous search-and-rescue systems, including unnecessary bandwidth use and IoT operations.
 
 ### Methodology
 
@@ -65,11 +75,6 @@ Two primary YOLO-family lightweight object detection models are used:
 | **Hardware GPU** | Nvidia RTX 4060 |
 | **VRAM** | 8 GB |
 </div>
-WE WILL COMPARE RGB ONLY DETECTION, SO BASICALLY WE WILL SEE IF THE MODEL PRODUCES RELIABLE RESULTS WHILE ONLY TESTING RGB VIDEOS IF DETECTED THEN PRODUCE ALARM
-
-THEN WE WILL COMPARE RGB + THERMAL, SO WE WILL SEE IF THE MODDEDL PRODUCES RELIABLE RESULTS WHILE LOOKING AT ALL 3 MODES, CONSNEUSS STYLE IF 2 OR MORE AGREE PRODUCE AN ALARM
-
-THEN WE WILL COMPARE RGB+ THERMAL + MAMBA SEQUENCE WE WILL SEE IF THE MODDEDL PRODUCES RELIABLE RESULTS WHILE LOOKING AT THE 2 MODDES + HISTORY TRACKING, MAMBA 
 
 
 
@@ -123,14 +128,34 @@ The following table summarizes the video data properties:
 | -------------- | -----: |
 | **Bit depth** | 24-bit (8-bit/channel RGB) |
 | **Size** | 640 x 640 pixels |
-| **Sampling rate** | 10 frames per second |
+| **Sampling rate** | 8 frames per second |
 | **Crop coordinates (X)** | [320, 960] px (centered) |
 | **Crop coordinates (Y)** | [80, 720] px (bottom) |
 | **Compression** | H.264 |
 
 </div>
 
+
+
+
+
 ### Experiments
+
+#### Post-processing methods
+
+The following table summarizes the post-processing methods:
+
+<div align="center">
+
+| Category                                                  | Method                    | Requires Training? |
+| --------------------------------------------------------- | ------------------------- | ------------------ |
+| **Binary detections**                                     | Baseline                  | ❌ No               |
+|                                                           | 5-Frame History Tracking  | ❌ No               |
+| **Confidence signals**                                    | 5-Frame Moving Average    | ❌ No               |
+| **Signal processing**                                     | 5-Frame Median Filter     | ❌ No               |
+| **Learned temporal representations / State-space models** | Mamba-SSSM                | ✅ Yes              |
+
+</div>
 
 ### Results
 
@@ -154,4 +179,4 @@ For the conference manuscript itself, use:
  }
 ```
 ## Acknowledgments & License
-This work builds on [Ultralytics YOLO](https://github.com/ultralytics/ultralytics), [Label Studio](https://github.com/HumanSignal/label-studio). Code is licensed under [Apache License 2.0](LICENSE); third-party datasets and dependencies retain their own licenses.
+This work builds on [Ultralytics YOLO](https://github.com/ultralytics/ultralytics), [Label Studio](https://github.com/HumanSignal/label-studio). Code is licensed under [Apache License 2.0](LICENSE); third-party dependencies retain their own licenses.
