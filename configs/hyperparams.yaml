@@ -1,0 +1,6 @@
+# MMSAR Training Hyperparameters matching README.md Training Setting table
+batch: 32
+epochs: 100
+early_stopping: false
+imgsz: 640
+device: 0

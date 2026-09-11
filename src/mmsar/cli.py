@@ -11,6 +11,7 @@ from mmsar.preprocessing.frame_sampler import sample_frames_from_manifest
 from mmsar.annotation.label_studio_config import generate_label_studio_config
 from mmsar.annotation.label_studio_client import LabelStudioManager
 from mmsar.annotation.rgb_to_thermal_copy import copy_annotations_rgb_to_thermal
+from mmsar.training.train import run_training, DEFAULT_DATA_CONFIG, DEFAULT_HYPERPARAMS_PATH
 
 app = typer.Typer(
     name="mmsar",
@@ -116,6 +117,26 @@ def import_annotations(
         output_path=out_thermal,
     )
     typer.echo(f"Successfully converted {len(thermal_tasks)} annotations to {out_thermal}")
+
+
+@app.command()
+def train(
+    model: str = typer.Option("yolo11n.yaml", "--model", help="YOLO architecture YAML (e.g. yolo11n.yaml, yolo26n.yaml)."),
+    data: Path = typer.Option(DEFAULT_DATA_CONFIG, "--data", help="Dataset YAML configuration path."),
+    hyperparams: Path = typer.Option(DEFAULT_HYPERPARAMS_PATH, "--hyperparams", help="Hyperparameters YAML path."),
+    dry_run: bool = typer.Option(False, "--dry-run", flag_value=True, help="Dry run: validate config and instantiate model without training."),
+) -> None:
+    """Train YOLO detector or run a dry-run validation."""
+    result = run_training(
+        model_arch=model,
+        data_config=data,
+        hyperparams_path=hyperparams,
+        dry_run=dry_run,
+    )
+    if dry_run:
+        typer.echo(f"Dry run successful for model '{model}' with batch size {result['batch']}.")
+    else:
+        typer.echo(f"Training completed for model '{model}'.")
 
 
 if __name__ == "__main__":
