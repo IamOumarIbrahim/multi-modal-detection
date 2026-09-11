@@ -39,8 +39,8 @@ flowchart TD
     end
 
     subgraph Detectors ["Lightweight Detectors"]
-        YOLO_RGB["Lightweight YOLO\n(YOLO11n / YOLOv12n)"]
-        YOLO_Th["Lightweight YOLO\n(YOLO11n / YOLOv12n)"]
+        YOLO_RGB["Lightweight YOLO\n(YOLO11n / YOLO26n)"]
+        YOLO_Th["Lightweight YOLO\n(YOLO11n / YOLO26n)"]
     end
 
     subgraph Fusion ["Late Fusion Gate"]
@@ -100,14 +100,14 @@ This work contributes the following:
 
 Two primary YOLO-family lightweight object detection models are used:
 1. **YOLO11n** - Ultralytics' nano YOLO11 variant; optimized for real-time/edge speed and efficiency.
-2. **YOLOv12n** - nano attention-centric YOLOv12; uses Area Attention + R-ELAN for higher accuracy at similar speed.
+2. **YOLO26n** - Ultralytics' nano YOLO26 variant; uses an end-to-end architecture for real-time edge speed and efficiency.
 
 <div align="center">
 
 | Model | Params | GFLOPs |
 | :--- | :---: | :---: |
 | YOLO11n | TBD | TBD |
-| YOLOv12n | TBD | TBD |
+| YOLO26n | TBD | TBD |
 
 </div>
 
@@ -269,7 +269,7 @@ Evaluated frame-by-frame at $\tau$ on raw model outputs without temporal history
 | **YOLO11n** | RGB Stream ($c_{\text{RGB}}$) | TBD | TBD | TBD |
 |  | Thermal Stream ($c_{\text{Thermal}}$) | TBD | TBD | TBD |
 |  | **Late Fusion Gate ($s[n] = \max$)** | **TBD** | **TBD** | **TBD** |
-| **YOLOv12n** | RGB Stream ($c_{\text{RGB}}$) | TBD | TBD | TBD |
+| **YOLO26n** | RGB Stream ($c_{\text{RGB}}$) | TBD | TBD | TBD |
 |  | Thermal Stream ($c_{\text{Thermal}}$) | TBD | TBD | TBD |
 |  | **Late Fusion Gate ($s[n] = \max$)** | **TBD** | **TBD** | **TBD** |
 
@@ -284,7 +284,7 @@ Evaluated frame-by-frame at $\tau$ on raw model outputs without temporal history
 | | 5-Frame Moving Average | TBD | TBD | TBD | TBD |
 | | 5-Frame Median Filter | TBD | TBD | TBD | TBD |
 | | Mamba-SSSM | TBD | TBD | TBD | TBD |
-| **YOLOv12n** | Baseline | TBD | TBD | TBD | TBD |
+| **YOLO26n** | Baseline | TBD | TBD | TBD | TBD |
 | | 5-Frame History Tracking | TBD | TBD | TBD | TBD |
 | | 5-Frame Moving Average | TBD | TBD | TBD | TBD |
 | | 5-Frame Median Filter | TBD | TBD | TBD | TBD |
