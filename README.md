@@ -130,13 +130,13 @@ This continuous value $s[n]$ feeds directly into downstream post-processing befo
 
 ### Post-Processing Methods
 
-| Category | Method | Requires Training? | Formulation |
-| --- | --- | --- | --- |
-| **Binary detections** | Baseline | ❌ No | $y[n] = \begin{cases} 1, & s[n] \ge \tau \\ 0, & \text{otherwise} \end{cases}$ |
-|  | 5-Frame History Tracking | ❌ No | $y[n] = \begin{cases} 1, & \displaystyle\sum_{k=0}^{4} \mathbb{I}(s[n-k] \ge \tau) \ge 3 \\ 0, & \text{otherwise} \end{cases}$ |
-| **Confidence signals** | 5-Frame Moving Average | ❌ No | $\tilde{s}[n] = \frac{1}{5}\displaystyle\sum_{k=0}^{4} s[n-k], \quad y[n] = \mathbb{I}(\tilde{s}[n] \ge \tau)$ |
-| **Signal processing** | 5-Frame Median Filter | ❌ No | $\tilde{s}[n] = \text{median}(s[n], \dots, s[n-4]), \quad y[n] = \mathbb{I}(\tilde{s}[n] \ge \tau)$ |
-| **Learned temporal representations / State-space models** | Mamba-SSSM | ✅ Yes | Learned state-space sequence processing |
+| Category | Method | Requires Training? |
+| --- | --- | --- |
+| **Binary detections** | Baseline | ❌ No |
+|  | 5-Frame History Tracking | ❌ No |
+| **Confidence signals** | 5-Frame Moving Average | ❌ No |
+| **Signal processing** | 5-Frame Median Filter | ❌ No |
+| **Learned temporal representations / State-space models** | Mamba-SSSM | ✅ Yes |
 
 #### Baseline
 
