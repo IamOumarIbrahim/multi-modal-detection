@@ -1,5 +1,6 @@
 """MMSAR CLI Entrypoint."""
 
+import json
 from pathlib import Path
 from typing import Optional
 import typer
@@ -7,6 +8,9 @@ from mmsar import __version__
 from mmsar.manifest.store import load_manifest, DEFAULT_MANIFEST_PATH
 from mmsar.preprocessing.video_io import decimate_and_crop
 from mmsar.preprocessing.frame_sampler import sample_frames_from_manifest
+from mmsar.annotation.label_studio_config import generate_label_studio_config
+from mmsar.annotation.label_studio_client import LabelStudioManager
+from mmsar.annotation.rgb_to_thermal_copy import copy_annotations_rgb_to_thermal
 
 app = typer.Typer(
     name="mmsar",
@@ -76,6 +80,42 @@ def sample_frames(
         manifest_path=manifest,
     )
     typer.echo(f"Processed {summary['processed_videos']} videos, extracted {summary['total_frames']} frames to {dest}")
+
+
+@app.command(name="push-label-studio")
+def push_label_studio(
+    title: str = typer.Option("MMSAR Dataset", "--title", "-t", help="Label Studio project title."),
+    url: str = typer.Option("http://localhost:8080", "--url", "-u", help="Label Studio URL."),
+    api_key: str = typer.Option(..., "--api-key", "-k", help="Label Studio API key."),
+    frames_dir: Optional[Path] = typer.Option(None, "--frames-dir", "-f", help="Directory of frames to upload."),
+) -> None:
+    """Create a project in Label Studio and optionally import frames."""
+    manager = LabelStudioManager(base_url=url, api_key=api_key)
+    config = generate_label_studio_config()
+    project = manager.create_project(title=title, label_config=config)
+    proj_id = getattr(project, "id", None)
+    typer.echo(f"Created Label Studio project {proj_id}: {title}")
+
+    if frames_dir and frames_dir.exists():
+        image_files = sorted(frames_dir.glob("*.png")) + sorted(frames_dir.glob("*.jpg"))
+        task_ids = manager.import_image_tasks(project_id=proj_id, image_paths=image_files)
+        typer.echo(f"Imported {len(task_ids)} tasks into project {proj_id}")
+
+
+@app.command(name="import-annotations")
+def import_annotations(
+    rgb_export: Path = typer.Option(..., "--rgb-export", "-r", help="Path to exported RGB annotations JSON."),
+    mapping_file: Path = typer.Option(..., "--mapping", "-m", help="JSON file mapping RGB to Thermal frames."),
+    out_thermal: Path = typer.Option(..., "--out", "-o", help="Path for generated Thermal annotations JSON."),
+) -> None:
+    """Copy RGB bounding-box annotations onto corresponding Thermal frames."""
+    mapping = json.loads(mapping_file.read_text(encoding="utf-8"))
+    thermal_tasks = copy_annotations_rgb_to_thermal(
+        rgb_export_path=rgb_export,
+        thermal_frame_ids=mapping,
+        output_path=out_thermal,
+    )
+    typer.echo(f"Successfully converted {len(thermal_tasks)} annotations to {out_thermal}")
 
 
 if __name__ == "__main__":

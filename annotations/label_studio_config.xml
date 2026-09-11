@@ -1,0 +1,6 @@
+<View>
+  <Image name="image" value="$image"/>
+  <RectangleLabels name="label" toName="image">
+    <Label value="Person_Detected" background="#FF0000"/>
+  </RectangleLabels>
+</View>
