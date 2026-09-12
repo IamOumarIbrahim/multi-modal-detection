@@ -163,38 +163,43 @@ def split_episodes(
         series_name = m.group(1) if m else parent_id
         series_map.setdefault(series_name, []).append(parent_id)
 
+    # Deterministic Option B parent-video allocation ensuring balanced positive episodes
+    # Each split receives exactly 2 positive episodes:
+    # - Train: positive_1, positive_2 (2 pos, 2 clear_neg)
+    # - Val: positive_3 (2 pos: left & right)
+    # - Test: positive_4, positive_5 (2 pos, 2 clear_neg)
+    # Hard negative and clear negative parents follow the 3:1:1 allocation (Train: 1,2,3; Val: 5; Test: 4).
+    parent_partition_assignment = {
+        # Positive series
+        "desert_RGB_positive_1": "train",
+        "desert_RGB_positive_2": "train",
+        "desert_RGB_positive_3": "val",
+        "desert_RGB_positive_4": "test",
+        "desert_RGB_positive_5": "test",
+        # Hard negative series
+        "desert_RGB_hard_negative_1": "train",
+        "desert_RGB_hard_negative_2": "train",
+        "desert_RGB_hard_negative_3": "train",
+        "desert_RGB_hard_negative_4": "test",
+        "desert_RGB_hard_negative_5": "val",
+        # Clear negative series
+        "desert_RGB_clear_negative_1": "train",
+        "desert_RGB_clear_negative_2": "train",
+        "desert_RGB_clear_negative_3": "train",
+        "desert_RGB_clear_negative_4": "test",
+        "desert_RGB_clear_negative_5": "val",
+    }
+
     partition_assigned: dict[str, list[EpisodeMetadata]] = {
         "train": [],
         "val": [],
         "test": [],
     }
 
-    # Partition each series proportionally by parent flight
-    for series_name, parent_ids in sorted(series_map.items()):
-        rng_split = random.Random(seed)
-        shuffled_parents = list(parent_ids)
-        rng_split.shuffle(shuffled_parents)
-
-        total_parents = len(shuffled_parents)
-        n_train = max(1, int(round(total_parents * train_ratio)))
-        n_val = max(1, int(round(total_parents * val_ratio))) if total_parents >= 5 else 0
-        n_test = total_parents - n_train - n_val
-
-        train_p = set(shuffled_parents[:n_train])
-        val_p = set(shuffled_parents[n_train : n_train + n_val])
-        test_p = set(shuffled_parents[n_train + n_val :])
-
-        for pid in train_p:
-            for ep in parent_map[pid].values():
-                partition_assigned["train"].append(ep)
-
-        for pid in val_p:
-            for ep in parent_map[pid].values():
-                partition_assigned["val"].append(ep)
-
-        for pid in test_p:
-            for ep in parent_map[pid].values():
-                partition_assigned["test"].append(ep)
+    for parent_id, tiles in sorted(parent_map.items()):
+        split_name = parent_partition_assignment.get(parent_id, "train")
+        for ep in tiles.values():
+            partition_assigned[split_name].append(ep)
 
     # Apply anti-adjacency shuffling within each split
     for split_name in ["train", "val", "test"]:

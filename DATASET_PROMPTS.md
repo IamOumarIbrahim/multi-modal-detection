@@ -242,6 +242,186 @@ No HUD.
 No bounding boxes.
 No watermark.
 ```
+NEW ONE:
+
+Create approximately 10 seconds of photorealistic operational field footage showing a remote, dense forest search area.
+
+The camera is positioned approximately 10 meters above the ground, looking downward at roughly 30–45 degrees toward the terrain. The camera moves slowly forward and slightly sideways as part of a practical aerial search sweep.
+
+THERE MUST BE NO HUMAN BEING IN THE VIDEO.
+
+HARD-NEGATIVE TARGET
+
+Include ONE naturally occurring visual pattern within the forest that could plausibly produce a false positive from a person detector.
+
+The hard negative should be formed by ordinary environmental elements such as:
+
+* fallen branches
+* tangled vegetation
+* irregular tree limbs
+* dark leaves or dead vegetation
+* exposed soil
+* rocks
+* shadows
+* small pieces of naturally occurring dark material
+* overlapping vegetation and branches
+
+The combination of these elements should create an ambiguous irregular silhouette that, at the camera's distance and viewing angle, could weakly resemble a crouching, standing, or partially obscured human figure.
+
+The ambiguity should come from the natural arrangement of the environment, NOT from an intentionally constructed human shape.
+
+Do not create a recognizable dummy or obvious imitation of a person.
+
+The hard negative must remain relatively small in the frame and occupy approximately 1–4% of the image area. It should be partially obscured and visually blended into the surrounding forest.
+
+The ambiguous pattern should NOT be the obvious visual center of the composition.
+
+SUBJECT / HARD-NEGATIVE POSITION
+
+Place the hard negative naturally within the outer portions of the image, such as:
+
+left third
+right third
+upper-left region
+upper-right region
+lower-left region
+lower-right region
+
+Do not place it directly along the camera's central viewing axis.
+
+The camera is performing a broad search sweep of the environment, not inspecting the hard negative.
+
+The camera should continue along its own trajectory regardless of the object's position.
+
+Do not pan, yaw, tilt, slow down, orbit, or otherwise adjust the camera to reveal or center the ambiguous pattern.
+
+Do not create a cinematic reveal.
+
+The hard negative may become temporarily more visible as the camera moves, then become partially hidden again by vegetation, branches, shadows, or terrain.
+
+The camera should never deliberately reacquire it.
+
+FOREST ENVIRONMENT
+
+The forest must be dense, irregular, and visually messy.
+
+Include:
+
+different tree sizes, overlapping branches, dense leaves, undergrowth, fallen branches, exposed soil, rocks, dead vegetation, patches of sunlight, uneven terrain, small irregular clearings, and irregular shadows.
+
+Do not create a large open clearing around the hard negative.
+
+The ambiguous pattern should instead exist naturally within dense clutter.
+
+Some foreground branches and leaves should pass between the camera and the hard negative.
+
+The surrounding environment must contain many other irregular shapes and textures so that the hard negative does not appear artificially isolated.
+
+Do not artificially outline, brighten, sharpen, separate, or spotlight the ambiguous pattern.
+
+HARD-NEGATIVE APPEARANCE
+
+The ambiguous shape should be subtle and genuinely difficult to interpret.
+
+From the aerial viewpoint, it may briefly suggest:
+
+a crouched figure
+a partially standing figure
+a person obscured by vegetation
+or an irregular human-like silhouette
+
+However, it must remain ambiguous.
+
+It should NOT clearly look like a person.
+
+Use muted natural colors and realistic textures.
+
+Any dark material should look naturally weathered, dirty, folded, tangled, or partially buried rather than like clean clothing.
+
+The ambiguous appearance should result primarily from:
+
+occlusion
+overlapping branches
+shadows
+perspective
+texture
+irregular vegetation
+partial visibility
+
+Do not create a clean humanoid outline.
+
+CAMERA BEHAVIOR
+
+The camera should behave like a real UAV performing a broad search sweep, not like a camera operator following an object.
+
+The camera should:
+
+maintain its general forward trajectory
+move slowly and continuously
+scan across different portions of the terrain
+allow the environment to dominate the frame
+maintain imperfect stabilization
+avoid deliberately reacquiring the hard negative
+pass through the area naturally
+
+The camera trajectory must be completely independent of the hard negative.
+
+Do not orbit it.
+Do not follow it.
+Do not center it.
+Do not keep it at a fixed position in the frame.
+Do not create a cinematic reveal.
+
+REALISTIC RECORDING CHARACTERISTICS
+
+Use realistic depth and atmospheric perspective.
+
+Include subtle:
+
+stabilization imperfections
+micro-jitter
+vibration
+motion blur
+compression artifacts
+sensor noise
+exposure adaptation
+occasional loss of fine detail
+
+Avoid an artificial drone-video look.
+
+Lighting should be natural and inconsistent, with patches of sunlight and shadow created by the forest canopy.
+
+Do not use perfect lighting or cinematic illumination.
+
+The hard negative should sometimes become less distinguishable because of motion blur, vegetation overlap, shadow, compression, or changing exposure.
+
+OVERALL APPEARANCE
+
+The footage should look like an actual operational search recording containing a naturally occurring false-positive candidate.
+
+The primary visual content must be the forest environment and terrain.
+
+The hard negative should be an incidental, ambiguous pattern within that environment rather than the subject of the shot.
+
+NO REAL PERSON.
+NO MANNEQUIN.
+NO HUMAN DUMMY.
+NO STATUE.
+NO HUMAN BODY PARTS.
+NO FACE.
+NO CLEAR HUMAN SILHOUETTE.
+NO INTENTIONALLY CONSTRUCTED HUMANOID OBJECT.
+NO CINEMATIC STAGING.
+NO DRAMATIC CAMERA MOVEMENT.
+NO DELIBERATE TRACKING.
+NO DELIBERATE CENTERING.
+NO ARTIFICIAL DEPTH OF FIELD.
+NO EXAGGERATED AERIAL PERSPECTIVE.
+
+No text.
+No HUD.
+No bounding boxes.
+No watermark.
 
 ---
 
@@ -1006,3 +1186,5 @@ The result must look like the SAME original forest recording captured using a re
 It must NOT look like an RGB forest video with a grayscale filter applied.
 
 Preserve the exact source video while replacing its RGB appearance with plausible thermal infrared sensor appearance.
+
+
