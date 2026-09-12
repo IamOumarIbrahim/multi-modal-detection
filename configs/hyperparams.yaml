@@ -1,14 +1,130 @@
-# MMSAR Training Hyperparameters matching README.md Training Setting table
+# MMSAR Main Benchmark Run Protocol & Hyperparameters Configuration
+# Reference: YOLO11n Desert SAR Detection — Multi-Seed Rigor Protocol
+
+# -----------------------------------------------------------------------------
+# Training & Hardware Settings (Section 2)
+# -----------------------------------------------------------------------------
 batch: 16
 epochs: 100
-early_stopping: false
+early_stopping: true
+patience: 20
+early_stopping_monitor: "val/loss"
 imgsz: 640
 amp: false
 device: 0
+log_training_time: true
+log_peak_vram: true
 
-# Model configurations: YOLO11n is primary; YOLO26n is optional based on available time
+# -----------------------------------------------------------------------------
+# Multi-Seed Protocol (Section 2)
+# -----------------------------------------------------------------------------
+seeds:
+  - 0
+  - 42
+  - 1234
+min_seeds: 3
+
+# -----------------------------------------------------------------------------
+# Optimizer & Learning Rate Schedule (Section 2)
+# -----------------------------------------------------------------------------
+optimizer: "SGD"
+momentum: 0.937
+weight_decay: 0.0005
+lr0: 0.01
+lrf: 0.01
+warmup_epochs: 3
+cos_lr: true
+
+# -----------------------------------------------------------------------------
+# Data Augmentations (Section 2)
+# -----------------------------------------------------------------------------
+mosaic: 1.0
+hsv_h: 0.015
+hsv_s: 0.7
+hsv_v: 0.4
+fliplr: 0.5
+
+# -----------------------------------------------------------------------------
+# Model Architectures & Experimental Arms (Section 3)
+# -----------------------------------------------------------------------------
 primary_model: "yolo11n.yaml"
 optional_models:
   - "yolo26n.yaml"
 include_optional: false
+
+experimental_arms:
+  arm_1_main_model:
+    name: "Main Model"
+    model: "yolo11n.yaml"
+    curriculum: "full"
+    split: "rebalanced"
+    optimizer: "SGD"
+    tta: false
+    description: "YOLO11n, full curriculum, rebalanced split"
+
+  arm_2_architecture_baseline:
+    name: "Architecture Baseline"
+    model: "yolo26n.yaml"
+    curriculum: "full"
+    split: "rebalanced"
+    optimizer: "MuSGD"
+    tta: false
+    notes: "Ultralytics Jan 2026: DFL removed, NMS-free dual-branch head, MuSGD optimizer"
+    description: "YOLO26n baseline with identical split and hyperparameters"
+
+  arm_3_hard_negative_ablation:
+    name: "Hard-Negative Ablation"
+    model: "yolo11n.yaml"
+    curriculum: "no_hard_negatives"
+    split: "rebalanced"
+    optimizer: "SGD"
+    tta: false
+    exclude_hard_negatives_from_train: true
+    description: "Identical model, all currently-available hard-negative episodes removed from training only"
+
+  arm_4_tta:
+    name: "Test-Time Augmentation (TTA)"
+    model: "yolo11n.yaml"
+    curriculum: "full"
+    split: "rebalanced"
+    optimizer: "SGD"
+    tta: true
+    description: "Inference-time augmentation across full seed set"
+
+# -----------------------------------------------------------------------------
+# Dataset & Split Protocol (Section 1)
+# -----------------------------------------------------------------------------
+dataset_split_protocol:
+  strategy: "Option B parent-video grouped episodic"
+  visual_leakage: 0
+  dynamic_allocation: true
+  min_positive_floor_per_split: 2
+  val_test_priority_routing: true
+  balance_difficulty: true
+  difficulty_metrics:
+    - "target_presence_rate"
+    - "occlusion_contrast_flag"
+  archive_manifest: true
+
+# -----------------------------------------------------------------------------
+# Evaluation, Diagnostics & Safeguards (Sections 4, 5 & 6)
+# -----------------------------------------------------------------------------
+evaluation:
+  multi_seed_aggregate: true
+  per_episode_breakdown: true
+  latency_sample_frames: 1000
+  bootstrap_ci_iterations: 1000
+  full_pr_curve: true
+  separate_fp_breakdown: true
+  qualitative_failure_gallery: true
+  empirical_iou_jitter_check: true
+  confidence_calibration_check: true
+  ood_spot_check: true
+
+safeguards:
+  no_hardcoded_metrics: true
+  duplicate_metric_diff_check: true
+  no_templated_verdict_strings: true
+  raw_val_log_archiving: true
+  raw_val_log_dir: "runs/detect"
 

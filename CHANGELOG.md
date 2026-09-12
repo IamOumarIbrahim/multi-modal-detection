@@ -21,3 +21,30 @@ eferences.bib; confirmed exact 1-to-1 parity with zero missing bibliography entr
 - **[T-C1] Environment-Stratified Operational Impact Table & Derivation**: Added Table VI (	ab:operational_impact, *Environment-Stratified False-Alarm Suppression and Projected Operational Savings*) scaffolding per-environment FASR, FP avoided, bandwidth conserved (kB), battery saved (kJ), and added flight time (min) with [TBD] cells, and added an operational derivation paragraph in Section V-C formulating $\Delta \text{FP}_m(e)$ and mapping it through Eqs.~\ref{eq:bandwidth_waste}--\ref{eq:energy_loiter}.
 - **[T-C2] Statistical Confidence Scaffold on Table III**: Augmented Table V (	ab:postprocessing_benchmark) with an F1 (95\% CI) column header maintaining [TBD] entries, and added a non-parametric sequence-level bootstrap methodology paragraph ( = 1000$ resamples) in Section III-C.
 - **[T-C3] Full Operating-Curve Figure Scaffold**: Added Figure 3 (ig:pr_curves, *Precision-Recall (or F1-vs-$\tau$) operating curves for M1--M5 across the full validation threshold sweep*) after Figure 2 with an explicit placeholder box and formal caption, linked by a sweep retention statement in Section III-C preserving all 46 candidate threshold evaluation points.
+
+---
+
+# MMSAR Benchmark Rigor Protocol & Configuration Update - Changelog
+
+Every modification aligning the training configuration, pipeline code, and documentation with the publication-track multi-seed rigor protocol is recorded below:
+
+- **[T-C01] Benchmark Protocol Hyperparameters (`configs/hyperparams.yaml`)**:
+  - Replaced fixed rapid-verification 20 epochs with early stopping on validation loss (`early_stopping: true`, `patience: 20`, `early_stopping_monitor: "val/loss"`).
+  - Formalized multi-seed protocol across seeds `[0, 42, 1234]` with `min_seeds: 3` and mandatory mean +/- std reporting across all arms.
+  - Specified full SGD optimizer schedule: `momentum: 0.937`, `weight_decay: 0.0005`, `lr0: 0.01`, `lrf: 0.01`, `warmup_epochs: 3`, and cosine decay (`cos_lr: true`).
+  - Added validated data augmentations: `mosaic: 1.0`, `hsv_h: 0.015`, `hsv_s: 0.7`, `hsv_v: 0.4`, and `fliplr: 0.5`.
+  - Configured four required experimental arms: Arm 1 (Main Model YOLO11n), Arm 2 (Architecture Baseline YOLO26n with MuSGD), Arm 3 (Hard-Negative Training Ablation), and Arm 4 (Test-Time Augmentation TTA).
+  - Specified dynamic episodic split allocation protocol (Option B parent-video grouped episodic partitioning, zero cross-split visual leakage, dynamic floor >= 2 positive episodes per split, and target-presence difficulty balancing).
+  - Configured evaluation diagnostics and reporting safeguards: latency sampling (>= 1000 frames on RTX 4060 and onboard companion computer), B=1000 bootstrap confidence intervals, precision-recall curves, separated false positive breakdown, qualitative failure gallery for misses, empirical IoU jitter curve, confidence score calibration diagram, out-of-distribution spot check, and automated pre-publish duplicate-metric diff check.
+
+- **[T-C02] Hyperparameter Pipeline Plumbing (`src/mmsar/training/train.py`)**:
+  - Integrated `optimizer`, `lr0`, `lrf`, `momentum`, `weight_decay`, `warmup_epochs`, `cos_lr`, `mosaic`, `hsv_h`, `hsv_s`, `hsv_v`, `fliplr`, and dynamic `patience` into the Ultralytics `model.train()` call.
+  - Updated dry-run inspection dict to surface the extended hyperparameter state.
+
+- **[T-C03] Scaffolding Test Suite Validation (`tests/test_training_scaffold.py`)**:
+  - Updated `test_hyperparams_match_readme` assertions to validate the new benchmark protocol configuration (early stopping enabled with patience 20, SGD optimizer, momentum, weight decay, warmup epochs, augmentations, multi-seed list, and experimental arms). All unit tests pass cleanly.
+
+- **[T-C04] Documentation Synchronization (`README.md`)**:
+  - Updated Detector Training Configuration table with early stopping (`patience=20` on `val/loss`), 100-epoch maximum horizon, learning rate schedule, data augmentations, and multi-seed protocol.
+  - Added documentation for the four publication-track benchmark arms, reporting safeguards, and extended diagnostic protocols.
+  - Updated quick reproduction commands to reflect CLI usage with the benchmark configuration.

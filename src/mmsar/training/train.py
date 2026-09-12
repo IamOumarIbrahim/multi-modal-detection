@@ -83,9 +83,23 @@ def run_training(
     hyperparams = load_hyperparams(hyperparams_path)
     batch = int(hyperparams.get("batch", 16))
     epochs = int(hyperparams.get("epochs", 100))
-    patience = 0 if not hyperparams.get("early_stopping", False) else 50
+    patience = 0 if not hyperparams.get("early_stopping", False) else int(hyperparams.get("patience", 20))
     imgsz = int(hyperparams.get("imgsz", 640))
     amp = bool(hyperparams.get("amp", False))
+
+    # Extended benchmark hyperparameters
+    optimizer = str(hyperparams.get("optimizer", "SGD"))
+    lr0 = float(hyperparams.get("lr0", 0.01))
+    lrf = float(hyperparams.get("lrf", 0.01))
+    momentum = float(hyperparams.get("momentum", 0.937))
+    weight_decay = float(hyperparams.get("weight_decay", 0.0005))
+    warmup_epochs = int(hyperparams.get("warmup_epochs", 3))
+    cos_lr = bool(hyperparams.get("cos_lr", True))
+    mosaic = float(hyperparams.get("mosaic", 1.0))
+    hsv_h = float(hyperparams.get("hsv_h", 0.015))
+    hsv_s = float(hyperparams.get("hsv_s", 0.7))
+    hsv_v = float(hyperparams.get("hsv_v", 0.4))
+    fliplr = float(hyperparams.get("fliplr", 0.5))
 
     # Instantiate model from architecture YAML (not .pt weights)
     model = YOLO(model_arch)
@@ -97,6 +111,11 @@ def run_training(
             "batch": batch,
             "epochs": epochs,
             "imgsz": imgsz,
+            "optimizer": optimizer,
+            "lr0": lr0,
+            "lrf": lrf,
+            "early_stopping": bool(hyperparams.get("early_stopping", False)),
+            "patience": patience,
         }
 
     # Training execution with automatic batch halving fallback on CUDA OOM
@@ -111,6 +130,18 @@ def run_training(
                 patience=patience,
                 amp=amp,
                 device=hyperparams.get("device", 0 if torch.cuda.is_available() else "cpu"),
+                optimizer=optimizer,
+                lr0=lr0,
+                lrf=lrf,
+                momentum=momentum,
+                weight_decay=weight_decay,
+                warmup_epochs=warmup_epochs,
+                cos_lr=cos_lr,
+                mosaic=mosaic,
+                hsv_h=hsv_h,
+                hsv_s=hsv_s,
+                hsv_v=hsv_v,
+                fliplr=fliplr,
             )
             return {
                 "status": "train_success",

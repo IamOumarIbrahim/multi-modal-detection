@@ -84,8 +84,22 @@ def test_hyperparams_match_readme() -> None:
     hyperparams = load_hyperparams()
     assert hyperparams["batch"] == 16
     assert hyperparams["epochs"] == 100
-    assert hyperparams["early_stopping"] is False
+    assert hyperparams["early_stopping"] is True
+    assert hyperparams["patience"] == 20
     assert hyperparams["primary_model"] == "yolo11n.yaml"
     assert "yolo26n.yaml" in hyperparams["optional_models"]
     assert hyperparams["include_optional"] is False
+    assert hyperparams["optimizer"] == "SGD"
+    assert hyperparams["momentum"] == 0.937
+    assert hyperparams["weight_decay"] == 0.0005
+    assert hyperparams["lr0"] == 0.01
+    assert hyperparams["lrf"] == 0.01
+    assert hyperparams["warmup_epochs"] == 3
+    assert hyperparams["cos_lr"] is True
+    assert hyperparams["mosaic"] == 1.0
+    assert hyperparams["seeds"] == [0, 42, 1234]
+    assert "arm_1_main_model" in hyperparams["experimental_arms"]
+    assert "arm_2_architecture_baseline" in hyperparams["experimental_arms"]
+    assert "arm_3_hard_negative_ablation" in hyperparams["experimental_arms"]
+    assert "arm_4_tta" in hyperparams["experimental_arms"]
 

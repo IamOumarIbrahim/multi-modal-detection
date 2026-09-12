@@ -132,7 +132,7 @@ To isolate temporal post-processing dynamics without conflating single-model wei
 
 </div>
 
-#### Detector Training Configuration
+#### Detector Training Configuration & Multi-Seed Benchmark Protocol
 
 <div align="center">
 
@@ -140,13 +140,32 @@ To isolate temporal post-processing dynamics without conflating single-model wei
 | :--- | :--- | :--- |
 | **Batch Size** | 16 | Optimal gradient variance for small target feature representation |
 | **Arithmetic Precision** | Full FP32 (`amp=False`) | Prevents underflow and numerical instability on edge embedded GPUs |
-| **Epochs** | 100 | Complete convergence across multi-environment sequence splits |
-| **Early Stopping** | Disabled (`patience=0`) | Preserves uniform training trajectory across both modality branches |
+| **Epochs** | 100 (Max Horizon) | Extended past rapid verification with early stopping |
+| **Early Stopping** | Enabled (`patience=20` on `val/loss`) | Halts training when validation loss plateaus to prevent overfitting |
 | **Optimizer** | SGD | Momentum: 0.937, Weight Decay: 0.0005 |
-| **Learning Rate** | $\text{lr}_0 = 0.01$ | Cosine decay schedule to final $\text{lr}_f = 0.0001$ |
+| **Learning Rate Schedule** | $\text{lr}_0 = 0.01$, $\text{lrf} = 0.01$ | Linear warmup (3 epochs), cosine decay schedule |
+| **Data Augmentation** | Mosaic ($p=1.0$), HSV ($0.015/0.7/0.4$), Fliplr ($p=0.5$) | Multi-scale terrain and illumination invariance |
+| **Multi-Seed Protocol** | Seeds: 0, 42, 1234 (Min. 3 seeds) | Mean $\pm$ standard deviation reported across all experimental arms |
 | **Hardware GPU** | NVIDIA GeForce RTX 4060 | 8 GB Dedicated VRAM |
 
 </div>
+
+#### Publication Benchmark Protocol & Experimental Arms
+
+To ensure statistical rigor and eliminate single-seed evaluation variance, all comparisons evaluate across identical seeds (0, 42, 1234) under four required experimental arms:
+
+1. **Main Model (YOLO11n):** Primary detector with full curriculum and Option B rebalanced episodic split.
+2. **Architecture Baseline (YOLO26n):** Ultralytics baseline with Distribution Focal Loss (DFL) removed, Non-Maximum Suppression (NMS) free dual-branch head, and MuSGD optimizer.
+3. **Hard-Negative Ablation:** Identical YOLO11n model trained with all available hard-negative episodes removed from the training curriculum to quantify distractor suppression.
+4. **Test-Time Augmentation (TTA):** Multiscale and flip inference evaluated across all seeds to determine if accuracy gains exceed seed-to-seed variance.
+
+#### Reporting Safeguards and Diagnostic Protocol
+
+- **No Hardcoded Metrics:** Every metric traces directly to a live `model.val()` execution result.
+- **Dynamic Episodic Split Allocation:** Split ratios and floors are recomputed dynamically from the current episode pool with zero cross-split visual leakage and a minimum floor of two positive episodes per split.
+- **Difficulty Balancing:** Splits are balanced by target-presence rate and terrain occlusion or contrast flags.
+- **Pre-Publish Metric Diff Check:** Automated diff check flags duplicate metrics across prior reports before publication.
+- **Extended Diagnostics:** Qualitative failure gallery for misses, empirical intersection-over-union (IoU) jitter curve, confidence score calibration diagram, and out-of-distribution spot checks.
 
 #### Real-Time Edge Budget Constraint
 At an operating timebase of $f_s = 8\text{ Hz}$ ($T_s = 125\text{ ms}$), the pipeline satisfies frame-synchronous execution without buffering delays:
@@ -412,13 +431,16 @@ python scripts/harvest_dual_crop_snippets.py
 ```
 
 ### 3. Upstream Detector Training
-Train the modality-specific YOLO11n baselines in full FP32 precision with batch size 16:
+Train the detector baselines in full FP32 precision with batch size 16 using the benchmark configuration:
 ```bash
-# Train YOLO11n-RGB
-yolo detect train data=configs/data_rgb.yaml model=yolo11n.pt imgsz=640 epochs=100 batch=16 amp=False optimizer=SGD lr0=0.01 device=0
+# Dry run validation of primary model (YOLO11n)
+mmsar train --dry-run
 
-# Train YOLO11n-Thermal
-yolo detect train data=configs/data_thermal.yaml model=yolo11n.pt imgsz=640 epochs=100 batch=16 amp=False optimizer=SGD lr0=0.01 device=0
+# Train YOLO11n primary detector using the multi-seed benchmark configuration
+mmsar train --hyperparams configs/hyperparams.yaml --data configs/data.template.yaml
+
+# Include architecture baseline (YOLO26n) in training plan
+mmsar train --hyperparams configs/hyperparams.yaml --include-optional
 ```
 
 ### 4. Validation Threshold Sweep & Post-Processing Benchmark
