@@ -1,0 +1,89 @@
+\begin{tikzpicture}[
+    >=Stealth,
+    node distance=0.65cm and 0.8cm,
+    font=\sffamily\scriptsize,
+    every node/.style={align=center},
+    box/.style={draw=black!75, rounded corners=3pt, thick, fill=white, inner sep=4pt, minimum height=0.65cm},
+    op/.style={draw=black!80, circle, thick, fill=white, inner sep=1.5pt},
+    ssmcell/.style={draw=blue!70, dashed, rounded corners=6pt, fill=blue!3, inner sep=6pt},
+    proj/.style={box, fill=cyan!12, draw=cyan!80, font=\sffamily\tiny},
+    param/.style={box, fill=orange!15, draw=orange!80, font=\sffamily\tiny\bfseries},
+    conn/.style={->, thick, draw=black!80},
+    siglabel/.style={font=\sffamily\tiny\bfseries, text=black!90}
+]
+
+% Input
+\node[box, fill=gray!12] (input) {\textbf{Fused Confidence Cue}\\[1pt]$s[n] \in \mathbb{R}^1$};
+
+% Input Projection & Activation
+\node[box, fill=cyan!15, draw=cyan!80, below=0.5cm of input] (in_proj) {
+    \textbf{Linear Input Projection}\\[1pt]
+    $x_t = \text{SiLU}\big(W_{\text{in}} s[n] + b_{\text{in}}\big) \in \mathbb{R}^{d_{\text{model}}}$ ($d_{\text{model}}=16$)
+};
+
+% Selective Projections
+\node[proj, below left=0.7cm and -0.2cm of in_proj] (proj_dt) {\textbf{Time-Step}\\[1pt]$\Delta_t = \text{softplus}(W_\Delta x_t)$};
+\node[proj, below=0.7cm of in_proj] (proj_b) {\textbf{Input Matrix}\\[1pt]$B_t = W_B x_t \in \mathbb{R}^{d_{\text{state}}}$};
+\node[proj, below right=0.7cm and -0.2cm of in_proj] (proj_c) {\textbf{Output Matrix}\\[1pt]$C_t = W_C x_t \in \mathbb{R}^{d_{\text{state}}}$};
+
+% Discretization & Recurrent Core
+\node[box, fill=purple!12, draw=purple!80, below=0.8cm of proj_b] (discretize) {
+    \textbf{Continuous-to-Discrete ZOH Discretization}\\[2pt]
+    $\bar{A}_t = \exp\big(\Delta_t \cdot (-e^{A_{\text{log}}})\big), \quad \bar{B}_t = (\Delta_t B_t) \cdot x_t$
+};
+
+% Recurrent State Update
+\node[op, below=0.7cm of discretize] (mult_a) {$\times$};
+\node[op, right=0.8cm of mult_a] (add_b) {$+$};
+\node[box, fill=teal!15, draw=teal!80, right=0.8cm of add_b] (state) {
+    \textbf{Hidden State}\\[1pt]
+    $h_t \in \mathbb{R}^{d_{\text{model}} \times d_{\text{state}}}$\\[1pt]
+    ($d_{\text{state}}=8$)
+};
+\node[box, fill=gray!15, draw=gray!70, below=0.5cm of state, font=\sffamily\tiny] (delay) {Unit Delay $z^{-1}$};
+
+% Output projection
+\node[op, below=0.7cm of add_b] (mult_c) {$\times$};
+\node[box, fill=cyan!15, draw=cyan!80, below=0.5cm of mult_c] (out_proj) {
+    \textbf{Output Linear Head}\\[1pt]
+    $\hat{y}_t = W_{\text{out}} \big(h_t C_t^{\top}\big) + b_{\text{out}} \in \mathbb{R}^1$
+};
+
+% Final Decision
+\node[box, fill=green!15, draw=green!70!black, line width=1.1pt, below=0.5cm of out_proj] (output) {
+    \textbf{Binary Alarm Assertion}\\[1pt]
+    $y[n] = \mathbb{I}\big(\sigma(\hat{y}_t) \ge \tau\big) \in \{0, 1\}$
+};
+
+% Container for Selective SSM
+\begin{scope}[on background layer]
+    \node[ssmcell, fit=(proj_dt) (proj_c) (discretize) (mult_a) (state) (delay) (mult_c),
+          label={[font=\sffamily\tiny\bfseries, text=blue!80!black, above=2pt]above:Selective SSM Cell (Pure PyTorch, Causal $O(1)$ Memory)}] {};
+\end{scope}
+
+% Connections
+\draw[conn] (input) -- (in_proj);
+
+\draw[conn] (in_proj.south) -- ++(0, -0.2) -| (proj_dt.north);
+\draw[conn] (in_proj.south) -- (proj_b.north);
+\draw[conn] (in_proj.south) -- ++(0, -0.2) -| (proj_c.north);
+
+\draw[conn] (proj_dt.south) -- ++(0, -0.2) -| (discretize.north west);
+\draw[conn] (proj_b.south) -- (discretize.north);
+
+\draw[conn] (discretize.south) -- node[left, siglabel] {$\bar{A}_t$} (mult_a.north);
+\draw[conn] (discretize.south) ++(0.8,0) -- node[right, siglabel] {$\bar{B}_t$} (add_b.north);
+
+\draw[conn] (mult_a) -- (add_b);
+\draw[conn] (add_b) -- (state);
+
+\draw[conn] (state.south) -- (delay.north);
+\draw[conn] (delay.west) -| (mult_a.south);
+
+\draw[conn] (state.south) ++(-0.4, 0) |- (mult_c.east);
+\draw[conn] (proj_c.south) -- ++(0, -2.2) -| (mult_c.north);
+
+\draw[conn] (mult_c) -- (out_proj);
+\draw[conn] (out_proj) -- (output);
+
+\end{tikzpicture}

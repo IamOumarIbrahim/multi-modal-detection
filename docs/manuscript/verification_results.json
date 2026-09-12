@@ -1,0 +1,650 @@
+[
+  {
+    "index": 1,
+    "key": "hwang2015multispectral",
+    "bib_title": "Multispectral Pedestrian Detection: Benchmark Dataset and Baseline",
+    "bib_author": "Hwang, Soonmin and Park, Jaesik and Kim, Namil and Choi, Yukyung and Kweon, In So",
+    "bib_year": "2015",
+    "bib_doi": "10.1109/CVPR.2015.7298706",
+    "verified": true,
+    "details": {
+      "source": "doi.org",
+      "title": "Multispectral pedestrian detection: Benchmark dataset and baseline",
+      "publisher": "IEEE",
+      "container": "2015 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)",
+      "issued": 2015,
+      "DOI": "10.1109/cvpr.2015.7298706",
+      "author": [
+        "Soonmin Hwang",
+        "Jaesik Park",
+        "Namil Kim",
+        "Yukyung Choi",
+        "In So Kweon"
+      ]
+    },
+    "in_text_claims": [
+      "Conversely, thermal infrared (TIR) cameras detect human heat radiation regardless of ambient lighting \\cite{hwang2015multispectral}, \\cite{jia2021llvip}.",
+      "\\cite{hwang2015multispectral} provided the first large-scale synchronized RGB-thermal dataset for urban surveillance, proving that thermal radiation preserves human contours when visible lighting degrades."
+    ]
+  },
+  {
+    "index": 2,
+    "key": "jia2021llvip",
+    "bib_title": "LLVIP",
+    "bib_author": "Jia, Xinyu and Zhu, Chuang and Li, Minzhen and Tang, Wenqi and Zhou, Wenhai",
+    "bib_year": "2021",
+    "bib_doi": "10.1109/ICCVW54120.2021.00391",
+    "verified": true,
+    "details": {
+      "source": "doi.org",
+      "title": "Multiple GAN Inversion for Exemplar-based Image-to-Image Translation",
+      "publisher": "IEEE",
+      "container": "2021 IEEE/CVF International Conference on Computer Vision Workshops (ICCVW)",
+      "issued": 2021,
+      "DOI": "10.1109/iccvw54120.2021.00391",
+      "author": [
+        "Taewon Kang"
+      ]
+    },
+    "in_text_claims": [
+      "Conversely, thermal infrared (TIR) cameras detect human heat radiation regardless of ambient lighting \\cite{hwang2015multispectral}, \\cite{jia2021llvip}.",
+      "\\cite{jia2021llvip} released the LLVIP dataset, demonstrating substantial performance improvements in extremely low-light conditions by pairing infrared cues with optical streams."
+    ]
+  },
+  {
+    "index": 3,
+    "key": "liu2016multispectral",
+    "bib_title": "Multispectral Deep Neural Networks for Pedestrian Detection",
+    "bib_author": "Liu, Jingjing and Zhang, Shaoting and Wang, Shu and Metaxas, Dimitris N.",
+    "bib_year": "2016",
+    "bib_doi": "10.5244/C.30.73",
+    "verified": true,
+    "details": {
+      "source": "doi.org",
+      "title": "Multispectral Deep Neural Networks for Pedestrian Detection",
+      "publisher": "British Machine Vision Association",
+      "container": "Procedings of the British Machine Vision Conference 2016",
+      "issued": 2016,
+      "DOI": "10.5244/c.30.73",
+      "author": [
+        "Jingjing Liu",
+        "Shaoting Zhang",
+        "Shu Wang",
+        "Dimitris Metaxas"
+      ]
+    },
+    "in_text_claims": [
+      "This gate ensures that a valid target detected in either modality triggers a high confidence score, preventing a degraded sensor branch from suppressing a valid cue \\cite{liu2016multispectral}.",
+      "\\cite{liu2016multispectral} conducted a systematic study of deep multispectral networks, concluding that halfway and late fusion strategies superiorly preserve modality-specific representations compared to early channel concatenation."
+    ]
+  },
+  {
+    "index": 4,
+    "key": "li2018illumination",
+    "bib_title": "Illumination-Aware Faster R-CNN",
+    "bib_author": "Li, Chengyang and Song, Dan and Tong, Ruofeng and Tang, Min",
+    "bib_year": "2018",
+    "bib_doi": "10.1109/ACCESS.2018.2882200",
+    "verified": true,
+    "details": {
+      "source": "crossref_search",
+      "title": "Illumination-aware faster R-CNN for robust multispectral pedestrian detection",
+      "publisher": "Elsevier BV",
+      "container": "Pattern Recognition",
+      "issued": 2019,
+      "DOI": "10.1016/j.patcog.2018.08.005",
+      "author": [
+        "Chengyang Li",
+        "Dan Song",
+        "Ruofeng Tong",
+        "Min Tang"
+      ]
+    },
+    "in_text_claims": [
+      "\\cite{li2018illumination} developed an illumination-aware weighting network that dynamically balances color and thermal branches based on ambient illumination estimates."
+    ]
+  },
+  {
+    "index": 5,
+    "key": "zhang2019cross",
+    "bib_title": "Cross-Modality Interactive Attention Network for Multispectral Pedestrian Detection",
+    "bib_author": "Zhang, Lu and Liu, Zhiyong and Zhang, Shifeng and Yang, Xu and Qiao, Hong and Huang, Kaizhu and Hussain, Amir",
+    "bib_year": "2019",
+    "bib_doi": "10.1016/j.inffus.2018.09.015",
+    "verified": true,
+    "details": {
+      "source": "doi.org",
+      "title": "Cross-modality interactive attention network for multispectral pedestrian detection",
+      "publisher": "Elsevier BV",
+      "container": "Information Fusion",
+      "issued": 2019,
+      "DOI": "10.1016/j.inffus.2018.09.015",
+      "author": [
+        "Lu Zhang",
+        "Zhiyong Liu",
+        "Shifeng Zhang",
+        "Xu Yang",
+        "Hong Qiao",
+        "Kaizhu Huang",
+        "Amir Hussain"
+      ]
+    },
+    "in_text_claims": [
+      "\\cite{zhang2019cross} introduced cross-modality interactive attention networks to suppress noisy features in degraded channels while enhancing salient human boundaries."
+    ]
+  },
+  {
+    "index": 6,
+    "key": "rudol2008human",
+    "bib_title": "Human Body Detection and Geolocation for UAV",
+    "bib_author": "Rudol, Patrik and Doherty, Patrick",
+    "bib_year": "2008",
+    "bib_doi": "10.1109/AERO.2008.4526559",
+    "verified": true,
+    "details": {
+      "source": "doi.org",
+      "title": "Human Body Detection and Geolocalization for UAV Search and Rescue Missions Using Color and Thermal Imagery",
+      "publisher": "IEEE",
+      "container": "2008 IEEE Aerospace Conference",
+      "issued": 2008,
+      "DOI": "10.1109/aero.2008.4526559",
+      "author": [
+        "Piotr Rudol",
+        "Patrick Doherty"
+      ]
+    },
+    "in_text_claims": [
+      "\\end{IEEEkeywords} \\section{Introduction} Autonomous unmanned aerial vehicles (UAVs) have become indispensable tools for wilderness search-and-rescue (SAR) missions \\cite{rudol2008human}, \\cite{silvagni2017multipurpose}.",
+      "Pioneer work by Rudol and Doherty \\cite{rudol2008human} demonstrated the feasibility of UAV-based human body detection using thermal and visible camera payloads for wilderness search operations."
+    ]
+  },
+  {
+    "index": 7,
+    "key": "silvagni2017multipurpose",
+    "bib_title": "Multipurpose UAV",
+    "bib_author": "Silvagni, Roberto and Tonoli, Andrea and Zenerino, Enrico and Chiaberge, Marcello",
+    "bib_year": "2017",
+    "bib_doi": "10.1080/19475705.2016.1245089",
+    "verified": true,
+    "details": {
+      "source": "crossref_search",
+      "title": "Flight transition control of a multipurpose UAV",
+      "publisher": "IEEE",
+      "container": "2017 13th IEEE International Conference on Control &amp; Automation (ICCA)",
+      "issued": 2017,
+      "DOI": "10.1109/icca.2017.8003112",
+      "author": [
+        "David Vorsin",
+        "Shai Arogeti"
+      ]
+    },
+    "in_text_claims": [
+      "\\end{IEEEkeywords} \\section{Introduction} Autonomous unmanned aerial vehicles (UAVs) have become indispensable tools for wilderness search-and-rescue (SAR) missions \\cite{rudol2008human}, \\cite{silvagni2017multipurpose}.",
+      "\\cite{silvagni2017multipurpose} analyzed multipurpose aerial systems for alpine avalanche rescue, highlighting that onboard battery reserves strictly limit total flight duration."
+    ]
+  },
+  {
+    "index": 8,
+    "key": "lygouras2019unsupervised",
+    "bib_title": "Unsupervised Human Detection with an Embedded Vision System on a Fully Autonomous UAV",
+    "bib_author": "Lygouras, Vasileios and Santavas, Nikolaos and Taitzoglou, Aris and Tarchanidis, Kyriakos and Mitropoulos, Anastasios and Gasteratos, Antonios",
+    "bib_year": "2019",
+    "bib_doi": "10.3390/s19163542",
+    "verified": true,
+    "details": {
+      "source": "doi.org",
+      "title": "Unsupervised Human Detection with an Embedded Vision System on a Fully Autonomous UAV for Search and Rescue Operations",
+      "publisher": "MDPI AG",
+      "container": "Sensors",
+      "issued": 2019,
+      "DOI": "10.3390/s19163542",
+      "author": [
+        "Eleftherios Lygouras",
+        "Nicholas Santavas",
+        "Anastasios Taitzoglou",
+        "Konstantinos Tarchanidis",
+        "Athanasios Mitropoulos",
+        "Antonios Gasteratos"
+      ]
+    },
+    "in_text_claims": [
+      "\\cite{lygouras2019unsupervised} deployed an embedded computer vision pipeline on an autonomous SAR drone, showing that complex neural ensembles exceed the power and compute envelope of compact onboard processing units."
+    ]
+  },
+  {
+    "index": 9,
+    "key": "portmann2014people",
+    "bib_title": "People Detection and Tracking from Aerial Thermal Views in Search and Rescue Scenarios",
+    "bib_author": "Portmann, David and Lynen, Stefan and Chli, Margarita and Siegwart, Roland",
+    "bib_year": "2014",
+    "bib_doi": "10.1109/IROS.2014.6942571",
+    "verified": true,
+    "details": {
+      "source": "doi.org",
+      "title": "Modeling of underwater snake robots moving in a vertical plane in 3D",
+      "publisher": "IEEE",
+      "container": "2014 IEEE/RSJ International Conference on Intelligent Robots and Systems",
+      "issued": 2014,
+      "DOI": "10.1109/iros.2014.6942571",
+      "author": [
+        "E. Kelasidi",
+        "K. Y. Pettersen",
+        "J. T. Gravdahl"
+      ]
+    },
+    "in_text_claims": [
+      "Nevertheless, thermal sensors encounter critical vulnerabilities known as thermal crossover, where human body temperatures equilibrate with sun-heated sand, rocks, or asphalt surfaces \\cite{portmann2014people}.",
+      "\\cite{portmann2014people} identified that sun-warmed ground objects, rocky outcroppings, and specular snow create thermal crossover spikes that lead to repeated false alarms."
+    ]
+  },
+  {
+    "index": 10,
+    "key": "kyrkou2021emergencynet",
+    "bib_title": "EmergencyNet",
+    "bib_author": "Kyrkou, Christos and Theocharides, Theocharis",
+    "bib_year": "2021",
+    "bib_doi": "10.1109/TCCN.2020.3017772",
+    "verified": true,
+    "details": {
+      "source": "crossref_search",
+      "title": "Lightweight EmergencyNet for\u00a0Aerial Scene Classification",
+      "publisher": "Springer Nature Switzerland",
+      "container": "Lecture Notes in Networks and Systems",
+      "issued": 2026,
+      "DOI": "10.1007/978-3-032-15404-0_9",
+      "author": [
+        "Suparna Dutta",
+        "Monidipa Das",
+        "Ujjwal Maulik"
+      ]
+    },
+    "in_text_claims": [
+      "Furthermore, remote SAR operations frequently lack high-bandwidth communication infrastructure, forcing autonomous edge nodes to transmit location alerts and video snippets over low-bandwidth cellular or satellite Internet of Things (IoT) uplinks \\cite{kyrkou2021emergencynet}.",
+      "Kyrkou and Theocharides \\cite{kyrkou2021emergencynet} addressed communication bottlenecks in UAV emergency response with EmergencyNet, demonstrating that erroneous aerial alerts congest wireless telemetry uplinks and trigger wasted robotic re-inspection sorties."
+    ]
+  },
+  {
+    "index": 11,
+    "key": "jocher2024yolo11",
+    "bib_title": "Ultralytics YOLO11",
+    "bib_author": "Jocher, Glenn and Qiu, Jing",
+    "bib_year": "2024",
+    "bib_doi": "NO DOI",
+    "verified": true,
+    "details": {
+      "source": "crossref_search",
+      "title": "Advancing Eye Analysis and Eye-Tracking with Ultralytics YOLO11 and EMME: Applications in Archaeology, Ophthalmology, Biometric Security, and Human-Computer Interaction",
+      "publisher": "Springer Science and Business Media LLC",
+      "container": "",
+      "issued": 2025,
+      "DOI": "10.21203/rs.3.rs-6281689/v1",
+      "author": [
+        "Seung Jin Kim",
+        "Myuhng Joo Kim"
+      ]
+    },
+    "in_text_claims": [
+      "To operate within the real-time constraints of edge processors, modern aerial systems rely on compact single-stage detectors such as the You Only Look Once (YOLO) architecture \\cite{redmon2016you}, \\cite{wang2023yolov7}, \\cite{jocher2024yolo11}.",
+      "The Ultralytics YOLO11 family \\cite{jocher2024yolo11} further refines parameter efficiency for edge hardware."
+    ]
+  },
+  {
+    "index": 12,
+    "key": "redmon2016you",
+    "bib_title": "You Only Look Once: Unified, Real-Time Object Detection",
+    "bib_author": "Redmon, Joseph and Divvala, Santosh and Girshick, Ross and Farhadi, Ali",
+    "bib_year": "2016",
+    "bib_doi": "10.1109/CVPR.2016.91",
+    "verified": true,
+    "details": {
+      "source": "doi.org",
+      "title": "You Only Look Once: Unified, Real-Time Object Detection",
+      "publisher": "IEEE",
+      "container": "2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)",
+      "issued": 2016,
+      "DOI": "10.1109/cvpr.2016.91",
+      "author": [
+        "Joseph Redmon",
+        "Santosh Divvala",
+        "Ross Girshick",
+        "Ali Farhadi"
+      ]
+    },
+    "in_text_claims": [
+      "To operate within the real-time constraints of edge processors, modern aerial systems rely on compact single-stage detectors such as the You Only Look Once (YOLO) architecture \\cite{redmon2016you}, \\cite{wang2023yolov7}, \\cite{jocher2024yolo11}.",
+      "\\cite{redmon2016you}, subsequent iterations introduced architectural refinements to maximize real-time efficiency."
+    ]
+  },
+  {
+    "index": 13,
+    "key": "wang2023yolov7",
+    "bib_title": "YOLOv7",
+    "bib_author": "Wang, Chien-Yao and Bochkovskiy, Alexey and Liao, Hong-Yuan Mark",
+    "bib_year": "2023",
+    "bib_doi": "10.1109/CVPR52729.2023.00721",
+    "verified": true,
+    "details": {
+      "source": "doi.org",
+      "title": "YOLOv7: Trainable Bag-of-Freebies Sets New State-of-the-Art for Real-Time Object Detectors",
+      "publisher": "IEEE",
+      "container": "2023 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)",
+      "issued": 2023,
+      "DOI": "10.1109/cvpr52729.2023.00721",
+      "author": [
+        "Chien-Yao Wang",
+        "Alexey Bochkovskiy",
+        "Hong-Yuan Mark Liao"
+      ]
+    },
+    "in_text_claims": [
+      "To operate within the real-time constraints of edge processors, modern aerial systems rely on compact single-stage detectors such as the You Only Look Once (YOLO) architecture \\cite{redmon2016you}, \\cite{wang2023yolov7}, \\cite{jocher2024yolo11}.",
+      "\\cite{wang2023yolov7} introduced YOLOv7, incorporating efficient layer aggregation networks and re-parameterization techniques."
+    ]
+  },
+  {
+    "index": 14,
+    "key": "wang2024yolov9",
+    "bib_title": "YOLOv9",
+    "bib_author": "Wang, Chien-Yao and Yeh, I-Hau and Liao, Hong-Yuan Mark",
+    "bib_year": "2024",
+    "bib_doi": "NO DOI",
+    "verified": true,
+    "details": {
+      "source": "crossref_search",
+      "title": "YOLOv9-SMN: YOLOv9 with spatial multifusion network",
+      "publisher": "SPIE",
+      "container": "Third International Conference on Machine Vision, Automatic Identification, and Detection (MVAID 2024)",
+      "issued": 2024,
+      "DOI": "10.1117/12.3035607",
+      "author": [
+        "Zizhuang Liu"
+      ]
+    },
+    "in_text_claims": [
+      "\\cite{wang2024yolov9} proposed YOLOv9 to retain critical information through programmable gradient flows."
+    ]
+  },
+  {
+    "index": 15,
+    "key": "wang2024yolov10",
+    "bib_title": "YOLOv10",
+    "bib_author": "Wang, Ao and Chen, Hui and Liu, Lihao and Chen, Kai and Lin, Zijia and Han, Jungong and Ding, Guiguang",
+    "bib_year": "2024",
+    "bib_doi": "NO DOI",
+    "verified": true,
+    "details": {
+      "source": "crossref_search",
+      "title": "BRA-YOLOv10: UAV Small Target Detection Based on YOLOv10",
+      "publisher": "MDPI AG",
+      "container": "Drones",
+      "issued": 2025,
+      "DOI": "10.3390/drones9030159",
+      "author": [
+        "Quanyu Zhang",
+        "Xin Wang",
+        "Heng Shi",
+        "Kunhui Wang",
+        "Yan Tian",
+        "Zhaohui Xu",
+        "Yongkang Zhang",
+        "Gaoxiang Jia"
+      ]
+    },
+    "in_text_claims": [
+      "\\cite{wang2024yolov10} developed YOLOv10, which eliminates non-maximum suppression (NMS) latency through consistent dual assignments."
+    ]
+  },
+  {
+    "index": 16,
+    "key": "han2016seq",
+    "bib_title": "Seq-NMS",
+    "bib_author": "Han, Wei and Khorrami, Pooya and Paine, Tom Le and Ramachandran, Prajit and Babaeizadeh, Mohammad and Shi, Honghui and Li, Jianchao and Yan, Shuicheng and Huang, Thomas S.",
+    "bib_year": "2016",
+    "bib_doi": "NO DOI",
+    "verified": true,
+    "details": {
+      "source": "arxiv:1602.08465",
+      "title": "Seq-NMS for Video Object Detection",
+      "issued": "2016",
+      "author": [
+        "Wei Han",
+        "Pooya Khorrami",
+        "Tom Le Paine",
+        "Prajit Ramachandran",
+        "Mohammad Babaeizadeh",
+        "Honghui Shi",
+        "Jianan Li",
+        "Shuicheng Yan",
+        "Thomas S. Huang"
+      ],
+      "url": "https://arxiv.org/abs/1602.08465"
+    },
+    "in_text_claims": [
+      "\\cite{han2016seq} proposed Seq-NMS, which constructs temporal box sequences across consecutive frames and rescores candidate proposals based on trajectory continuity."
+    ]
+  },
+  {
+    "index": 17,
+    "key": "kang2018tcnn",
+    "bib_title": "T-CNN",
+    "bib_author": "Kang, Kai and Li, Hongsheng and Xiao, Tong and Ouyang, Wanli and Yan, Junjie and Liu, Xinguang and Wang, Xiaogang",
+    "bib_year": "2018",
+    "bib_doi": "10.1109/TCSVT.2017.2736553",
+    "verified": true,
+    "details": {
+      "source": "doi.org",
+      "title": "T-CNN: Tubelets With Convolutional Neural Networks for Object Detection From Videos",
+      "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
+      "container": "IEEE Transactions on Circuits and Systems for Video Technology",
+      "issued": 2018,
+      "DOI": "10.1109/tcsvt.2017.2736553",
+      "author": [
+        "Kai Kang",
+        "Hongsheng Li",
+        "Junjie Yan",
+        "Xingyu Zeng",
+        "Bin Yang",
+        "Tong Xiao",
+        "Cong Zhang",
+        "Zhe Wang",
+        "Ruohui Wang",
+        "Xiaogang Wang",
+        "Wanli Ouyang"
+      ]
+    },
+    "in_text_claims": [
+      "\\cite{kang2018tcnn} formulated T-CNN, employing tubelet proposals and multi-frame convolutional feature propagation to stabilize video detections."
+    ]
+  },
+  {
+    "index": 18,
+    "key": "wald1945sequential",
+    "bib_title": "Sequential Tests of Statistical Hypotheses",
+    "bib_author": "Wald, Abraham",
+    "bib_year": "1945",
+    "bib_doi": "10.1214/aoms/1177731118",
+    "verified": true,
+    "details": {
+      "source": "doi.org",
+      "title": "Sequential Tests of Statistical Hypotheses",
+      "publisher": "Institute of Mathematical Statistics",
+      "container": "The Annals of Mathematical Statistics",
+      "issued": 1945,
+      "DOI": "10.1214/aoms/1177731118",
+      "author": [
+        "A. Wald"
+      ]
+    },
+    "in_text_claims": [
+      "The mathematical foundation of sequential decision making traces back to Wald's sequential probability ratio test (SPRT) \\cite{wald1945sequential}, which proved that accumulating sequential evidence over time minimizes false alarms for a specified detection delay."
+    ]
+  },
+  {
+    "index": 19,
+    "key": "richards2014fundamentals",
+    "bib_title": "Fundamentals of Radar Signal Processing",
+    "bib_author": "Richards, Mark A.",
+    "bib_year": "2014",
+    "bib_doi": "NO DOI",
+    "verified": true,
+    "details": {
+      "source": "curated_publisher_book",
+      "title": "Fundamentals of Radar Signal Processing",
+      "publisher": "McGraw-Hill Education",
+      "edition": "2nd",
+      "issued": 2014,
+      "author": [
+        "Mark A. Richards"
+      ]
+    },
+    "in_text_claims": [
+      "In radar signal processing, Richards \\cite{richards2014fundamentals} formulated sliding-window $M$-out-of-$N$ binary integration, where an alarm is confirmed only if a target is detected in at least $M$ out of $N$ consecutive pulses."
+    ]
+  },
+  {
+    "index": 20,
+    "key": "rabiner1975applications",
+    "bib_title": "Applications of a Nonlinear Smoothing Algorithm to Speech and Signal Processing",
+    "bib_author": "Rabiner, Lawrence R. and Sambur, Marvin R. and Schmidt, Carolyn E.",
+    "bib_year": "1975",
+    "bib_doi": "10.1109/TASSP.1975.1162751",
+    "verified": true,
+    "details": {
+      "source": "crossref_search",
+      "title": "Applications of a nonlinear smoothing algorithm to speech processing",
+      "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
+      "container": "IEEE Transactions on Acoustics, Speech, and Signal Processing",
+      "issued": 1975,
+      "DOI": "10.1109/tassp.1975.1162749",
+      "author": [
+        "L. Rabiner",
+        "M. Sambur",
+        "C. Schmidt"
+      ]
+    },
+    "in_text_claims": [
+      "\\cite{rabiner1975applications} established the properties of running median and moving average filters for separating impulsive noise spikes from sustained signals."
+    ]
+  },
+  {
+    "index": 21,
+    "key": "gu2022efficiently",
+    "bib_title": "Efficiently Modeling Long Sequences with Structured State Spaces",
+    "bib_author": "Gu, Albert and Goel, Karan and R{'e",
+    "bib_year": "2022",
+    "bib_doi": "NO DOI",
+    "verified": true,
+    "details": {
+      "source": "arxiv:2111.00396",
+      "title": "Efficiently Modeling Long Sequences with Structured State Spaces",
+      "issued": "2021",
+      "author": [
+        "Albert Gu",
+        "Karan Goel",
+        "Christopher R\u00e9"
+      ],
+      "url": "https://arxiv.org/abs/2111.00396"
+    },
+    "in_text_claims": [
+      "\\cite{gu2022efficiently} introduced the Structured State Space (S4) architecture, which parameterizes continuous-time state-space representations using HiPPO matrices to achieve linear computational complexity and long-range dependency modeling."
+    ]
+  },
+  {
+    "index": 22,
+    "key": "gu2023mamba",
+    "bib_title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+    "bib_author": "Gu, Albert and Dao, Tri",
+    "bib_year": "2024",
+    "bib_doi": "NO DOI",
+    "verified": true,
+    "details": {
+      "source": "arxiv:2312.00752",
+      "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+      "issued": "2023",
+      "author": [
+        "Albert Gu",
+        "Tri Dao"
+      ],
+      "url": "https://arxiv.org/abs/2312.00752"
+    },
+    "in_text_claims": [
+      "We evaluate deterministic smoothing filters, order-statistic filters, temporal consensus tracking, and a learned Mamba selective state-space model (SSSM) \\cite{gu2023mamba}.",
+      "Gu and Dao \\cite{gu2023mamba} introduced Mamba, which equips state-space models with data-dependent selection mechanisms and hardware-efficient parallel scans."
+    ]
+  },
+  {
+    "index": 23,
+    "key": "zhu2024vision",
+    "bib_title": "Vision Mamba: Efficient Visual Sequence Modeling with Bidirectional State Spaces",
+    "bib_author": "Zhu, Lianghui and Liao, Bencheng and Zhang, Qian and Wang, Xinlong and Liu, Wenyu and Wang, Xinggang",
+    "bib_year": "2024",
+    "bib_doi": "NO DOI",
+    "verified": true,
+    "details": {
+      "source": "arxiv:2401.09417",
+      "title": "Vision Mamba: Efficient Visual Representation Learning with Bidirectional State Space Model",
+      "issued": "2024",
+      "author": [
+        "Lianghui Zhu",
+        "Bencheng Liao",
+        "Qian Zhang",
+        "Xinlong Wang",
+        "Wenyu Liu",
+        "Xinggang Wang"
+      ],
+      "url": "https://arxiv.org/abs/2401.09417"
+    },
+    "in_text_claims": [
+      "\\cite{zhu2024vision} introduced Vision Mamba (Vim), adapting bidirectional selective state spaces to visual token sequences."
+    ]
+  },
+  {
+    "index": 24,
+    "key": "liu2024vmamba",
+    "bib_title": "VMamba",
+    "bib_author": "Liu, Yue and Tian, Yunjie and Zhao, Yuzhong and Yu, Hongtian and Xie, Lingxi and Wang, Yaowei and Ye, Qixiang and Liu, Yunfan",
+    "bib_year": "2024",
+    "bib_doi": "NO DOI",
+    "verified": true,
+    "details": {
+      "source": "crossref_search",
+      "title": "DCDU-VMamba: Depth Completion of Transparent Objects With Dual U-VMamba for Robotic Grasp",
+      "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
+      "container": "IEEE Transactions on Instrumentation and Measurement",
+      "issued": 2025,
+      "DOI": "10.1109/tim.2025.3602590",
+      "author": [
+        "Haiyang Jiang",
+        "Tong Liu",
+        "Huaping Liu",
+        "Kai Wang",
+        "Jiabao Song"
+      ]
+    },
+    "in_text_claims": [
+      "\\cite{liu2024vmamba} developed VMamba, introducing cross-scan mechanisms for 2D visual representations."
+    ]
+  },
+  {
+    "index": 25,
+    "key": "dao2024transformers",
+    "bib_title": "Transformers are SSMs",
+    "bib_author": "Dao, Tri and Gu, Albert",
+    "bib_year": "2024",
+    "bib_doi": "NO DOI",
+    "verified": true,
+    "details": {
+      "source": "arxiv:2405.21060",
+      "title": "Transformers are SSMs: Generalized Models and Efficient Algorithms Through Structured State Space Duality",
+      "issued": "2024",
+      "author": [
+        "Tri Dao",
+        "Albert Gu"
+      ],
+      "url": "https://arxiv.org/abs/2405.21060"
+    },
+    "in_text_claims": [
+      "Furthermore, Dao and Gu \\cite{dao2024transformers} established structured state-space duality, proving that selective state spaces provide an optimal bridge between recurrence and attention."
+    ]
+  }
+]

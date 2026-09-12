@@ -1,0 +1,288 @@
+[
+  {
+    "index": 1,
+    "key": "hwang2015multispectral",
+    "title": "Multispectral Pedestrian Detection: Benchmark Dataset and Baseline",
+    "author": "Hwang, Soonmin and Park, Jaesik and Kim, Namil and Choi, Yukyung and Kweon, In So",
+    "doi": "10.1109/CVPR.2015.7298706",
+    "year": "2015",
+    "in_text": [
+      "Conversely, thermal infrared (TIR) cameras detect human heat radiation regardless of ambient lighting \\cite{hwang2015multispectral}, \\cite{jia2021llvip}.",
+      "\\cite{hwang2015multispectral} provided the first large-scale synchronized RGB-thermal dataset for urban surveillance, proving that thermal radiation preserves human contours when visible lighting degrades."
+    ]
+  },
+  {
+    "index": 2,
+    "key": "jia2021llvip",
+    "title": "LLVIP",
+    "author": "Jia, Xinyu and Zhu, Chuang and Li, Minzhen and Tang, Wenqi and Zhou, Wenhai",
+    "doi": "10.1109/ICCVW54120.2021.00391",
+    "year": "2021",
+    "in_text": [
+      "Conversely, thermal infrared (TIR) cameras detect human heat radiation regardless of ambient lighting \\cite{hwang2015multispectral}, \\cite{jia2021llvip}.",
+      "\\cite{jia2021llvip} released the LLVIP dataset, demonstrating substantial performance improvements in extremely low-light conditions by pairing infrared cues with optical streams."
+    ]
+  },
+  {
+    "index": 3,
+    "key": "liu2016multispectral",
+    "title": "Multispectral Deep Neural Networks for Pedestrian Detection",
+    "author": "Liu, Jingjing and Zhang, Shaoting and Wang, Shu and Metaxas, Dimitris N.",
+    "doi": "10.5244/C.30.73",
+    "year": "2016",
+    "in_text": [
+      "This gate ensures that a valid target detected in either modality triggers a high confidence score, preventing a degraded sensor branch from suppressing a valid cue \\cite{liu2016multispectral}.",
+      "\\cite{liu2016multispectral} conducted a systematic study of deep multispectral networks, concluding that halfway and late fusion strategies superiorly preserve modality-specific representations compared to early channel concatenation."
+    ]
+  },
+  {
+    "index": 4,
+    "key": "li2018illumination",
+    "title": "Illumination-Aware Faster R-CNN",
+    "author": "Li, Chengyang and Song, Dan and Tong, Ruofeng and Tang, Min",
+    "doi": "10.1109/ACCESS.2018.2882200",
+    "year": "2018",
+    "in_text": [
+      "\\cite{li2018illumination} developed an illumination-aware weighting network that dynamically balances color and thermal branches based on ambient illumination estimates."
+    ]
+  },
+  {
+    "index": 5,
+    "key": "zhang2019cross",
+    "title": "Cross-Modality Interactive Attention Network for Multispectral Pedestrian Detection",
+    "author": "Zhang, Lu and Liu, Zhiyong and Zhang, Shifeng and Yang, Xu and Qiao, Hong and Huang, Kaizhu and Hussain, Amir",
+    "doi": "10.1016/j.inffus.2018.09.015",
+    "year": "2019",
+    "in_text": [
+      "\\cite{zhang2019cross} introduced cross-modality interactive attention networks to suppress noisy features in degraded channels while enhancing salient human boundaries."
+    ]
+  },
+  {
+    "index": 6,
+    "key": "rudol2008human",
+    "title": "Human Body Detection and Geolocation for UAV",
+    "author": "Rudol, Patrik and Doherty, Patrick",
+    "doi": "10.1109/AERO.2008.4526559",
+    "year": "2008",
+    "in_text": [
+      "\\end{IEEEkeywords} \\section{Introduction} Autonomous unmanned aerial vehicles (UAVs) have become indispensable tools for wilderness search-and-rescue (SAR) missions \\cite{rudol2008human}, \\cite{silvagni2017multipurpose}.",
+      "Pioneer work by Rudol and Doherty \\cite{rudol2008human} demonstrated the feasibility of UAV-based human body detection using thermal and visible camera payloads for wilderness search operations."
+    ]
+  },
+  {
+    "index": 7,
+    "key": "silvagni2017multipurpose",
+    "title": "Multipurpose UAV",
+    "author": "Silvagni, Roberto and Tonoli, Andrea and Zenerino, Enrico and Chiaberge, Marcello",
+    "doi": "10.1080/19475705.2016.1245089",
+    "year": "2017",
+    "in_text": [
+      "\\end{IEEEkeywords} \\section{Introduction} Autonomous unmanned aerial vehicles (UAVs) have become indispensable tools for wilderness search-and-rescue (SAR) missions \\cite{rudol2008human}, \\cite{silvagni2017multipurpose}.",
+      "\\cite{silvagni2017multipurpose} analyzed multipurpose aerial systems for alpine avalanche rescue, highlighting that onboard battery reserves strictly limit total flight duration."
+    ]
+  },
+  {
+    "index": 8,
+    "key": "lygouras2019unsupervised",
+    "title": "Unsupervised Human Detection with an Embedded Vision System on a Fully Autonomous UAV",
+    "author": "Lygouras, Vasileios and Santavas, Nikolaos and Taitzoglou, Aris and Tarchanidis, Kyriakos and Mitropoulos, Anastasios and Gasteratos, Antonios",
+    "doi": "10.3390/s19163542",
+    "year": "2019",
+    "in_text": [
+      "\\cite{lygouras2019unsupervised} deployed an embedded computer vision pipeline on an autonomous SAR drone, showing that complex neural ensembles exceed the power and compute envelope of compact onboard processing units."
+    ]
+  },
+  {
+    "index": 9,
+    "key": "portmann2014people",
+    "title": "People Detection and Tracking from Aerial Thermal Views in Search and Rescue Scenarios",
+    "author": "Portmann, David and Lynen, Stefan and Chli, Margarita and Siegwart, Roland",
+    "doi": "10.1109/IROS.2014.6942571",
+    "year": "2014",
+    "in_text": [
+      "Nevertheless, thermal sensors encounter critical vulnerabilities known as thermal crossover, where human body temperatures equilibrate with sun-heated sand, rocks, or asphalt surfaces \\cite{portmann2014people}.",
+      "\\cite{portmann2014people} identified that sun-warmed ground objects, rocky outcroppings, and specular snow create thermal crossover spikes that lead to repeated false alarms."
+    ]
+  },
+  {
+    "index": 10,
+    "key": "kyrkou2021emergencynet",
+    "title": "EmergencyNet",
+    "author": "Kyrkou, Christos and Theocharides, Theocharis",
+    "doi": "10.1109/TCCN.2020.3017772",
+    "year": "2021",
+    "in_text": [
+      "Furthermore, remote SAR operations frequently lack high-bandwidth communication infrastructure, forcing autonomous edge nodes to transmit location alerts and video snippets over low-bandwidth cellular or satellite Internet of Things (IoT) uplinks \\cite{kyrkou2021emergencynet}.",
+      "Kyrkou and Theocharides \\cite{kyrkou2021emergencynet} addressed communication bottlenecks in UAV emergency response with EmergencyNet, demonstrating that erroneous aerial alerts congest wireless telemetry uplinks and trigger wasted robotic re-inspection sorties."
+    ]
+  },
+  {
+    "index": 11,
+    "key": "jocher2024yolo11",
+    "title": "Ultralytics YOLO11",
+    "author": "Jocher, Glenn and Qiu, Jing",
+    "doi": "NO DOI",
+    "year": "2024",
+    "in_text": [
+      "To operate within the real-time constraints of edge processors, modern aerial systems rely on compact single-stage detectors such as the You Only Look Once (YOLO) architecture \\cite{redmon2016you}, \\cite{wang2023yolov7}, \\cite{jocher2024yolo11}.",
+      "The Ultralytics YOLO11 family \\cite{jocher2024yolo11} further refines parameter efficiency for edge hardware."
+    ]
+  },
+  {
+    "index": 12,
+    "key": "redmon2016you",
+    "title": "You Only Look Once: Unified, Real-Time Object Detection",
+    "author": "Redmon, Joseph and Divvala, Santosh and Girshick, Ross and Farhadi, Ali",
+    "doi": "10.1109/CVPR.2016.91",
+    "year": "2016",
+    "in_text": [
+      "To operate within the real-time constraints of edge processors, modern aerial systems rely on compact single-stage detectors such as the You Only Look Once (YOLO) architecture \\cite{redmon2016you}, \\cite{wang2023yolov7}, \\cite{jocher2024yolo11}.",
+      "\\cite{redmon2016you}, subsequent iterations introduced architectural refinements to maximize real-time efficiency."
+    ]
+  },
+  {
+    "index": 13,
+    "key": "wang2023yolov7",
+    "title": "YOLOv7",
+    "author": "Wang, Chien-Yao and Bochkovskiy, Alexey and Liao, Hong-Yuan Mark",
+    "doi": "10.1109/CVPR52729.2023.00721",
+    "year": "2023",
+    "in_text": [
+      "To operate within the real-time constraints of edge processors, modern aerial systems rely on compact single-stage detectors such as the You Only Look Once (YOLO) architecture \\cite{redmon2016you}, \\cite{wang2023yolov7}, \\cite{jocher2024yolo11}.",
+      "\\cite{wang2023yolov7} introduced YOLOv7, incorporating efficient layer aggregation networks and re-parameterization techniques."
+    ]
+  },
+  {
+    "index": 14,
+    "key": "wang2024yolov9",
+    "title": "YOLOv9",
+    "author": "Wang, Chien-Yao and Yeh, I-Hau and Liao, Hong-Yuan Mark",
+    "doi": "NO DOI",
+    "year": "2024",
+    "in_text": [
+      "\\cite{wang2024yolov9} proposed YOLOv9 to retain critical information through programmable gradient flows."
+    ]
+  },
+  {
+    "index": 15,
+    "key": "wang2024yolov10",
+    "title": "YOLOv10",
+    "author": "Wang, Ao and Chen, Hui and Liu, Lihao and Chen, Kai and Lin, Zijia and Han, Jungong and Ding, Guiguang",
+    "doi": "NO DOI",
+    "year": "2024",
+    "in_text": [
+      "\\cite{wang2024yolov10} developed YOLOv10, which eliminates non-maximum suppression (NMS) latency through consistent dual assignments."
+    ]
+  },
+  {
+    "index": 16,
+    "key": "han2016seq",
+    "title": "Seq-NMS",
+    "author": "Han, Wei and Khorrami, Pooya and Paine, Tom Le and Ramachandran, Prajit and Babaeizadeh, Mohammad and Shi, Honghui and Li, Jianchao and Yan, Shuicheng and Huang, Thomas S.",
+    "doi": "NO DOI",
+    "year": "2016",
+    "in_text": [
+      "\\cite{han2016seq} proposed Seq-NMS, which constructs temporal box sequences across consecutive frames and rescores candidate proposals based on trajectory continuity."
+    ]
+  },
+  {
+    "index": 17,
+    "key": "kang2018tcnn",
+    "title": "T-CNN",
+    "author": "Kang, Kai and Li, Hongsheng and Xiao, Tong and Ouyang, Wanli and Yan, Junjie and Liu, Xinguang and Wang, Xiaogang",
+    "doi": "10.1109/TCSVT.2017.2736553",
+    "year": "2018",
+    "in_text": [
+      "\\cite{kang2018tcnn} formulated T-CNN, employing tubelet proposals and multi-frame convolutional feature propagation to stabilize video detections."
+    ]
+  },
+  {
+    "index": 18,
+    "key": "wald1945sequential",
+    "title": "Sequential Tests of Statistical Hypotheses",
+    "author": "Wald, Abraham",
+    "doi": "10.1214/aoms/1177731118",
+    "year": "1945",
+    "in_text": [
+      "The mathematical foundation of sequential decision making traces back to Wald's sequential probability ratio test (SPRT) \\cite{wald1945sequential}, which proved that accumulating sequential evidence over time minimizes false alarms for a specified detection delay."
+    ]
+  },
+  {
+    "index": 19,
+    "key": "richards2014fundamentals",
+    "title": "Fundamentals of Radar Signal Processing",
+    "author": "Richards, Mark A.",
+    "doi": "NO DOI",
+    "year": "2014",
+    "in_text": [
+      "In radar signal processing, Richards \\cite{richards2014fundamentals} formulated sliding-window $M$-out-of-$N$ binary integration, where an alarm is confirmed only if a target is detected in at least $M$ out of $N$ consecutive pulses."
+    ]
+  },
+  {
+    "index": 20,
+    "key": "rabiner1975applications",
+    "title": "Applications of a Nonlinear Smoothing Algorithm to Speech and Signal Processing",
+    "author": "Rabiner, Lawrence R. and Sambur, Marvin R. and Schmidt, Carolyn E.",
+    "doi": "10.1109/TASSP.1975.1162751",
+    "year": "1975",
+    "in_text": [
+      "\\cite{rabiner1975applications} established the properties of running median and moving average filters for separating impulsive noise spikes from sustained signals."
+    ]
+  },
+  {
+    "index": 21,
+    "key": "gu2022efficiently",
+    "title": "Efficiently Modeling Long Sequences with Structured State Spaces",
+    "author": "Gu, Albert and Goel, Karan and R{'e",
+    "doi": "NO DOI",
+    "year": "2022",
+    "in_text": [
+      "\\cite{gu2022efficiently} introduced the Structured State Space (S4) architecture, which parameterizes continuous-time state-space representations using HiPPO matrices to achieve linear computational complexity and long-range dependency modeling."
+    ]
+  },
+  {
+    "index": 22,
+    "key": "gu2023mamba",
+    "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+    "author": "Gu, Albert and Dao, Tri",
+    "doi": "NO DOI",
+    "year": "2024",
+    "in_text": [
+      "We evaluate deterministic smoothing filters, order-statistic filters, temporal consensus tracking, and a learned Mamba selective state-space model (SSSM) \\cite{gu2023mamba}.",
+      "Gu and Dao \\cite{gu2023mamba} introduced Mamba, which equips state-space models with data-dependent selection mechanisms and hardware-efficient parallel scans."
+    ]
+  },
+  {
+    "index": 23,
+    "key": "zhu2024vision",
+    "title": "Vision Mamba: Efficient Visual Sequence Modeling with Bidirectional State Spaces",
+    "author": "Zhu, Lianghui and Liao, Bencheng and Zhang, Qian and Wang, Xinlong and Liu, Wenyu and Wang, Xinggang",
+    "doi": "NO DOI",
+    "year": "2024",
+    "in_text": [
+      "\\cite{zhu2024vision} introduced Vision Mamba (Vim), adapting bidirectional selective state spaces to visual token sequences."
+    ]
+  },
+  {
+    "index": 24,
+    "key": "liu2024vmamba",
+    "title": "VMamba",
+    "author": "Liu, Yue and Tian, Yunjie and Zhao, Yuzhong and Yu, Hongtian and Xie, Lingxi and Wang, Yaowei and Ye, Qixiang and Liu, Yunfan",
+    "doi": "NO DOI",
+    "year": "2024",
+    "in_text": [
+      "\\cite{liu2024vmamba} developed VMamba, introducing cross-scan mechanisms for 2D visual representations."
+    ]
+  },
+  {
+    "index": 25,
+    "key": "dao2024transformers",
+    "title": "Transformers are SSMs",
+    "author": "Dao, Tri and Gu, Albert",
+    "doi": "NO DOI",
+    "year": "2024",
+    "in_text": [
+      "Furthermore, Dao and Gu \\cite{dao2024transformers} established structured state-space duality, proving that selective state spaces provide an optimal bridge between recurrence and attention."
+    ]
+  }
+]

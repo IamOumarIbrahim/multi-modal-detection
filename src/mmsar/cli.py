@@ -126,6 +126,25 @@ def import_annotations(
     typer.echo(f"Successfully converted {len(thermal_tasks)} annotations to {out_thermal}")
 
 
+@app.command(name="extract-video-annotations")
+def extract_video_annotations(
+    json_path: Path = typer.Option(..., "--json", "-j", help="Path to exported Label Studio video tracking JSON."),
+    out_dir: Path = typer.Option(Path("data/processed/labels"), "--out", "-o", help="Directory to save per-frame YOLO text annotations."),
+    frames_per_video: int = typer.Option(240, "--frames", "-f", help="Total number of frames per video in Label Studio (default 240 for 10s @ 24 fps)."),
+    decimate_ratio: int = typer.Option(1, "--decimate", "-d", help="Frame decimation ratio (default 1 for all frames, 3 for 24->8 fps decimation)."),
+) -> None:
+    """Extract interpolated per-frame YOLO annotations from Label Studio video tracking JSON."""
+    from mmsar.annotation.video_annotation_parser import convert_ls_video_export_to_yolo
+    result = convert_ls_video_export_to_yolo(
+        export_json_path=json_path,
+        output_labels_dir=out_dir,
+        total_frames_per_video=frames_per_video,
+        decimation_ratio=decimate_ratio,
+    )
+    typer.echo(f"Successfully generated {result['total_labels_written']} YOLO label files in {out_dir}")
+
+
+
 @app.command()
 def train(
     model: Optional[str] = typer.Option(

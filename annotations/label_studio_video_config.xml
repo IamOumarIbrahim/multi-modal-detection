@@ -1,0 +1,8 @@
+<View>
+  <Header value="MMSAR Person Tracking in Video"/>
+  <Video name="video" value="$video" framerate="24.0"/>
+  <VideoRectangle name="box" toName="video"/>
+  <Labels name="labels" toName="video">
+    <Label value="Person_Detected" background="#E74C3C"/>
+  </Labels>
+</View>

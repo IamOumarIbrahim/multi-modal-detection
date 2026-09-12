@@ -81,10 +81,11 @@ def run_training(
         Summary dict containing training status, model name, and final batch size.
     """
     hyperparams = load_hyperparams(hyperparams_path)
-    batch = int(hyperparams.get("batch", 32))
+    batch = int(hyperparams.get("batch", 16))
     epochs = int(hyperparams.get("epochs", 100))
     patience = 0 if not hyperparams.get("early_stopping", False) else 50
     imgsz = int(hyperparams.get("imgsz", 640))
+    amp = bool(hyperparams.get("amp", False))
 
     # Instantiate model from architecture YAML (not .pt weights)
     model = YOLO(model_arch)
@@ -108,6 +109,7 @@ def run_training(
                 batch=current_batch,
                 imgsz=imgsz,
                 patience=patience,
+                amp=amp,
                 device=hyperparams.get("device", 0 if torch.cuda.is_available() else "cpu"),
             )
             return {

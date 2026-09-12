@@ -34,12 +34,12 @@ def test_train_dry_run_exits_zero_without_training(tmp_path: Path) -> None:
     # Assert train.py --dry-run exits 0 without launching a real multi-epoch loop
     result_11 = run_training(model_arch="yolo11n.yaml", dry_run=True)
     assert result_11["status"] == "dry_run_success"
-    assert result_11["batch"] == 32
+    assert result_11["batch"] == 16
     assert result_11["model_arch"] == "yolo11n.yaml"
 
     result_26 = run_training(model_arch="yolo26n.yaml", dry_run=True)
     assert result_26["status"] == "dry_run_success"
-    assert result_26["batch"] == 32
+    assert result_26["batch"] == 16
     assert result_26["model_arch"] == "yolo26n.yaml"
 
     # Test via CLI runner default (primary model only)
@@ -82,7 +82,7 @@ def test_cli_train_with_optional_models() -> None:
 
 def test_hyperparams_match_readme() -> None:
     hyperparams = load_hyperparams()
-    assert hyperparams["batch"] == 32
+    assert hyperparams["batch"] == 16
     assert hyperparams["epochs"] == 100
     assert hyperparams["early_stopping"] is False
     assert hyperparams["primary_model"] == "yolo11n.yaml"

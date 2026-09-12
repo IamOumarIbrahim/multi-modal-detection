@@ -38,6 +38,7 @@ SUBCOMMANDS = [
     "sample-frames",
     "push-label-studio",
     "import-annotations",
+    "extract-video-annotations",
     "train",
     "fill-results",
 ]
@@ -182,7 +183,7 @@ def test_synthetic_end_to_end_pipeline(tmp_path: Path) -> None:
         dry_run=True,
     )
     assert train_result["status"] == "dry_run_success"
-    assert train_result["batch"] == 32
+    assert train_result["batch"] == 16
 
     # Step 10: Reporting table filler dry-run and confirmed fill on isolated copy
     readme_copy = tmp_path / "README.md"

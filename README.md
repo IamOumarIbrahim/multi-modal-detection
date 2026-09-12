@@ -118,7 +118,8 @@ Two primary YOLO-family lightweight object detection models are used:
 
 | Training Setting | Value |
 | :--- | :--- |
-| **Batch size** | 32 |
+| **Batch size** | 16 |
+| **Precision** | Full FP32 (amp=False) |
 | **Epochs** | 100 |
 | **Early stopping** | Disabled |
 | **Hardware GPU** | Nvidia RTX 4060 |
@@ -200,10 +201,10 @@ The following table summarizes the dataset composition:
 
 | Condition | Scenario Type | RGB Videos | Thermal Videos | Frames per Modality (8 FPS) |
 | --- | --- | --- | --- | --- |
-| **Desert** | Positive | 5 | 5 | 400 |
-| **Desert** | Hard-Negative | 5 | 5 | 400 |
-| **Desert** | Clear-Negative | 5 | 5 | 400 |
-| **Forest** | Positive | 5 | 5 | 400 |
+| **Desert** | Positive | 5 ✅| 5 | 400 |
+| **Desert** | Hard-Negative | 5 ✅ | 5 | 400 |
+| **Desert** | Clear-Negative | 5 ✅| 5 | 400 |
+| **Forest** | Positive | 5 (1/5 done)| 5 | 400 |
 | **Forest** | Hard-Negative | 5 | 5 | 400 |
 | **Forest** | Clear-Negative | 5 | 5 | 400 |
 | **Altitude (Snow)** | Positive | 5 | 5 | 400 |

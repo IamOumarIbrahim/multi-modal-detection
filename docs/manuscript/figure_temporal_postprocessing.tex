@@ -1,0 +1,92 @@
+\begin{tikzpicture}[
+    >=Stealth,
+    font=\sffamily\small,
+    stemline/.style={draw=blue!75!black, line width=1.5pt},
+    threshline/.style={draw=red!70, dashed, line width=1pt},
+    axisline/.style={draw=black!75, ->, thick},
+    badge/.style={draw=black!40, rounded corners=3pt, font=\sffamily\scriptsize, inner sep=4pt, align=left}
+]
+
+% =============================================================
+% Panel A: Transient Noise Spike (Hard Negative Clutter)
+% =============================================================
+\node[font=\sffamily\footnotesize\bfseries, anchor=west] at (-0.4, 3.2) {(a) Transient Noise Spike (Single-Frame Clutter)};
+
+% Axes
+\draw[axisline] (1.0, 0) -- (6.0, 0) node[right, font=\sffamily\scriptsize] {Frame $k$};
+\draw[axisline] (1.0, 0) -- (1.0, 2.7);
+\node[rotate=90, anchor=south, font=\sffamily\scriptsize] at (0.05, 1.35) {Confidence $s[k]$};
+
+% Ticks
+\foreach \x/\label in {1.6/{$n-4$}, 2.4/{$n-3$}, 3.2/{$n-2$}, 4.0/{$n-1$}, 4.8/{$n$}} {
+    \draw (1.0, 0) ++(\x-1.0, 2pt) -- ++(0, -4pt) node[below=1pt, font=\sffamily\scriptsize] {\label};
+}
+\node[left, font=\sffamily\scriptsize] at (1.0, 1.35) {$\tau = 0.5$};
+\node[left, font=\sffamily\scriptsize] at (1.0, 2.45) {$1.0$};
+\node[left, font=\sffamily\scriptsize] at (1.0, 0) {$0.0$};
+
+% Threshold line
+\draw[threshline] (1.0, 1.35) -- (5.7, 1.35);
+
+% Stems: Low background + 1 sharp isolated noise spike
+\draw[stemline] (1.6, 0) -- (1.6, 0.25) node[circle, fill=blue!75!black, inner sep=1.3pt] {};
+\draw[stemline] (2.4, 0) -- (2.4, 0.35) node[circle, fill=blue!75!black, inner sep=1.3pt] {};
+\draw[stemline, draw=red!75!black, line width=1.8pt] (3.2, 0) -- (3.2, 2.3) node[circle, fill=red!75!black, inner sep=1.8pt] {};
+\draw[stemline] (4.0, 0) -- (4.0, 0.20) node[circle, fill=blue!75!black, inner sep=1.3pt] {};
+\draw[stemline] (4.8, 0) -- (4.8, 0.15) node[circle, fill=blue!75!black, inner sep=1.3pt] {};
+
+% Window bracket
+\draw[draw=black!60, decorate, decoration={brace, amplitude=3.5pt, mirror}] (1.4, -0.45) -- (5.0, -0.45) 
+    node[midway, below=3pt, font=\sffamily\scriptsize] {Sliding Window $W = 5$ ($625\text{ ms}$)};
+
+% Outcome badge panel A
+\node[badge, fill=red!6, draw=red!60] at (7.8, 1.35) {
+    \textbf{Single-Frame Raw:}\\
+    \textcolor{red!80!black}{\textbf{$\times$ Spurious Alarm!}}\\[4pt]
+    \textbf{Temporal Filtered:}\\
+    \textcolor{green!60!black}{\textbf{$\checkmark$ Suppressed ($y[n]=0$)}}
+};
+
+% =============================================================
+% Panel B: Sustained Human Signature (True Positive Target)
+% =============================================================
+\begin{scope}[yshift=-4.6cm]
+\node[font=\sffamily\footnotesize\bfseries, anchor=west] at (-0.4, 3.2) {(b) Sustained Target Signature (True SAR Victim)};
+
+% Axes
+\draw[axisline] (1.0, 0) -- (6.0, 0) node[right, font=\sffamily\scriptsize] {Frame $k$};
+\draw[axisline] (1.0, 0) -- (1.0, 2.7);
+\node[rotate=90, anchor=south, font=\sffamily\scriptsize] at (0.05, 1.35) {Confidence $s[k]$};
+
+% Ticks
+\foreach \x/\label in {1.6/{$n-4$}, 2.4/{$n-3$}, 3.2/{$n-2$}, 4.0/{$n-1$}, 4.8/{$n$}} {
+    \draw (1.0, 0) ++(\x-1.0, 2pt) -- ++(0, -4pt) node[below=1pt, font=\sffamily\scriptsize] {\label};
+}
+\node[left, font=\sffamily\scriptsize] at (1.0, 1.35) {$\tau = 0.5$};
+\node[left, font=\sffamily\scriptsize] at (1.0, 2.45) {$1.0$};
+\node[left, font=\sffamily\scriptsize] at (1.0, 0) {$0.0$};
+
+% Threshold line
+\draw[threshline] (1.0, 1.35) -- (5.7, 1.35);
+
+% Stems: Consistently high confidence across all frames
+\draw[stemline, draw=green!60!black, line width=1.6pt] (1.6, 0) -- (1.6, 1.9) node[circle, fill=green!60!black, inner sep=1.4pt] {};
+\draw[stemline, draw=green!60!black, line width=1.6pt] (2.4, 0) -- (2.4, 2.1) node[circle, fill=green!60!black, inner sep=1.4pt] {};
+\draw[stemline, draw=green!60!black, line width=1.6pt] (3.2, 0) -- (3.2, 2.0) node[circle, fill=green!60!black, inner sep=1.4pt] {};
+\draw[stemline, draw=green!60!black, line width=1.6pt] (4.0, 0) -- (4.0, 2.25) node[circle, fill=green!60!black, inner sep=1.4pt] {};
+\draw[stemline, draw=green!60!black, line width=1.6pt] (4.8, 0) -- (4.8, 2.15) node[circle, fill=green!60!black, inner sep=1.4pt] {};
+
+% Window bracket
+\draw[draw=black!60, decorate, decoration={brace, amplitude=3.5pt, mirror}] (1.4, -0.45) -- (5.0, -0.45) 
+    node[midway, below=3pt, font=\sffamily\scriptsize] {Sliding Window $W = 5$ ($625\text{ ms}$)};
+
+% Outcome badge panel B
+\node[badge, fill=green!6, draw=green!60!black] at (7.8, 1.35) {
+    \textbf{Single-Frame Raw:}\\
+    \textcolor{green!60!black}{\textbf{$\checkmark$ Target Detected}}\\[4pt]
+    \textbf{Temporal Filtered:}\\
+    \textcolor{green!60!black}{\textbf{$\checkmark$ Confirmed ($y[n]=1$)}}
+};
+\end{scope}
+
+\end{tikzpicture}

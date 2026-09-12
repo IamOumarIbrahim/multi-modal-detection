@@ -1,8 +1,9 @@
 # MMSAR Training Hyperparameters matching README.md Training Setting table
-batch: 32
+batch: 16
 epochs: 100
 early_stopping: false
 imgsz: 640
+amp: false
 device: 0
 
 # Model configurations: YOLO11n is primary; YOLO26n is optional based on available time

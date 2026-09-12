@@ -1,5 +1,9 @@
 # Realistic Video Generation Prompts
 
+## Tool used
+
+Google gemini 3.8-flash (extended)
+
 ## Global realism instruction
 
 Add this to **every RGB prompt**:

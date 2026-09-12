@@ -53,8 +53,11 @@ def decimate_and_crop(
                 break
 
             if frame_idx % decimation_ratio == 0:
-                # Crop [Y_min:Y_max, X_min:X_max]
-                cropped = frame[y_min:y_max, x_min:x_max]
+                fh, fw = frame.shape[:2]
+                if fw == 640 and fh == 640:
+                    cropped = frame
+                else:
+                    cropped = frame[y_min:y_max, x_min:x_max]
 
                 out_filename = destination / f"frame_{saved_idx:06d}.png"
                 success = cv2.imwrite(str(out_filename), cropped)

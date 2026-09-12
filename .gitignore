@@ -9,4 +9,5 @@ data/processed/**
 *.pt
 .venv/
 __pycache__/
-*.egg-info/
+*.egg-info/
+videos/
