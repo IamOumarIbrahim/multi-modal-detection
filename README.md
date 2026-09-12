@@ -4,7 +4,7 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License: Apache 2.0"></a>
   <img src="https://img.shields.io/badge/Resolution-640%C3%97640-555?style=flat" alt="Resolution: 640×640">
-  <img src="https://img.shields.io/badge/Sampling_Rate-8_Hz_(125_ms)-blue?style=flat" alt="Sampling Rate: 8 Hz">
+  <img src="https://img.shields.io/badge/Sampling_Rate-24_Hz_(41.7_ms)-blue?style=flat" alt="Sampling Rate: 24 Hz">
   <img src="https://img.shields.io/badge/Backbones-2%C3%97_YOLO11n_(2.6M_Params)-orange?style=flat" alt="Backbone: YOLO11n">
   <img src="https://img.shields.io/badge/Status-ICSPIS_2026_Submission-red?style=flat" alt="Status: ICSPIS 2026 Submission">
 </p>
@@ -25,7 +25,7 @@
 - [Dataset Corpus & Harvesting](#dataset-corpus--harvesting)
   - [Controlled 2×2 Experimental Design](#controlled-22-experimental-design)
   - [Dual-Crop Harvesting Procedure](#dual-crop-harvesting-procedure)
-  - [Decimation & Sequence-Level 60/20/20 Split](#decimation--sequence-level-602020-split)
+  - [Full-Rate Stream & Sequence-Level 60/20/20 Split](#full-rate-stream--sequence-level-602020-split)
   - [Dataset Composition Matrix](#dataset-composition-matrix)
 - [Results & Benchmarks](#results--benchmarks)
   - [Table 1: Upstream Frame-Level Detection Performance](#table-1-upstream-frame-level-detection-performance)
@@ -59,8 +59,8 @@ flowchart TD
         TIR_raw["Raw Thermal Video\n1280x720 @ 24 FPS"]
         Crop_RGB["Dual-Crop Extraction\nLeft (x=0) & Right (x=640)\n640x640 Snippets (y=40)"]
         Crop_TIR["Dual-Crop Extraction\nLeft (x=0) & Right (x=640)\n640x640 Snippets (y=40)"]
-        Dec_RGB["3:1 Decimation\nTimebase fs = 8 Hz (Ts = 125 ms)"]
-        Dec_TIR["3:1 Decimation\nTimebase fs = 8 Hz (Ts = 125 ms)"]
+        Dec_RGB["Full-Rate Ingestion\nTimebase fs = 24 Hz (Ts ≈ 41.7 ms)"]
+        Dec_TIR["Full-Rate Ingestion\nTimebase fs = 24 Hz (Ts ≈ 41.7 ms)"]
     end
 
     subgraph S2 ["Stage 2: Parallel Upstream Detectors"]
@@ -278,18 +278,18 @@ Raw video sequences are captured in $1280 \times 720$ resolution at 24 FPS (10.0
 
 ---
 
-### Decimation & Sequence-Level 60/20/20 Split
+### Full-Rate Stream & Sequence-Level 60/20/20 Split
 
-Videos are decimated $3:1$ to an operating rate of $f_s = 8\text{ Hz}$ ($T_s = 125\text{ ms}$, 80 frames per snippet). To prevent temporal data leakage, partitioning is performed strictly at the sequence level:
+Videos are processed at full frame rate $f_s = 24\text{ Hz}$ ($T_s \approx 41.7\text{ ms}$, 240 frames per snippet). To prevent temporal data leakage, partitioning is performed strictly at the sequence level:
 
 <div align="center">
 
-| Partition | Proportion | Clips per Scenario Bin | Clips per Biome | Total Video Clips | Frames per Modality (8 Hz) |
+| Partition | Proportion | Clips per Scenario Bin | Clips per Biome | Total Video Clips | Frames per Modality (24 Hz) |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Train Split** | 60% | 6 clips | 18 clips | 36 clips | 2,880 frames |
-| **Validation Split** | 20% | 2 clips | 6 clips | 12 clips | 960 frames |
-| **Test Split (Held-Out)** | 20% | 2 clips | 6 clips | 12 clips | 960 frames |
-| **Total Corpus** | **100%** | **10 clips** | **30 clips** | **60 clips** | **4,800 frames** |
+| **Train Split** | 60% | 6 clips | 18 clips | 36 clips | 8,640 frames |
+| **Validation Split** | 20% | 2 clips | 6 clips | 12 clips | 2,880 frames |
+| **Test Split (Held-Out)** | 20% | 2 clips | 6 clips | 12 clips | 2,880 frames |
+| **Total Corpus** | **100%** | **10 clips** | **30 clips** | **60 clips** | **14,400 frames** |
 
 </div>
 
@@ -299,15 +299,15 @@ Videos are decimated $3:1$ to an operating rate of $f_s = 8\text{ Hz}$ ($T_s = 1
 
 <div align="center">
 
-| Biome Condition | Scenario Type | RGB Video Clips | Thermal Video Clips | Frames per Modality (8 Hz) | Sequence Split (Train / Val / Test) |
+| Biome Condition | Scenario Type | RGB Video Clips | Thermal Video Clips | Frames per Modality (24 Hz) | Sequence Split (Train / Val / Test) |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| **Arid Desert** | Positive Target | 10 | 10 | 800 | 6 / 2 / 2 clips |
-| **Arid Desert** | Hard-Negative Distractor | 10 | 10 | 800 | 6 / 2 / 2 clips |
-| **Arid Desert** | Clear-Negative Background | 10 | 10 | 800 | 6 / 2 / 2 clips |
-| **Temperate Forest** | Positive Target | 10 | 10 | 800 | 6 / 2 / 2 clips |
-| **Temperate Forest** | Hard-Negative Distractor | 10 | 10 | 800 | 6 / 2 / 2 clips |
-| **Temperate Forest** | Clear-Negative Background | 10 | 10 | 800 | 6 / 2 / 2 clips |
-| **Corpus Total** | **All 6 Scenario Bins** | **60** | **60** | **4,800** | **36 / 12 / 12 clips** |
+| **Arid Desert** | Positive Target | 10 | 10 | 2,400 | 6 / 2 / 2 clips |
+| **Arid Desert** | Hard-Negative Distractor | 10 | 10 | 2,400 | 6 / 2 / 2 clips |
+| **Arid Desert** | Clear-Negative Background | 10 | 10 | 2,400 | 6 / 2 / 2 clips |
+| **Temperate Forest** | Positive Target | 10 | 10 | 2,400 | 6 / 2 / 2 clips |
+| **Temperate Forest** | Hard-Negative Distractor | 10 | 10 | 2,400 | 6 / 2 / 2 clips |
+| **Temperate Forest** | Clear-Negative Background | 10 | 10 | 2,400 | 6 / 2 / 2 clips |
+| **Corpus Total** | **All 6 Scenario Bins** | **60** | **60** | **14,400** | **36 / 12 / 12 clips** |
 
 </div>
 

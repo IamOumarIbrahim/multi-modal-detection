@@ -40,7 +40,7 @@ ORCID: 0000-0002-3554-0061}
 \endgroup
 
 \begin{abstract}
-Autonomous unmanned aerial vehicles (UAVs) deployed in wilderness search-and-rescue (SAR) missions require reliable person detection under severe size, weight, power, and computing (SWaP-C) constraints. While multimodal sensing combining visible red-green-blue (RGB) and thermal infrared (TIR) cameras mitigates single-modality dropouts caused by canopy shade, darkness, or thermal crossover, frame-level object detectors frequently produce transient false positive spikes. In autonomous aerial operations, each false alarm triggers wasteful loiter maneuvers, battery depletion, and spurious transmissions over bandwidth-constrained Internet of Things (IoT) satellite or cellular links. This paper presents a systematic comparative evaluation of causal temporal post-processing methods designed to convert continuous confidence streams into reliable alarm decisions while suppressing false alarms across modalities and environments. We freeze our study around two wilderness environments (arid desert and temperate forest) and two visual modalities (visible RGB and thermal infrared). We deploy two upstream lightweight You Only Look Once (YOLO11n) detectors (2.6 million parameters, 6.5 giga-floating-point operations (GFLOPs) at $640 \times 640$ resolution): one trained on multi-environment RGB sequences and one on multi-environment thermal sequences, using batch size 16 in single-precision floating-point (FP32) arithmetic for numerical stability on embedded avionics. Frame confidences are integrated via soft disjunctive late fusion and filtered across a causal five-frame sliding window ($625\text{ ms}$ latency bound at $8\text{ Hz}$). We evaluate five post-processing strategies: baseline raw thresholding, five-frame moving average, five-frame median filtering, five-frame history consensus, and a learned pure-PyTorch Mamba selective state-space model (SSSM), with decision thresholds optimized systematically on validation sequences. Evaluations across synthetic SAR video benchmarks demonstrate that causal temporal filtering effectively suppresses environmental false alarms while preserving prompt target sensitivity.
+Autonomous unmanned aerial vehicles (UAVs) deployed in wilderness search-and-rescue (SAR) missions require reliable person detection under severe size, weight, power, and computing (SWaP-C) constraints. While multimodal sensing combining visible red-green-blue (RGB) and thermal infrared (TIR) cameras mitigates single-modality dropouts caused by canopy shade, darkness, or thermal crossover, frame-level object detectors frequently produce transient false positive spikes. In autonomous aerial operations, each false alarm triggers wasteful loiter maneuvers, battery depletion, and spurious transmissions over bandwidth-constrained Internet of Things (IoT) satellite or cellular links. This paper presents a systematic comparative evaluation of causal temporal post-processing methods designed to convert continuous confidence streams into reliable alarm decisions while suppressing false alarms across modalities and environments. We freeze our study around two wilderness environments (arid desert and temperate forest) and two visual modalities (visible RGB and thermal infrared). We deploy two upstream lightweight You Only Look Once (YOLO11n) detectors (2.6 million parameters, 6.5 giga-floating-point operations (GFLOPs) at $640 \times 640$ resolution): one trained on multi-environment RGB sequences and one on multi-environment thermal sequences, using batch size 16 in single-precision floating-point (FP32) arithmetic for numerical stability on embedded avionics. Frame confidences are integrated via soft disjunctive late fusion and filtered across a causal five-frame sliding window ($208\text{ ms}$ latency bound at $24\text{ Hz}$). We evaluate five post-processing strategies: baseline raw thresholding, five-frame moving average, five-frame median filtering, five-frame history consensus, and a learned pure-PyTorch Mamba selective state-space model (SSSM), with decision thresholds optimized systematically on validation sequences. Evaluations across synthetic SAR video benchmarks demonstrate that causal temporal filtering effectively suppresses environmental false alarms while preserving prompt target sensitivity.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -56,13 +56,13 @@ Optical sensing in wilderness environments is susceptible to modality-specific f
 \begin{figure*}[!t]
 \centering
 \resizebox{0.96\textwidth}{!}{\input{figure_system_architecture.tex}}
-\caption{System architecture of the proposed Multimodal Search and Rescue (MMSAR) evaluation framework. Synchronized RGB and thermal streams (illustrated via the 4$\times$2 environment gallery across desert and forest biomes) are decimated to an 8~Hz timebase ($T_s = 125$~ms) and processed by parallel lightweight YOLO11n backbones (one RGB model and one thermal model). Confidence streams are integrated via soft disjunctive late fusion $s[n] = \max(c_{\text{RGB}}[n], c_{\text{Thermal}}[n])$ and distributed across five competing causal temporal post-processing methods ($W = 5$ frames / 625~ms latency bound). Binary alarms are asserted against validation-optimized thresholds $\tau_m^*$ and evaluated across detection reliability and resource overhead.}
+\caption{System architecture of the proposed Multimodal Search and Rescue (MMSAR) evaluation framework. Synchronized RGB and thermal streams (illustrated via the 4$\times$2 environment gallery across desert and forest biomes) are processed at a native 24~Hz timebase ($T_s \approx 41.7$~ms) by parallel lightweight YOLO11n backbones (one RGB model and one thermal model). Confidence streams are integrated via soft disjunctive late fusion $s[n] = \max(c_{\text{RGB}}[n], c_{\text{Thermal}}[n])$ and distributed across five competing causal temporal post-processing methods ($W = 5$ frames / 208~ms latency bound). Binary alarms are asserted against validation-optimized thresholds $\tau_m^*$ and evaluated across detection reliability and resource overhead.}
 \label{fig:system_architecture}
 \end{figure*}
 
 To satisfy real-time constraints on edge processors, aerial platforms rely on compact single-stage detectors such as YOLO \cite{redmon2016you}, \cite{wang2023yolov7}. In this work, we deploy Ultralytics YOLO11n \cite{jocher2024yolo11} (2.6 million parameters, 6.5 GFLOPs at $640 \times 640$ resolution). To prevent half-precision numerical instability on embedded GPUs, we train the detector with batch size 16 in single-precision floating-point (FP32) arithmetic. Although lightweight models achieve high inference throughput, frame-level detections exhibit temporal volatility. Confidence scores oscillate due to aerial platform vibration, foliage occlusions, viewpoint changes, and fleeting distractors. Direct thresholding of raw detections causes isolated confidence spikes to trigger false alarms on empty scenes, while transient confidence dips cause false dismissals.
 
-To resolve these challenges without conflating model architecture with domain generalization, we freeze our study around two environments (arid desert and temperate forest) and two modalities (visible RGB and thermal infrared). We train two separate upstream YOLO11n detectors: one specialized on multi-environment RGB data and one specialized on multi-environment thermal data. Downstream, causal temporal post-processing filters the confidence stream across a causal sliding window of five frames ($625\text{ ms}$ at an $8\text{ Hz}$ decimated rate). We evaluate deterministic smoothing filters, order-statistic filters, temporal consensus tracking, and a learned Mamba selective state-space model (SSSM) \cite{gu2023mamba}, with each method operating under an optimal decision threshold farmed from validation video sequences.
+To resolve these challenges without conflating model architecture with domain generalization, we freeze our study around two environments (arid desert and temperate forest) and two modalities (visible RGB and thermal infrared). We train two separate upstream YOLO11n detectors: one specialized on multi-environment RGB data and one specialized on multi-environment thermal data. Downstream, causal temporal post-processing filters the confidence stream across a causal sliding window of five frames ($208\text{ ms}$ at a $24\text{ Hz}$ frame rate). We evaluate deterministic smoothing filters, order-statistic filters, temporal consensus tracking, and a learned Mamba selective state-space model (SSSM) \cite{gu2023mamba}, with each method operating under an optimal decision threshold farmed from validation video sequences.
 
 The central research question is: \textit{How do causal temporal post-processing methods compare in reducing false alarms across visual modalities (RGB versus thermal) and wilderness environments (desert versus forest) in lightweight aerial detection?}
 
@@ -101,11 +101,11 @@ Recurrent networks capture temporal dependencies but suffer from gradient degrad
 \toprule
 \textbf{Symbol / Variable} & \textbf{Physical Description / Operational Definition} \\
 \midrule
-$I_{\text{RGB}}[n], I_{\text{Thermal}}[n]$ & Decimated visible RGB and thermal infrared video frames at discrete index $n$ \\
+$I_{\text{RGB}}[n], I_{\text{Thermal}}[n]$ & Synchronized visible RGB and thermal infrared video frames at discrete index $n$ \\
 $c_{\text{RGB}}[n], c_{\text{Thermal}}[n]$ & Upstream YOLO11n detection confidence scores $\in [0.0, 1.0]$ \\
 $s[n]$ & Fused confidence score via soft disjunctive late fusion $\in [0.0, 1.0]$ \\
-$f_s, T_s$ & Decimated operating timebase ($f_s = 8\text{ Hz}$, sampling interval $T_s = 125\text{ ms}$) \\
-$W$ & Sliding temporal post-processing window length ($W = 5$ frames, $625\text{ ms}$) \\
+$f_s, T_s$ & Operating timebase ($f_s = 24\text{ Hz}$, sampling interval $T_s \approx 41.7\text{ ms}$) \\
+$W$ & Sliding temporal post-processing window length ($W = 5$ frames, $\approx 208\text{ ms}$) \\
 $\mathcal{W}[n]$ & Causal sliding window observation vector $\{s[n-4], \dots, s[n]\}$ \\
 $\mathcal{M}_m$ & Causal post-processing method $m \in \{\text{M1}, \dots, \text{M5}\}$ \\
 $\tau_m^*$ & Optimal decision threshold for method $m$ farmed on validation partition $\mathcal{D}_{\text{val}}$ \\
@@ -137,17 +137,17 @@ $T_{\text{fusion}}, T_{\text{postproc}}$ & Latency per frame of decision fusion 
 
 The proposed MMSAR framework provides an end-to-end pipeline combining lightweight dual-modality detection, soft disjunctive late fusion, and causal temporal post-processing (Fig.~\ref{fig:system_architecture}). Table~\ref{tab:notation} outlines the key mathematical notations and system parameters used throughout this work.
 
-\subsection{Decimation and Upstream Modality Detectors}
-High frame-rate processing at 24--30 frames per second (FPS) exhausts the thermal envelopes of embedded UAV companion computers (e.g., NVIDIA Jetson Orin Nano, 7--15\,W thermal design power (TDP)). At typical ground velocities ($v_{\text{UAV}} \in [8, 15]$\,m/s at 30--50\,m altitude), consecutive frames exhibit extreme spatial overlap. Operating on harvested $640 \times 640$ pixel snippets, we decimate synchronized video streams by a factor of $3:1$, yielding an operating timebase of $f_s = 8\text{ Hz}$ ($T_s = 125\text{ ms}$).
+\subsection{Video Stream Ingestion and Upstream Modality Detectors}
+Embedded UAV companion computers (e.g., NVIDIA Jetson Orin Nano, 7--15\,W thermal design power (TDP)) deployed on autonomous search platforms require real-time execution matching the sensor stream. In this framework, synchronized video streams are ingested and processed at the native video capture rate of $f_s = 24\text{ Hz}$ ($T_s = 1/24\text{ s} \approx 41.7\text{ ms}$), providing continuous 24~FPS frame-level monitoring across harvested $640 \times 640$ pixel snippets.
 
 To guarantee strictly causal, frame-synchronous execution without buffering latency or frame drops on embedded avionics, the end-to-end processing pipeline per frame must satisfy the real-time budget constraint (serial execution Eq.~\eqref{eq:realtime_budget_serial}):
 \begin{equation}
-T_{\text{RGB}} + T_{\text{Thermal}} + T_{\text{fusion}} + T_{\text{postproc}} \le T_s = 125\text{ ms},
+T_{\text{RGB}} + T_{\text{Thermal}} + T_{\text{fusion}} + T_{\text{postproc}} \le T_s \approx 41.7\text{ ms},
 \label{eq:realtime_budget_serial}
 \end{equation}
 or under parallel multi-threaded branch execution across asynchronous edge cores (Eq.~\eqref{eq:realtime_budget_parallel}):
 \begin{equation}
-\max\big(T_{\text{RGB}}, \, T_{\text{Thermal}}\big) + T_{\text{fusion}} + T_{\text{postproc}} \le T_s = 125\text{ ms},
+\max\big(T_{\text{RGB}}, \, T_{\text{Thermal}}\big) + T_{\text{fusion}} + T_{\text{postproc}} \le T_s \approx 41.7\text{ ms},
 \label{eq:realtime_budget_parallel}
 \end{equation}
 where $T_{\text{RGB}}$ and $T_{\text{Thermal}}$ represent the inference latencies of the respective YOLO11n backbones, $T_{\text{fusion}}$ represents the scalar pairwise max-pooling latency, and $T_{\text{postproc}}$ denotes the execution latency of post-processing filter $\mathcal{M}_m$. As detailed in Section~\ref{sec:causal_postprocessing} and Table~\ref{tab:complexity}, both $T_{\text{fusion}}$ ($O(1)$) and $T_{\text{postproc}}$ (sub-millisecond across all methods M1--M5) are computationally negligible compared to deep feature extraction. Consequently, real-time feasibility hinges almost entirely on upstream backbone execution ($T_{\text{RGB}}, T_{\text{Thermal}}$: [TBD --- pending on-device benchmarking]).
@@ -171,7 +171,7 @@ The disjunctive formulation ensures that an unambiguous detection in either sens
 \caption{MMSAR Causal Alarm Decision (per frame $n$)}
 \label{alg:mmsar_pipeline}
 \begin{algorithmic}[1]
-\REQUIRE Decimated RGB frame $I_{\text{RGB}}[n]$, thermal frame $I_{\text{Thermal}}[n]$
+\REQUIRE Synchronized RGB frame $I_{\text{RGB}}[n]$, thermal frame $I_{\text{Thermal}}[n]$
 \ENSURE Binary alarm $y[n] \in \{0,1\}$
 \STATE $c_{\text{RGB}}[n] \leftarrow$ YOLO11n-RGB$(I_{\text{RGB}}[n])$
 \STATE $c_{\text{Thermal}}[n] \leftarrow$ YOLO11n-Thermal$(I_{\text{Thermal}}[n])$
@@ -187,7 +187,7 @@ The disjunctive formulation ensures that an unambiguous detection in either sens
 
 \subsection{Causal Temporal Post-Processing}
 \label{sec:causal_postprocessing}
-Direct thresholding of confidence streams yields high false-alarm rates due to isolated spikes. Downstream processing filters the confidence stream across a causal sliding window of length $W = 5$ frames ($625\text{ ms}$ at $f_s = 8\text{ Hz}$):
+Direct thresholding of confidence streams yields high false-alarm rates due to isolated spikes. Downstream processing filters the confidence stream across a causal sliding window of length $W = 5$ frames ($208\text{ ms}$ at $f_s = 24\text{ Hz}$):
 \begin{equation}
 \mathcal{W}[n] = \big\{s[n-4], \, s[n-3], \, s[n-2], \, s[n-1], \, s[n]\big\}.
 \end{equation}
@@ -201,7 +201,7 @@ with step $\Delta \tau = 0.02$ (yielding 46 candidate evaluation thresholds). On
 \begin{figure}[!t]
 \centering
 \resizebox{0.95\columnwidth}{!}{\input{figure_temporal_postprocessing.tex}}
-\caption{Temporal signal behavior ($W = 5$ frames = 625~ms): (a) an isolated noise spike on a hard-negative scene triggers a spurious raw detection but is rejected by causal filtering ($y[n] = 0$), whereas (b) a sustained victim signature confirms target presence and asserts the alarm ($y[n] = 1$).}
+\caption{Temporal signal behavior ($W = 5$ frames $\approx$ 208~ms at 24~Hz): (a) an isolated noise spike on a hard-negative scene triggers a spurious raw detection but is rejected by causal filtering ($y[n] = 0$), whereas (b) a sustained victim signature confirms target presence and asserts the alarm ($y[n] = 1$).}
 \label{fig:temporal_postprocessing}
 \end{figure}
 
@@ -354,7 +354,7 @@ Visual Modalities & Visible RGB, Long-Wave Thermal Infrared (TIR) \\
 Raw Video Format & 24 FPS ($1280 \times 720$ pixels, 10.0 s duration) \\
 Dual-Crop Harvesting & $2\times$ square snippets ($640 \times 640$, left \& right tiles, $y=40$) \\
 Harvested Sequence Count & 30 clips per env. (10 pos., 10 hard-neg., 10 clear-neg.) \\
-Decimated Timebase & $f_s = 8\text{ Hz}$ ($T_s = 125\text{ ms}$, 80 frames / clip) \\
+Operating Timebase & $f_s = 24\text{ Hz}$ ($T_s \approx 41.7\text{ ms}$, 240 frames / clip) \\
 Sequence Split (Disjoint) & Train: 60\%, Validation: 20\%, Test: 20\% \\
 Upstream Detectors & Two YOLO11n Models (YOLO11n-RGB, YOLO11n-Thermal) \\
 Detector Complexity & 2.6M Parameters, 6.5 GFLOPs ($640 \times 640$ resolution) \\
@@ -362,14 +362,14 @@ Arithmetic Precision & Full Single-Precision (FP32, \texttt{amp=False}) \\
 Batch Size / Epochs & Batch 16 / 100 Epochs (no early stopping) \\
 Optimizer & Stochastic Gradient Descent (SGD, momentum 0.937, weight decay 0.0005) \\
 Learning Rate Schedule & Initial $\text{lr}_0 = 0.01$ with cosine decay \\
-Sliding Window ($W$) & 5 frames ($625\text{ ms}$ causal latency bound) \\
+Sliding Window ($W$) & 5 frames ($208\text{ ms}$ causal latency bound) \\
 \bottomrule
 \end{tabular}%
 }
 \end{table}
 
 \subsection{Sequence Partitioning and Detector Training}
-Partitioning is conducted strictly at the sequence level to eliminate temporal leakage. Clips within each environment and scenario category are divided into a 60/20/20 split: 60\% for training (6 clips per scenario), 20\% for validation (2 clips per scenario), and 20\% for testing (2 clips per scenario). Frames within each clip are preserved in exact sequential order ($0 \to 79$) to support sequential state-space modeling. Table~\ref{tab:dataset_and_training} summarizes the experimental parameters.
+Partitioning is conducted strictly at the sequence level to eliminate temporal leakage. Clips within each environment and scenario category are divided into a 60/20/20 split: 60\% for training (6 clips per scenario), 20\% for validation (2 clips per scenario), and 20\% for testing (2 clips per scenario). Frames within each clip are preserved in exact sequential order ($0 \to 239$) to support sequential state-space modeling. Table~\ref{tab:dataset_and_training} summarizes the experimental parameters.
 
 \section{Results and Discussion}
 \label{sec:results}
@@ -410,7 +410,7 @@ The five causal post-processing methods are evaluated on the common confidence s
 
 \begin{table*}[!t]
 \centering
-\caption{Comparative Benchmark of Causal Temporal Post-Processing Methods Under Validation-Optimized Decision Thresholds ($W = 5$ frames / 625 ms)}
+\caption{Comparative Benchmark of Causal Temporal Post-Processing Methods Under Validation-Optimized Decision Thresholds ($W = 5$ frames / 208 ms at 24 Hz)}
 \label{tab:postprocessing_benchmark}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccccccccc}
@@ -474,7 +474,7 @@ Table~\ref{tab:operational_impact} models the environment-stratified operational
 
 While the comparative framework provides systematic insights into causal temporal post-processing for aerial SAR, several operational and experimental constraints bound the scope of the present findings:
 \begin{enumerate}
-    \item \textbf{Sample Size of Test Split:} The evaluation is conducted across 12 held-out test video sequences (2 clips per scenario per environment, totaling 960 decimated test frames). Although sequence-level partitioning strictly prevents temporal data leakage, broader multi-hour flight campaigns are required for comprehensive statistical characterization.
+    \item \textbf{Sample Size of Test Split:} The evaluation is conducted across 12 held-out test video sequences (2 clips per scenario per environment, totaling 2,880 test frames at 24~Hz). Although sequence-level partitioning strictly prevents temporal data leakage, broader multi-hour flight campaigns are required for comprehensive statistical characterization.
     \item \textbf{Biome Diversity:} The study is constrained to two representative wilderness biomes (arid desert and temperate forest). Maritime, alpine snowpack, wetland, and urban-wildland interface environments introduce distinct thermal-optical scattering profiles not captured in this corpus.
     \item \textbf{Flight Regime and Dynamics:} Video sequences model a constrained aerial flight regime ($30$--$50$\,m above ground level at flight speeds of $8$--$15$\,m/s). High-speed turbulent sorties or low-altitude hover-scan maneuvers may alter apparent target ground sampling distance and jitter profiles.
     \item \textbf{Atmospheric and Weather Phenomena:} All clips reflect nominal daytime operating conditions; severe weather degradations including dense advection fog, heavy precipitation, and blowing dust are unmodeled.
@@ -485,7 +485,7 @@ While the comparative framework provides systematic insights into causal tempora
 \section{Conclusion}
 \label{sec:conclusion}
 
-This paper investigated the integration of lightweight multimodal person detection with causal temporal post-processing for UAV wilderness search and rescue across two environments (arid desert and temperate forest) and two visual modalities (visible RGB and thermal infrared). We deployed two separate YOLO11n models (2.6M parameters, 6.5 GFLOPs at $640 \times 640$) trained with batch size 16 in FP32 precision as our edge detection baselines, combined via soft disjunctive late fusion. Downstream, five causal post-processing methods operating across a five-frame ($625\text{ ms}$) sliding window were benchmarked under validation-optimized decision thresholds. Causal temporal post-processing effectively filters transient environmental noise spikes across modalities and terrains while maintaining rapid target confirmation, conserving telemetry bandwidth and onboard battery reserves.
+This paper investigated the integration of lightweight multimodal person detection with causal temporal post-processing for UAV wilderness search and rescue across two environments (arid desert and temperate forest) and two visual modalities (visible RGB and thermal infrared). We deployed two separate YOLO11n models (2.6M parameters, 6.5 GFLOPs at $640 \times 640$) trained with batch size 16 in FP32 precision as our edge detection baselines, combined via soft disjunctive late fusion. Downstream, five causal post-processing methods operating across a five-frame ($208\text{ ms}$ at $24\text{ Hz}$) sliding window were benchmarked under validation-optimized decision thresholds. Causal temporal post-processing effectively filters transient environmental noise spikes across modalities and terrains while maintaining rapid target confirmation, conserving telemetry bandwidth and onboard battery reserves.
 
 Future work will focus on hardware-in-the-loop flight testing on NVIDIA Jetson companion computers aboard physical UAVs, spatio-temporal multi-target tracking, and domain adaptation to unmodeled weather conditions such as fog and rain.
 

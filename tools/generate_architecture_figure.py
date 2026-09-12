@@ -110,7 +110,7 @@ v2f_box = patches.FancyBboxPatch((x_c7 - 0.8, 8.1), 1.6, 1.9, boxstyle='round,pa
                                  linewidth=1.8, edgecolor='#059669', facecolor='#ECFDF5', zorder=3)
 ax.add_patch(v2f_box)
 ax.text(x_c7, 9.35, 'Video to\nFrame', fontsize=10.5, fontweight='bold', color='#065F46', ha='center', va='center', zorder=4)
-ax.text(x_c7, 8.45, 'Frame Extraction\n3:1 Decimate\n(24 → 8 Hz)', fontsize=7.2, color='#047857', ha='center', va='center', zorder=4)
+ax.text(x_c7, 8.45, 'Frame Extraction\nFull-Rate\n(24 Hz)', fontsize=7.2, color='#047857', ha='center', va='center', zorder=4)
 
 # Arrow 7 -> 8
 ax.annotate('', xy=(21.5, 9.05), xytext=(20.9, 9.05),
@@ -158,7 +158,7 @@ ax.plot([26.2, 27.3, 27.3, 1.4, 1.4, 2.2], [7.3, 7.3, 5.75, 5.75, 3.5, 3.5],
 ax.annotate('', xy=(2.4, 3.5), xytext=(1.4, 3.5),
             arrowprops=dict(arrowstyle='->', lw=2.8, color='#7C3AED'), zorder=5)
 
-ax.text(14.0, 5.75, 'Harvested Dataset: 30 Snippets per Environment (60% Train / 20% Val / 20% Test) — 80 Frames/Clip @ 8 Hz',
+ax.text(14.0, 5.75, 'Harvested Dataset: 30 Snippets per Environment (60% Train / 20% Val / 20% Test) — 240 Frames/Clip @ 24 Hz',
         fontsize=10.0, fontweight='bold', color='#4C1D95', ha='center', va='center',
         bbox=dict(boxstyle='round,pad=0.35', facecolor='#EDE9FE', edgecolor='#8B5CF6', lw=1.6), zorder=6)
 
@@ -177,10 +177,10 @@ ax.text(4.3, 2.1, 'YOLO11n - Thermal Detector', fontsize=10.5, fontweight='bold'
 ax.text(4.3, 1.65, '2.6M Parameters | FP32 | Batch 16', fontsize=8.0, color='#D97706', ha='center', zorder=4)
 
 # Inputs to Detectors
-ax.text(1.2, 4.15, 'RGB Stream\n640×640 (8 Hz)', fontsize=7.8, fontweight='bold', color='#0369A1', ha='center', zorder=4)
+ax.text(1.2, 4.15, 'RGB Stream\n640×640 (24 Hz)', fontsize=7.8, fontweight='bold', color='#0369A1', ha='center', zorder=4)
 ax.annotate('', xy=(2.4, 4.15), xytext=(1.7, 4.15), arrowprops=dict(arrowstyle='->', lw=2.0, color='#0284C7'), zorder=4)
 
-ax.text(1.2, 1.95, 'Thermal Stream\n640×640 (8 Hz)', fontsize=7.8, fontweight='bold', color='#B45309', ha='center', zorder=4)
+ax.text(1.2, 1.95, 'Thermal Stream\n640×640 (24 Hz)', fontsize=7.8, fontweight='bold', color='#B45309', ha='center', zorder=4)
 ax.annotate('', xy=(2.4, 1.95), xytext=(1.7, 1.95), arrowprops=dict(arrowstyle='->', lw=2.0, color='#D97706'), zorder=4)
 
 # Arrows from Detectors to Fusion

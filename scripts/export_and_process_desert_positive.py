@@ -70,7 +70,7 @@ def main():
         # Interpolate across all 240 frames of the 24 FPS video
         frame_boxes = interpolate_video_sequence(seq, total_frames=240)
 
-        # Open video and extract 8 FPS (3:1 decimation: frames 0, 3, 6, ..., 237)
+        # Open video and extract at native 24 FPS (240 frames per video)
         cap = cv2.VideoCapture(str(raw_video_path))
         video_frames_dir = frames_base / video_stem
         video_labels_dir = labels_base / video_stem
@@ -86,67 +86,65 @@ def main():
             if not ret:
                 break
 
-            if frame_idx % 3 == 0:
-                # 8 FPS decimated frame (640x640)
-                frame_filename = video_frames_dir / f"frame_{saved_idx:06d}.png"
-                flat_filename = images_flat_base / f"{video_stem}_frame_{saved_idx:06d}.png"
-                cv2.imwrite(str(frame_filename), frame)
-                cv2.imwrite(str(flat_filename), frame)
-                total_images_extracted += 1
+            # 24 FPS frame extraction (640x640)
+            frame_filename = video_frames_dir / f"frame_{saved_idx:06d}.png"
+            flat_filename = images_flat_base / f"{video_stem}_frame_{saved_idx:06d}.png"
+            cv2.imwrite(str(frame_filename), frame)
+            cv2.imwrite(str(flat_filename), frame)
+            total_images_extracted += 1
 
-                # Matching Label Studio frame is 1-indexed (1 + frame_idx)
-                ls_frame_num = frame_idx + 1
-                box = frame_boxes.get(ls_frame_num)
+            # Matching Label Studio frame is 1-indexed (1 + frame_idx)
+            ls_frame_num = frame_idx + 1
+            box = frame_boxes.get(ls_frame_num)
 
-                struct_label_file = video_labels_dir / f"frame_{saved_idx:06d}.txt"
-                flat_label_file = labels_base / f"{video_stem}_frame_{saved_idx:06d}.txt"
+            struct_label_file = video_labels_dir / f"frame_{saved_idx:06d}.txt"
+            flat_label_file = labels_base / f"{video_stem}_frame_{saved_idx:06d}.txt"
 
-                if box is not None:
-                    # Convert percentages (0..100) to normalized YOLO (0..1)
-                    x_norm = box["x"] / 100.0
-                    y_norm = box["y"] / 100.0
-                    w_norm = box["width"] / 100.0
-                    h_norm = box["height"] / 100.0
+            if box is not None:
+                # Convert percentages (0..100) to normalized YOLO (0..1)
+                x_norm = box["x"] / 100.0
+                y_norm = box["y"] / 100.0
+                w_norm = box["width"] / 100.0
+                h_norm = box["height"] / 100.0
 
-                    x_center = max(0.0, min(1.0, x_norm + w_norm / 2.0))
-                    y_center = max(0.0, min(1.0, y_norm + h_norm / 2.0))
-                    w_norm = max(0.0, min(1.0, w_norm))
-                    h_norm = max(0.0, min(1.0, h_norm))
+                x_center = max(0.0, min(1.0, x_norm + w_norm / 2.0))
+                y_center = max(0.0, min(1.0, y_norm + h_norm / 2.0))
+                w_norm = max(0.0, min(1.0, w_norm))
+                h_norm = max(0.0, min(1.0, h_norm))
 
-                    line = f"0 {x_center:.6f} {y_center:.6f} {w_norm:.6f} {h_norm:.6f}\n"
-                    struct_label_file.write_text(line, encoding="utf-8")
-                    flat_label_file.write_text(line, encoding="utf-8")
-                    total_boxes_count += 1
+                line = f"0 {x_center:.6f} {y_center:.6f} {w_norm:.6f} {h_norm:.6f}\n"
+                struct_label_file.write_text(line, encoding="utf-8")
+                flat_label_file.write_text(line, encoding="utf-8")
+                total_boxes_count += 1
 
-                    # Save debug overlay for the first detected frame of each video
-                    if not sample_saved:
-                        overlay = frame.copy()
-                        ih, iw = frame.shape[:2]
-                        bx1 = int((x_center - w_norm / 2.0) * iw)
-                        by1 = int((y_center - h_norm / 2.0) * ih)
-                        bx2 = int((x_center + w_norm / 2.0) * iw)
-                        by2 = int((y_center + h_norm / 2.0) * ih)
-                        cv2.rectangle(overlay, (bx1, by1), (bx2, by2), (0, 255, 0), 2)
-                        cv2.putText(overlay, "Person_Detected", (bx1, max(15, by1 - 5)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-                        sample_path = debug_samples_dir / f"overlay_{video_stem}_frame_{saved_idx:06d}.png"
-                        cv2.imwrite(str(sample_path), overlay)
-                        sample_saved = True
-                else:
-                    struct_label_file.write_text("", encoding="utf-8")
-                    flat_label_file.write_text("", encoding="utf-8")
+                # Save debug overlay for the first detected frame of each video
+                if not sample_saved:
+                    overlay = frame.copy()
+                    ih, iw = frame.shape[:2]
+                    bx1 = int((x_center - w_norm / 2.0) * iw)
+                    by1 = int((y_center - h_norm / 2.0) * ih)
+                    bx2 = int((x_center + w_norm / 2.0) * iw)
+                    by2 = int((y_center + h_norm / 2.0) * ih)
+                    cv2.rectangle(overlay, (bx1, by1), (bx2, by2), (0, 255, 0), 2)
+                    cv2.putText(overlay, "Person_Detected", (bx1, max(15, by1 - 5)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                    sample_path = debug_samples_dir / f"overlay_{video_stem}_frame_{saved_idx:06d}.png"
+                    cv2.imwrite(str(sample_path), overlay)
+                    sample_saved = True
+            else:
+                struct_label_file.write_text("", encoding="utf-8")
+                flat_label_file.write_text("", encoding="utf-8")
 
-                total_labels_extracted += 1
-                saved_idx += 1
-
+            total_labels_extracted += 1
+            saved_idx += 1
             frame_idx += 1
 
         cap.release()
-        print(f"  Video {video_stem}: 80 frames @ 8 FPS extracted. Saved to {video_frames_dir}")
+        print(f"  Video {video_stem}: 240 frames @ 24 FPS extracted. Saved to {video_frames_dir}")
 
     print("\n=== SUMMARY ===")
-    print(f"Total 8 FPS images extracted: {total_images_extracted} (expected 400)")
-    print(f"Total YOLO label files:       {total_labels_extracted} (expected 400)")
-    print(f"Total positive person frames: {total_boxes_count}")
+    print(f"Total 24 FPS images extracted: {total_images_extracted} (expected 1200)")
+    print(f"Total YOLO label files:        {total_labels_extracted} (expected 1200)")
+    print(f"Total positive person frames:  {total_boxes_count}")
     print(f"Verification overlays saved to: {debug_samples_dir}")
     print("COMPLETE!")
 

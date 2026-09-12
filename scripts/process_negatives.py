@@ -109,8 +109,8 @@ def main():
         tasks = session.get(f"{BASE_URL}/api/projects/{project_id}/tasks").json()
         print(f"  Project {project_id} has {len(tasks)} video tasks loaded at 24 FPS.")
 
-        # 3. Decimate to 8 FPS (3:1 decimation) and export images & empty YOLO labels
-        print(f"3. Decimating to 8 FPS (80 frames/video) and generating images & YOLO labels...")
+        # 3. Extract at 24 FPS (full frame-rate, 240 frames/video) and export images & empty YOLO labels
+        print(f"3. Extracting at 24 FPS (240 frames/video) and generating images & YOLO labels...")
         frames_base = Path(f"data/processed/frames/desert/{scenario_type}/rgb")
         images_flat_base = Path(f"data/processed/images/desert/{scenario_type}/rgb")
         labels_base = Path(f"data/processed/labels/desert/{scenario_type}/rgb")
@@ -127,7 +127,6 @@ def main():
             video_labels_dir.mkdir(parents=True, exist_ok=True)
 
             cap = cv2.VideoCapture(str(src))
-            frame_idx = 0
             saved_idx = 0
 
             while True:
@@ -135,27 +134,24 @@ def main():
                 if not ret:
                     break
 
-                if frame_idx % 3 == 0:
-                    # Save frame image (640x640 PNG)
-                    frame_filename = video_frames_dir / f"frame_{saved_idx:06d}.png"
-                    flat_filename = images_flat_base / f"{video_stem}_frame_{saved_idx:06d}.png"
-                    cv2.imwrite(str(frame_filename), frame)
-                    cv2.imwrite(str(flat_filename), frame)
-                    total_images += 1
+                # Save frame image (640x640 PNG)
+                frame_filename = video_frames_dir / f"frame_{saved_idx:06d}.png"
+                flat_filename = images_flat_base / f"{video_stem}_frame_{saved_idx:06d}.png"
+                cv2.imwrite(str(frame_filename), frame)
+                cv2.imwrite(str(flat_filename), frame)
+                total_images += 1
 
-                    # Save empty YOLO label file (negative background frame)
-                    struct_label_file = video_labels_dir / f"frame_{saved_idx:06d}.txt"
-                    flat_label_file = labels_base / f"{video_stem}_frame_{saved_idx:06d}.txt"
-                    struct_label_file.write_text("", encoding="utf-8")
-                    flat_label_file.write_text("", encoding="utf-8")
-                    total_labels += 1
+                # Save empty YOLO label file (negative background frame)
+                struct_label_file = video_labels_dir / f"frame_{saved_idx:06d}.txt"
+                flat_label_file = labels_base / f"{video_stem}_frame_{saved_idx:06d}.txt"
+                struct_label_file.write_text("", encoding="utf-8")
+                flat_label_file.write_text("", encoding="utf-8")
+                total_labels += 1
 
-                    saved_idx += 1
-
-                frame_idx += 1
+                saved_idx += 1
 
             cap.release()
-            print(f"  {video_stem}: 80 frames @ 8 FPS extracted (images + empty labels).")
+            print(f"  {video_stem}: {saved_idx} frames @ 24 FPS extracted (images + empty labels).")
 
     # 4. Update data/manifest.json
     print(f"\n4. Updating data/manifest.json...")
@@ -167,8 +163,8 @@ def main():
     print("  data/manifest.json updated successfully.")
 
     print(f"\n=== SUMMARY ===")
-    print(f"Total Negative 8 FPS Images Extracted: {total_images} (expected 800)")
-    print(f"Total Negative YOLO Labels Created:   {total_labels} (expected 800)")
+    print(f"Total Negative 24 FPS Images Extracted: {total_images} (expected 2400)")
+    print(f"Total Negative YOLO Labels Created:   {total_labels} (expected 2400)")
     print("ALL HARD-NEGATIVE & CLEAR-NEGATIVE VIDEOS SUCCESSFULLY PROCESSED!")
 
 if __name__ == "__main__":
