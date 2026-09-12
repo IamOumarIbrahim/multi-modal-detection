@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  12 SEP 2026 11:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  12 SEP 2026 11:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -801,22 +801,12 @@ Package pdftex.def Info: figures/desert_th_annotated.png  used on input line 12
 omarb/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
 
 
-]
-Underfull \hbox (badness 1635) in paragraph at lines 74--75
-[]\OT1/ptm/b/n/10 Modality and En-vi-ron-ment Sen-si-tiv-ity Anal-y-sis:
- []
-
-
-Underfull \hbox (badness 2376) in paragraph at lines 74--75
-\OT1/ptm/m/n/10 Sys-tem-atic char-ac-ter-i-za-tion of how tem-po-ral post-
- []
-
-[2 <./figures/icon_lorem_ipsum.png> <./figures/gemini_logo.png> <./figures/dese
-rt_rgb_video.png (PNG copy)> <./figures/forest_rgb_video.png (PNG copy)> <./fig
-ures/desert_th_video.png (PNG copy)> <./figures/forest_th_video.png (PNG copy)>
- <./figures/crop_640_left_video.png (PNG copy)> <./figures/crop_640_right_video
-.png (PNG copy)> <./figures/icon_label_studio.png> <./figures/desert_rgb_annota
-ted.png (PNG copy)> <./figures/desert_th_annotated.png (PNG copy)>] [3]
+] [2 <./figures/icon_lorem_ipsum.png> <./figures/gemini_logo.png> <./figures/de
+sert_rgb_video.png (PNG copy)> <./figures/forest_rgb_video.png (PNG copy)> <./f
+igures/desert_th_video.png (PNG copy)> <./figures/forest_th_video.png (PNG copy
+)> <./figures/crop_640_left_video.png (PNG copy)> <./figures/crop_640_right_vid
+eo.png (PNG copy)> <./figures/icon_label_studio.png> <./figures/desert_rgb_anno
+tated.png (PNG copy)> <./figures/desert_th_annotated.png (PNG copy)>] [3]
 Underfull \hbox (badness 2564) in paragraph at lines 158--159
 []\OT1/ptm/b/n/10 YOLO11n-Thermal: \OT1/ptm/m/n/10 Trained on multi-environment
 
@@ -876,13 +866,13 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 16743 strings out of 467871
- 350958 string characters out of 5418376
- 774122 words of memory out of 5000000
- 45298 multiletter control sequences out of 15000+600000
- 693031 words of font info for 159 fonts, out of 8000000 for 9000
+ 16747 strings out of 467871
+ 351075 string characters out of 5418376
+ 779682 words of memory out of 5000000
+ 45301 multiletter control sequences out of 15000+600000
+ 694109 words of font info for 160 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,17n,94p,2193b,964s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,17n,94p,2158b,964s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmex10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmmi10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -913,7 +903,7 @@ urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/
 urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
 /urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
 /urw/times/utmri8a.pfb>
-Output written on main.pdf (9 pages, 5609912 bytes).
+Output written on main.pdf (9 pages, 5613554 bytes).
 PDF statistics:
  186 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

@@ -278,9 +278,20 @@ Raw video sequences are captured in $1280 \times 720$ resolution at 24 FPS (10.0
 
 ---
 
-### Full-Rate Stream & Sequence-Level 60/20/20 Split
+### Full-Rate Stream & Option B Episodic Splitting
 
-Videos are processed at full frame rate $f_s = 24\text{ Hz}$ ($T_s \approx 41.7\text{ ms}$, 240 frames per snippet). To prevent temporal data leakage, partitioning is performed strictly at the sequence level:
+Videos are processed at full frame rate $f_s = 24\text{ Hz}$ ($T_s \approx 41.7\text{ ms}$, 240 frames per snippet, 10.0~s duration). To prevent temporal data leakage and cross-tile circumvention, partitioning follows **Option B (Parent-Video Grouped Episodic Partitioning)**:
+
+1. **Parent-Video Grouped Split [TBD]:** Left and right harvested snippets derived from the same parent video are strictly co-located in the identical partition (both in Train, both in Val, or both in Test). Cross-split parent leakage is identically zero.
+2. **240-Frame Atomic Bundles:** Frames within each snippet remain in exact chronological sequence ($0 \to 239$) to preserve causal dynamics for temporal decision filters.
+3. **Seeded Snippet Shuffling (Seed 0) with Anti-Adjacency:** Snippets within each partition are shuffled using seed 0 under an anti-adjacency constraint ($d_{\min} \ge 2$), guaranteeing that derived sibling tiles are never adjacent in the feed queue.
+4. **Episodic State Flush:** At snippet boundaries ($n = 239 \to n = 0$), temporal filter memory is completely reset ($h_0 \leftarrow \mathbf{0}$, window $\mathcal{W}$ cleared), ensuring independent episodic evaluation.
+
+Downstream temporal decision methods are benchmarked across four core dimensions:
+- **Positive Event Detection:** Target confirmation recall, precision, and $F_1$ score.
+- **False Alert Mitigation:** False alarm suppression ratio (FASR) against raw static baseline.
+- **Decision Delay:** Causal latency bound ($W = 5$ frames $\approx 208\text{ ms}$ at 24~Hz).
+- **Processing Overhead Savings:** Satellite/cellular IoT telemetry bandwidth ($\Delta\Omega$) and UAV hover battery energy savings ($\Delta E$).
 
 <div align="center">
 

@@ -15,7 +15,7 @@
 \citation{liu2016multispectral}
 \citation{li2018illumination}
 \citation{zhang2019cross}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces System architecture of the proposed Multimodal Search and Rescue (MMSAR) evaluation framework. Synchronized RGB and thermal streams (illustrated via the 4$\times $2 environment gallery across desert and forest biomes) are processed at a native 24~Hz timebase ($T_s \approx 41.7$~ms) by parallel lightweight YOLO11n backbones (one RGB model and one thermal model). Confidence streams are integrated via soft disjunctive late fusion $s[n] = \max (c_{\text  {RGB}}[n], c_{\text  {Thermal}}[n])$ and distributed across five competing causal temporal post-processing methods ($W = 5$ frames / 208~ms latency bound). Binary alarms are asserted against validation-optimized thresholds $\tau _m^*$ and evaluated across detection reliability and resource overhead.}}{2}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces System architecture of the proposed Multimodal Search and Rescue (MMSAR) evaluation framework. Visible RGB and thermal infrared video streams are synthesized from text prompts and Gemini video generation, followed by cross-modality thermal transfer, dual-crop ($640 \times 640$) spatial extraction into left and right viewports, video-level bounding-box annotation in Label Studio, and full-rate 24~Hz frame extraction. Curated sequences are partitioned into 240-frame episodes under a parent-video grouped split protocol (Option B, [TBD]) with anti-adjacency snippet shuffling to eliminate cross-tile spatial leakage. At the edge inference stage, parallel lightweight YOLO11n backbones process incoming RGB and thermal frames at 24~Hz ($T_s \approx 41.7$~ms), integrated via soft disjunctive late fusion ($s[n] = \max (c_{\text  {RGB}}[n], c_{\text  {Thermal}}[n])$) and evaluated across five lightweight temporal decision methods ($W = 5$ frames, 208~ms latency bound). Alert decisions are benchmarked across positive event detection, false alert mitigation, decision delay, and edge processing overhead savings.}}{2}{}\protected@file@percent }
 \newlabel{fig:system_architecture}{{1}{2}{}{figure.1}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{2}{}\protected@file@percent }
 \newlabel{sec:related_work}{{II}{2}{}{section.2}{}}
@@ -55,17 +55,17 @@
 \newlabel{alg:mmsar_pipeline}{{1}{4}{}{algorithm.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Soft Disjunctive Late Fusion Gate}{4}{}\protected@file@percent }
 \newlabel{eq:late_fusion}{{3}{4}{}{equation.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Causal Temporal Post-Processing}{4}{}\protected@file@percent }
-\newlabel{sec:causal_postprocessing}{{\mbox  {III-C}}{4}{}{subsection.3.3}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Temporal signal behavior ($W = 5$ frames $\approx $ 208~ms at 24~Hz): (a) an isolated noise spike on a hard-negative scene triggers a spurious raw detection but is rejected by causal filtering ($y[n] = 0$), whereas (b) a sustained victim signature confirms target presence and asserts the alarm ($y[n] = 1$).}}{4}{}\protected@file@percent }
 \newlabel{fig:temporal_postprocessing}{{2}{4}{}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Causal Temporal Post-Processing}{4}{}\protected@file@percent }
+\newlabel{sec:causal_postprocessing}{{\mbox  {III-C}}{4}{}{subsection.3.3}{}}
 \newlabel{eq:threshold_optimization}{{5}{4}{}{equation.5}{}}
 \newlabel{eq:m1_raw}{{6}{4}{}{equation.6}{}}
 \newlabel{eq:ma_filter}{{7}{4}{}{equation.7}{}}
-\newlabel{eq:ma_alarm}{{8}{4}{}{equation.8}{}}
 \citation{kyrkou2021emergencynet}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Precision-Recall (or F1-vs-$\tau $) operating curves for M1--M5 across the full validation threshold sweep, retained rather than collapsed to a single point at $\tau _m^*$.}}{5}{}\protected@file@percent }
 \newlabel{fig:pr_curves}{{3}{5}{}{figure.3}{}}
+\newlabel{eq:ma_alarm}{{8}{5}{}{equation.8}{}}
 \newlabel{eq:med_filter}{{9}{5}{}{equation.9}{}}
 \newlabel{eq:med_alarm}{{10}{5}{}{equation.10}{}}
 \newlabel{eq:hist_consensus}{{11}{5}{}{equation.11}{}}
