@@ -108,10 +108,10 @@
 \draw[purplearrow] (crops) -- (label_studio);
 
 % 9. Video to Frame Full-Rate 24 Hz Extraction & YOLO Export
-\node[stepbox, text width=1.35cm] (v2f) at (22.8, 5.7) {
+\node[stepbox, text width=1.8cm, inner xsep=2pt] (v2f) at (22.8, 5.7) {
     \textbf{Video to Frame}\\[1pt]
     {\tiny Full-Rate Stream}\\[-1pt]
-    {\tiny (24 Hz Sampling)}
+    {\tiny (24~Hz Sampling)}
 };
 \node[below=2pt of v2f, font=\fontsize{5pt}{6pt}\selectfont, text=green!60!black] (sub_v2f) {Frame Extraction};
 
@@ -134,15 +134,16 @@
 % MIDDLE SECTION: TRANSITION DATASET BANNER & FEED CONDUIT
 % =========================================================================
 
-% Option B Benchmark Corpus & Episodic Splitting Card (No bullets, tightened, no Option B)
-\node[draw=purple!70, fill=purple!6, rounded corners=4pt, thick, font=\fontsize{5.8pt}{7.0pt}\selectfont, text=black!85, inner ysep=4pt, inner xsep=10pt, align=center] (dataset_banner) at (13.0, 4.15) {
-    \textbf{\textcolor{purple!90!black}{MMSAR Benchmark Corpus and Sequence Partitioning [TBD]}}\\[2pt]
+% Benchmark Corpus & Episodic Splitting Card (No MMSAR, generous padding above and below)
+\node[draw=purple!70, fill=purple!6, rounded corners=4pt, thick, font=\fontsize{5.8pt}{7.0pt}\selectfont, text=black!85, inner ysep=4pt, inner xsep=10pt, align=center] (dataset_banner) at (13.0, 3.6) {
+    \textbf{\textcolor{purple!90!black}{Benchmark Corpus and Sequence Partitioning [TBD]}}\\[2pt]
     Parent-Video Grouped Split (60\% Train / 20\% Val / 20\% Test) $|$ Co-Located Left and Right Tiles\\
     240 Frames/Episode at 24~Hz ($0 \to 239$ Sequential) $|$ Seed 0 Shuffled with Anti-Adjacency
 };
 
 % Routing from Stage 1 output to Dataset Banner (clean loop via right margin)
 \draw[thick, draw=purple!80, ->] (annotated_frames.east) -- ++(0.4, 0) |- (dataset_banner.east);
+
 
 % =========================================================================
 % BOTTOM SECTION: ONBOARD DETECTION, FUSION & CAUSAL POST-PROCESSING
@@ -158,17 +159,17 @@
 };
 
 % Routing from Dataset Banner to Pre-Detector Split Box
-\coordinate (split_bus) at (-2.4, 4.15);
+\coordinate (split_bus) at (-2.4, 3.6);
 \draw[thick, draw=purple!80] (dataset_banner.west) -- node[midway, above=4pt, sig, text=purple!90!black] {Curated Dataset Stream} (split_bus);
 \draw[arrow, draw=purple!80, thick] (split_bus) |- (split_box.west);
 
 % 1. Parallel Detectors (YOLO11n-RGB & YOLO11n-Thermal)
-\node[detector] (yolo_rgb) at (3.2, 0.6) {\textbf{RGB Detector}\\[1pt]YOLO11n Backbone\\{\scriptsize 640$\times$640, 2.6M, FP32}};
-\node[detector] (yolo_tir) at (3.2, -2.0) {\textbf{Thermal Detector}\\[1pt]YOLO11n Backbone\\{\scriptsize 640$\times$640, 2.6M, FP32}};
+\node[detector] (yolo_rgb) at (3.2, 0.6) {\textbf{RGB Detector}\\[1pt]YOLO11n\\{\scriptsize 640$\times$640, 2.6M, FP32}};
+\node[detector] (yolo_tir) at (3.2, -2.0) {\textbf{Thermal Detector}\\[1pt]YOLO11n\\{\scriptsize 640$\times$640, 2.6M, FP32}};
 
 % Input arrows from Split Box to Detectors (Clean routing, Horizontal labels)
 \draw[arrow, blue!70!black, thick] (split_box.north east) to[out=20, in=180] node[pos=0.45, above=4pt, sig] {RGB Input} (yolo_rgb.west);
-\draw[arrow, orange!70!black, thick] (split_box.south east) to[out=-20, in=180] node[pos=0.45, below=4pt, sig] {Thermal Input} (yolo_tir.west);
+\draw[arrow, orange!70!black, thick] (split_box.south east) to[out=-20, in=180] node[pos=0.45, below=8pt, sig] {Thermal Input} (yolo_tir.west);
 
 % 2. Late Decision Fusion Gate (No equations)
 \node[fusion] (fusion) at (7.2, -0.7) {
@@ -179,7 +180,7 @@
 
 % Horizontal score labels (No sloped rotation)
 \draw[arrow, blue!70!black] (yolo_rgb.east) -- node[pos=0.45, above=4pt, sig] {RGB Score} (fusion.north west);
-\draw[arrow, orange!70!black] (yolo_tir.east) -- node[pos=0.45, below=4pt, sig] {Thermal Score} (fusion.south west);
+\draw[arrow, orange!70!black] (yolo_tir.east) -- node[pos=0.65, below=4pt, sig] {Thermal Score} (fusion.south west);
 
 % 3. Causal Post-Processing Methods (Generously padded, distinct vertical separation, 208 ms at 24 Hz)
 \node[method] (m1) at (13.3, 1.9) {\textbf{M1: Raw Baseline}\\[1pt]Direct Score Threshold\\{\tiny (Instantaneous Confidence)}};
@@ -226,11 +227,12 @@
 % 6. Operational Evaluation Framework (PI Benchmarking Pillars 1, 2, 3, 4)
 \node[eval] (eval) at (23.8, -1.95) {
     \textbf{Operational Evaluation}\\[2pt]
-    $\bullet$ Positive Event Detection ($R, P, F_1$)\\
-    $\bullet$ False Alert Suppression Ratio\\
-    $\bullet$ Decision Delay ($W=5$, 208~ms)\\
-    $\bullet$ Processing Overhead Savings
+    Detection ($R, P, F_1$)\\[1pt]
+    False Alert Mitigation\\[1pt]
+    Decision Delay ($<$208~ms)\\[1pt]
+    Compute \& Energy Savings
 };
 \draw[arrow, draw=blue!70!black, thick, rounded corners=5pt] (alarm_split) |- node[pos=0.72, below=5pt, sig, text=blue!80!black] {Alarm Signal} (eval.west);
+
 
 \end{tikzpicture}

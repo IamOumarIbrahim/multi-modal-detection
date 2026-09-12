@@ -142,11 +142,12 @@ def main():
         print(f"  Video {video_stem}: 240 frames @ 24 FPS extracted. Saved to {video_frames_dir}")
 
     print("\n=== SUMMARY ===")
-    print(f"Total 24 FPS images extracted: {total_images_extracted} (expected 1200)")
-    print(f"Total YOLO label files:        {total_labels_extracted} (expected 1200)")
+    print(f"Total 24 FPS images extracted: {total_images_extracted} (expected 2400)")
+    print(f"Total YOLO label files:        {total_labels_extracted} (expected 2400)")
     print(f"Total positive person frames:  {total_boxes_count}")
     print(f"Verification overlays saved to: {debug_samples_dir}")
     print("COMPLETE!")
 
 if __name__ == "__main__":
     main()
+

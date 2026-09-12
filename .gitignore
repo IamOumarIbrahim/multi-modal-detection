@@ -7,6 +7,7 @@ data/raw/**/*.mov
 data/processed/**
 !data/processed/.gitkeep
 *.pt
+data/annotations/**
 .venv/
 __pycache__/
 *.egg-info/

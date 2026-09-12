@@ -81,7 +81,7 @@ def main():
 
         raw_dir = Path(f"data/raw/desert/{scenario_type}/rgb")
         raw_files = sorted(raw_dir.glob("*.mp4"))
-        assert len(raw_files) == 5, f"Expected 5 videos in {raw_dir}, found {len(raw_files)}"
+        assert len(raw_files) == 10, f"Expected 10 snippets (5 left, 5 right) in {raw_dir}, found {len(raw_files)}"
 
         # 1. Prepare faststart videos
         ls_video_dir = Path(f"data/processed/label_studio_videos/{scenario_type}")
@@ -104,10 +104,19 @@ def main():
             with open(v, "rb") as f:
                 files = {"file": (v.name, f, "video/mp4")}
                 up_resp = session.post(f"{BASE_URL}/api/projects/{project_id}/import", headers=headers, files=files)
+                assert up_resp.status_code == 201, f"Import failed for {v.name}: {up_resp.status_code}"
                 print(f"  Import {v.name}: status={up_resp.status_code}, task_count={up_resp.json().get('task_count')}")
 
         tasks = session.get(f"{BASE_URL}/api/projects/{project_id}/tasks").json()
         print(f"  Project {project_id} has {len(tasks)} video tasks loaded at 24 FPS.")
+
+        print(f"  Verifying video streaming for Project {project_id} tasks...")
+        for t in tasks:
+            v_url = t.get("data", {}).get("video", "")
+            stream_resp = session.get(f"{BASE_URL}{v_url}", headers={"Range": "bytes=0-1024"})
+            assert stream_resp.status_code in (200, 206) and "video" in stream_resp.headers.get("Content-Type", "")
+        print(f"  [ALL {len(tasks)} VIDEOS LOADED & VERIFIED OK FOR PROJECT {project_id}]")
+
 
         # 3. Extract at 24 FPS (full frame-rate, 240 frames/video) and export images & empty YOLO labels
         print(f"3. Extracting at 24 FPS (240 frames/video) and generating images & YOLO labels...")
@@ -157,15 +166,16 @@ def main():
     print(f"\n4. Updating data/manifest.json...")
     manifest_path = Path("data/manifest.json")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    manifest["desert"]["hard_negative"]["count"] = 5
-    manifest["desert"]["clear_negative"]["count"] = 5
+    manifest["desert"]["hard_negative"]["count"] = 10
+    manifest["desert"]["clear_negative"]["count"] = 10
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print("  data/manifest.json updated successfully.")
 
     print(f"\n=== SUMMARY ===")
-    print(f"Total Negative 24 FPS Images Extracted: {total_images} (expected 2400)")
-    print(f"Total Negative YOLO Labels Created:   {total_labels} (expected 2400)")
+    print(f"Total Negative 24 FPS Images Extracted: {total_images} (expected 4800)")
+    print(f"Total Negative YOLO Labels Created:   {total_labels} (expected 4800)")
     print("ALL HARD-NEGATIVE & CLEAR-NEGATIVE VIDEOS SUCCESSFULLY PROCESSED!")
 
 if __name__ == "__main__":
     main()
+
