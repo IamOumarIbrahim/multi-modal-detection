@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  12 SEP 2026 11:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  12 SEP 2026 11:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -832,10 +832,7 @@ LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 3
  (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-Underfull \vbox (badness 1048) has occurred while \output is active []
-
- [6]
-[7]
+[6] [7]
 Underfull \hbox (badness 1540) in paragraph at lines 493--494
 \OT1/ptm/m/n/10 mark-ing in wilder-ness search and res-cue, the MM-SAR
  []
@@ -866,10 +863,10 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 16747 strings out of 467871
- 351075 string characters out of 5418376
- 779682 words of memory out of 5000000
- 45301 multiletter control sequences out of 15000+600000
+ 16748 strings out of 467871
+ 351091 string characters out of 5418376
+ 779335 words of memory out of 5000000
+ 45302 multiletter control sequences out of 15000+600000
  694109 words of font info for 160 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,17n,94p,2158b,964s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -903,7 +900,7 @@ urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/
 urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
 /urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
 /urw/times/utmri8a.pfb>
-Output written on main.pdf (9 pages, 5613554 bytes).
+Output written on main.pdf (9 pages, 5612682 bytes).
 PDF statistics:
  186 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

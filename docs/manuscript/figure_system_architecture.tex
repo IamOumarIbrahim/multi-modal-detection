@@ -134,12 +134,11 @@
 % MIDDLE SECTION: TRANSITION DATASET BANNER & FEED CONDUIT
 % =========================================================================
 
-% Option B Benchmark Corpus & Episodic Splitting Card
-\node[draw=purple!70, fill=purple!6, rounded corners=4pt, thick, font=\fontsize{5.8pt}{7.0pt}\selectfont, text=black!85, inner ysep=4pt, inner xsep=8pt, align=center] (dataset_banner) at (13.0, 3.95) {
-    \textbf{\textcolor{purple!90!black}{MMSAR Benchmark Corpus \& Episodic Splitting Protocol (Option B)}}\\[2pt]
-    $\bullet$ \textbf{Parent-Video Grouped Split [TBD]:} Left and right tiles co-located in identical split (60\% Train / 20\% Val / 20\% Test)\\
-    $\bullet$ \textbf{240-Frame Episode Bundles:} 10.0~s sequences at 24~Hz ($0 \to 239$ sequential, unrandomized within episode)\\
-    $\bullet$ \textbf{Episode Shuffling (Seed 0):} Inter-snippet order randomized across splits; anti-adjacent derived pairs; state flush at boundaries
+% Option B Benchmark Corpus & Episodic Splitting Card (No bullets, tightened, no Option B)
+\node[draw=purple!70, fill=purple!6, rounded corners=4pt, thick, font=\fontsize{5.8pt}{7.0pt}\selectfont, text=black!85, inner ysep=4pt, inner xsep=10pt, align=center] (dataset_banner) at (13.0, 4.15) {
+    \textbf{\textcolor{purple!90!black}{MMSAR Benchmark Corpus and Sequence Partitioning [TBD]}}\\[2pt]
+    Parent-Video Grouped Split (60\% Train / 20\% Val / 20\% Test) $|$ Co-Located Left and Right Tiles\\
+    240 Frames/Episode at 24~Hz ($0 \to 239$ Sequential) $|$ Seed 0 Shuffled with Anti-Adjacency
 };
 
 % Routing from Stage 1 output to Dataset Banner (clean loop via right margin)
@@ -147,31 +146,32 @@
 
 % =========================================================================
 % BOTTOM SECTION: ONBOARD DETECTION, FUSION & CAUSAL POST-PROCESSING
+% (Shifted down by 0.7cm for generous vertical padding)
 % =========================================================================
 
-% Pre-detector Split Protocol Box (Option B Dispatcher before Detectors)
-\node[box, fill=purple!10, draw=purple!75, thick, font=\fontsize{5.2pt}{6.4pt}\selectfont, text width=1.9cm, align=center] (split_box) at (-1.0, 0) {
+% Pre-detector Split Protocol Box (Dispatcher before Detectors)
+\node[box, fill=purple!10, draw=purple!75, thick, font=\fontsize{5.2pt}{6.4pt}\selectfont, text width=1.9cm, align=center] (split_box) at (-1.0, -0.7) {
     \textbf{Corpus Split}\\[1pt]
     \textbf{Dispatch}\\[2pt]
     {\scriptsize [TBD Partition]}\\[1pt]
-    {\tiny Option B Shuffled}
+    {\tiny Shuffled Episodes}
 };
 
 % Routing from Dataset Banner to Pre-Detector Split Box
-\coordinate (split_bus) at (-2.4, 3.95);
+\coordinate (split_bus) at (-2.4, 4.15);
 \draw[thick, draw=purple!80] (dataset_banner.west) -- node[midway, above=4pt, sig, text=purple!90!black] {Curated Dataset Stream} (split_bus);
 \draw[arrow, draw=purple!80, thick] (split_bus) |- (split_box.west);
 
 % 1. Parallel Detectors (YOLO11n-RGB & YOLO11n-Thermal)
-\node[detector] (yolo_rgb) at (3.2, 1.3) {\textbf{RGB Detector}\\[1pt]YOLO11n Backbone\\{\scriptsize 640$\times$640, 2.6M, FP32}};
-\node[detector] (yolo_tir) at (3.2, -1.3) {\textbf{Thermal Detector}\\[1pt]YOLO11n Backbone\\{\scriptsize 640$\times$640, 2.6M, FP32}};
+\node[detector] (yolo_rgb) at (3.2, 0.6) {\textbf{RGB Detector}\\[1pt]YOLO11n Backbone\\{\scriptsize 640$\times$640, 2.6M, FP32}};
+\node[detector] (yolo_tir) at (3.2, -2.0) {\textbf{Thermal Detector}\\[1pt]YOLO11n Backbone\\{\scriptsize 640$\times$640, 2.6M, FP32}};
 
 % Input arrows from Split Box to Detectors (Clean routing, Horizontal labels)
 \draw[arrow, blue!70!black, thick] (split_box.north east) to[out=20, in=180] node[pos=0.45, above=4pt, sig] {RGB Input} (yolo_rgb.west);
 \draw[arrow, orange!70!black, thick] (split_box.south east) to[out=-20, in=180] node[pos=0.45, below=4pt, sig] {Thermal Input} (yolo_tir.west);
 
 % 2. Late Decision Fusion Gate (No equations)
-\node[fusion] (fusion) at (7.2, 0) {
+\node[fusion] (fusion) at (7.2, -0.7) {
     \textbf{Late Decision Fusion}\\[2pt]
     Confidence Max Gate\\[2pt]
     {\scriptsize Soft Disjunctive OR}
@@ -182,49 +182,49 @@
 \draw[arrow, orange!70!black] (yolo_tir.east) -- node[pos=0.45, below=4pt, sig] {Thermal Score} (fusion.south west);
 
 % 3. Causal Post-Processing Methods (Generously padded, distinct vertical separation, 208 ms at 24 Hz)
-\node[method] (m1) at (13.3, 2.6) {\textbf{M1: Raw Baseline}\\[1pt]Direct Score Threshold\\{\tiny (Instantaneous Confidence)}};
-\node[method] (m2) at (13.3, 1.3) {\textbf{M2: Moving Average}\\[1pt]Sliding Window Mean\\{\tiny (5-Frame Window, 208 ms)}};
-\node[method] (m3) at (13.3, 0.0) {\textbf{M3: Median Filter}\\[1pt]Order-Statistic Median\\{\tiny (Spike Rejection, 5 Frames)}};
-\node[method] (m4) at (13.3, -1.3) {\textbf{M4: History Consensus}\\[1pt]Majority Rule Persistence\\{\tiny (At Least 3 of 5 Detections)}};
-\node[method] (m5) at (13.3, -2.6) {\textbf{M5: Learned Mamba-SSSM}\\[1pt]Selective State-Space Filter\\{\tiny (Learned Recurrent Dynamics)}};
+\node[method] (m1) at (13.3, 1.9) {\textbf{M1: Raw Baseline}\\[1pt]Direct Score Threshold\\{\tiny (Instantaneous Confidence)}};
+\node[method] (m2) at (13.3, 0.6) {\textbf{M2: Moving Average}\\[1pt]Sliding Window Mean\\{\tiny (5-Frame Window, 208 ms)}};
+\node[method] (m3) at (13.3, -0.7) {\textbf{M3: Median Filter}\\[1pt]Order-Statistic Median\\{\tiny (Spike Rejection, 5 Frames)}};
+\node[method] (m4) at (13.3, -2.0) {\textbf{M4: History Consensus}\\[1pt]Majority Rule Persistence\\{\tiny (At Least 3 of 5 Detections)}};
+\node[method] (m5) at (13.3, -3.3) {\textbf{M5: Learned Mamba-SSSM}\\[1pt]Selective State-Space Filter\\{\tiny (Learned Recurrent Dynamics)}};
 
 % Distribution Bus (Horizontal Fused Score label)
-\draw[thick, draw=purple!80] (fusion.east) -- (10.2, 0) node[midway, above=4pt, sig, text=purple!90!black] {Fused Score};
-\draw[thick, draw=purple!80] (10.2, 2.6) -- (10.2, -2.6);
-\draw[arrow, draw=purple!80] (10.2, 2.6) -- (m1.west);
-\draw[arrow, draw=purple!80] (10.2, 1.3) -- (m2.west);
-\draw[arrow, draw=purple!80] (10.2, 0.0) -- (m3.west);
-\draw[arrow, draw=purple!80] (10.2, -1.3) -- (m4.west);
-\draw[arrow, draw=purple!80] (10.2, -2.6) -- (m5.west);
+\draw[thick, draw=purple!80] (fusion.east) -- (10.2, -0.7) node[midway, above=4pt, sig, text=purple!90!black] {Fused Score};
+\draw[thick, draw=purple!80] (10.2, 1.9) -- (10.2, -3.3);
+\draw[arrow, draw=purple!80] (10.2, 1.9) -- (m1.west);
+\draw[arrow, draw=purple!80] (10.2, 0.6) -- (m2.west);
+\draw[arrow, draw=purple!80] (10.2, -0.7) -- (m3.west);
+\draw[arrow, draw=purple!80] (10.2, -2.0) -- (m4.west);
+\draw[arrow, draw=purple!80] (10.2, -3.3) -- (m5.west);
 
 % Collection Bus
-\draw[thick, draw=teal!80] (16.4, 2.6) -- (16.4, -2.6);
-\draw[arrow, draw=teal!80] (m1.east) -- (16.4, 2.6);
-\draw[arrow, draw=teal!80] (m2.east) -- (16.4, 1.3);
-\draw[arrow, draw=teal!80] (m3.east) -- (16.4, 0.0);
-\draw[arrow, draw=teal!80] (m4.east) -- (16.4, -1.3);
-\draw[arrow, draw=teal!80] (m5.east) -- (16.4, -2.6);
+\draw[thick, draw=teal!80] (16.4, 1.9) -- (16.4, -3.3);
+\draw[arrow, draw=teal!80] (m1.east) -- (16.4, 1.9);
+\draw[arrow, draw=teal!80] (m2.east) -- (16.4, 0.6);
+\draw[arrow, draw=teal!80] (m3.east) -- (16.4, -0.7);
+\draw[arrow, draw=teal!80] (m4.east) -- (16.4, -2.0);
+\draw[arrow, draw=teal!80] (m5.east) -- (16.4, -3.3);
 
 % 4. Common Alarm Output (Lightweight Temporal Decision Gate)
-\node[decision] (alarm) at (18.9, 0) {
+\node[decision] (alarm) at (18.9, -0.7) {
     \textbf{Alert Decision}\\[2pt]
     Verification Gate\\[2pt]
     {\scriptsize Optimal Threshold $\tau_m^*$}
 };
-\draw[arrow, draw=teal!80, very thick] (16.4, 0) -- (alarm.west);
+\draw[arrow, draw=teal!80, very thick] (16.4, -0.7) -- (alarm.west);
 
 % 5. Top Alert Generation Pillar Callout (PI Benchmarking Pillars 1 & 2)
-\node[kpi] (kpi_box) at (23.8, 1.45) {
+\node[kpi] (kpi_box) at (23.8, 0.75) {
     \textbf{Reliable Alert Generation}\\[1pt]
     {\scriptsize False Alert Mitigation (FASR)}\\[-1pt]
     {\tiny Bounded Decision Latency (208~ms)}
 };
-\coordinate (alarm_split) at (20.6, 0);
+\coordinate (alarm_split) at (20.6, -0.7);
 \draw[thick, draw=teal!80] (alarm.east) -- (alarm_split);
 \draw[arrow, draw=red!70!black, thick, rounded corners=5pt] (alarm_split) |- node[pos=0.72, above=5pt, sig, text=red!80!black] {Alarm Stream} (kpi_box.west);
 
 % 6. Operational Evaluation Framework (PI Benchmarking Pillars 1, 2, 3, 4)
-\node[eval] (eval) at (23.8, -1.25) {
+\node[eval] (eval) at (23.8, -1.95) {
     \textbf{Operational Evaluation}\\[2pt]
     $\bullet$ Positive Event Detection ($R, P, F_1$)\\
     $\bullet$ False Alert Suppression Ratio\\
