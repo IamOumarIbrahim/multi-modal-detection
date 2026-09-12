@@ -69,12 +69,10 @@ C.-Y. Wang, A.~Bochkovskiy, and H.-Y.~M. Liao, ``{YOLOv7}: Trainable
   in \emph{Proceedings of the IEEE/CVF Conference on Computer Vision and
   Pattern Recognition (CVPR)}, 2023, pp. 7464--7475.
 
-\bibitem{jocher2020yolov5}
+\bibitem{jocher2024yolo11}
 \BIBentryALTinterwordspacing
-G.~Jocher, A.~Stoken, J.~Borovec, L.~Changyu, A.~Hogan, L.~Diaconu, F.~Ingham
-  \emph{et~al.}, ``ultralytics/yolov5: v5.0 - {YOLOv5-P6} 1280 models, {AWS},
-  {Supervisely} and {YouTube} integrations,'' Apr. 2020. [Online]. Available:
-  \url{https://github.com/ultralytics/yolov5}
+G.~Jocher and J.~Qiu, ``Ultralytics {YOLO11},'' 2024. [Online]. Available:
+  \url{https://github.com/ultralytics/ultralytics}
 \BIBentrySTDinterwordspacing
 
 \bibitem{liu2016multispectral}

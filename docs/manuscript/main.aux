@@ -7,10 +7,10 @@
 \citation{portmann2014people}
 \citation{redmon2016you}
 \citation{wang2023yolov7}
-\citation{jocher2020yolov5}
-\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
+\citation{jocher2024yolo11}
 \citation{liu2016multispectral}
 \citation{gu2023mamba}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
 \citation{hwang2015multispectral}
 \citation{jia2021llvip}
 \citation{liu2016multispectral}
@@ -19,84 +19,70 @@
 \citation{rudol2008human}
 \citation{silvagni2017multipurpose}
 \citation{lygouras2019unsupervised}
-\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{2}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Multispectral and Multimodal Person Detection}{2}{}\protected@file@percent }
 \citation{portmann2014people}
 \citation{kyrkou2021emergencynet}
 \citation{redmon2016you}
 \citation{wang2023yolov7}
 \citation{wang2024yolov9}
 \citation{wang2024yolov10}
-\citation{jocher2020yolov5}
+\citation{jocher2024yolo11}
 \citation{han2016seq}
 \citation{kang2018tcnn}
 \citation{wald1945sequential}
 \citation{richards2014fundamentals}
 \citation{rabiner1975applications}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces System architecture of the proposed MMSAR evaluation framework. Synchronized RGB and thermal streams (illustrated via the 6$\times $2 environment gallery) are decimated to an 8~Hz timebase ($T_s = 125$~ms) and processed by parallel lightweight YOLO11n backbones. A common confidence cue $s[n] = \max (c_{\text  {RGB}}[n], c_{\text  {Thermal}}[n])$ is distributed across five competing causal temporal post-processing methods ($W = 5$ frames / 625~ms latency bound). Binary alarms are asserted against validation-optimized thresholds $\tau _m^*$ and evaluated across detection reliability and resource overhead.}}{2}{}\protected@file@percent }
+\newlabel{fig:system_architecture}{{1}{2}{}{figure.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Multispectral and Multimodal Person Detection}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Lightweight Detectors for Aerial Search and Rescue}{2}{}\protected@file@percent }
 \citation{gu2022efficiently}
 \citation{gu2023mamba}
 \citation{zhu2024vision}
 \citation{liu2024vmamba}
 \citation{dao2024transformers}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Lightweight Detectors for Aerial Search and Rescue}{3}{}\protected@file@percent }
+\citation{jocher2024yolo11}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Temporal Post-Processing and Sequential Decision Making}{3}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}State-Space Sequence Models in Sequential Signal Processing}{3}{}\protected@file@percent }
-\citation{jocher2020yolov5}
-\@writefile{toc}{\contentsline {section}{\numberline {III}Methodology}{4}{}\protected@file@percent }
-\newlabel{sec:methodology}{{III}{4}{}{section.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Multispectral Video Decimation and Sensor Preprocessing}{4}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Soft Disjunctive Late Fusion Gate}{4}{}\protected@file@percent }
-\newlabel{eq:late_fusion}{{2}{4}{}{equation.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Deterministic and Order-Statistic Temporal Post-Processing}{4}{}\protected@file@percent }
-\newlabel{sec:postprocessing}{{\mbox  {III-C}}{4}{}{subsection.3.3}{}}
-\newlabel{eq:threshold_optimization}{{4}{4}{}{equation.4}{}}
-\citation{richards2014fundamentals}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Experimental comparative evaluation pipeline of the MMSAR framework. Synchronized RGB and thermal streams are decimated to an 8~Hz operating timebase ($T_s = 125$~ms) and processed by parallel lightweight YOLOv5n backbones. A common scalar confidence cue $s[n] = \max (c_{\text  {RGB}}[n], c_{\text  {Thermal}}[n])$ is distributed identically across five competing causal temporal post-processing methods ($W = 5$ frames / 625~ms latency bound). Binary alarms are asserted against method-specific optimal decision thresholds $\tau _m^*$ farmed on validation sequences and evaluated across detection reliability and resource overhead.}}{5}{}\protected@file@percent }
-\newlabel{fig:system_architecture}{{1}{5}{}{figure.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Temporal signal motivation ($W = 5$ frames = 625~ms) illustrating why temporal post-processing is required: (a) an isolated transient noise spike on a hard-negative scene triggers a spurious raw detection but is suppressed by causal temporal filtering ($y[n] = 0$), whereas (b) a sustained human victim signature confirms target presence and asserts the downstream alarm ($y[n] = 1$).}}{5}{}\protected@file@percent }
-\newlabel{fig:temporal_postprocessing}{{2}{5}{}{figure.2}{}}
-\citation{gu2022efficiently}
-\citation{gu2023mamba}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}State-Space Sequence Models}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Methodology}{3}{}\protected@file@percent }
+\newlabel{sec:methodology}{{III}{3}{}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Decimation and Parallel YOLO11n Detection}{3}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Temporal signal behavior ($W = 5$ frames = 625~ms): (a) an isolated noise spike on a hard-negative scene triggers a spurious raw detection but is rejected by causal filtering ($y[n] = 0$), whereas (b) a sustained victim signature confirms target presence and asserts the alarm ($y[n] = 1$).}}{3}{}\protected@file@percent }
+\newlabel{fig:temporal_postprocessing}{{2}{3}{}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Soft Disjunctive Late Fusion Gate}{3}{}\protected@file@percent }
+\newlabel{eq:late_fusion}{{2}{3}{}{equation.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Causal Temporal Post-Processing}{3}{}\protected@file@percent }
+\newlabel{eq:threshold_optimization}{{4}{3}{}{equation.4}{}}
 \citation{kyrkou2021emergencynet}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Learned Selective State-Space Sequence Model (Mamba-SSSM)}{6}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Empirical performance trade-off frontier comparing the five causal temporal post-processing methods. Raw frame-level baseline thresholding (M1) achieves high initial recall but zero false-alarm suppression, causing severe telemetry queueing and battery drain. Moving average (M2) suppresses clutter but incurs edge attenuation. Median filtering (M3) and history consensus (M4) establish strong noise rejection. Learned Mamba-SSSM (M5) defines the optimal Pareto frontier, achieving 89.4\% false-alarm suppression while preserving 95.8\% positive target recall.}}{6}{}\protected@file@percent }
-\newlabel{fig:performance_tradeoff}{{3}{6}{}{figure.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-E}}Downstream Operational Decision Policy and Telemetry Impact}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {IV}Experimental Setup and Dataset}{7}{}\protected@file@percent }
-\newlabel{sec:experimental_setup}{{IV}{7}{}{section.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Synthetic Multimodal SAR Video Collection}{7}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Faststart Container Optimization for Web Annotation}{7}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Continuous Video Annotation Protocol}{7}{}\protected@file@percent }
-\citation{jocher2020yolov5}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}Temporal Decimation to 8.0 Hz Operating Timebase}{8}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-E}}Ground-Truth Extraction and YOLO Coordinate Normalization}{8}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-F}}Cross-Spectral Transfer and Model Training}{8}{}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Frame-Level Upstream Detection Performance Across Sensor Modalities (Test Set, $\tau = 0.50$)}}{8}{}\protected@file@percent }
-\newlabel{tab:fusion_comparison}{{I}{8}{}{table.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {V}Results and Discussion}{8}{}\protected@file@percent }
-\newlabel{sec:results}{{V}{8}{}{section.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Upstream Detection and Modality Fusion Analysis}{8}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Comparative Evaluation of Causal Post-Processing Methods}{9}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Environmental Condition Breakdown}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Downstream Operational Metrics}{4}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Dataset Partitioning and Detector Training Parameters}}{4}{}\protected@file@percent }
+\newlabel{tab:dataset_and_training}{{I}{4}{}{table.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Experimental Setup and Dataset}{4}{}\protected@file@percent }
+\newlabel{sec:experimental_setup}{{IV}{4}{}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Synthetic Multimodal Dataset Specifications}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Sequence Partitioning and Detector Training}{4}{}\protected@file@percent }
 \citation{kyrkou2021emergencynet}
 \bibstyle{IEEEtran}
 \bibdata{references}
 \bibcite{rudol2008human}{1}
 \bibcite{silvagni2017multipurpose}{2}
 \bibcite{kyrkou2021emergencynet}{3}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Frame-Level Upstream Detection Across Sensor Modalities (Test Split, $\tau = 0.50$)}}{5}{}\protected@file@percent }
+\newlabel{tab:fusion_comparison}{{II}{5}{}{table.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Results and Discussion}{5}{}\protected@file@percent }
+\newlabel{sec:results}{{V}{5}{}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Upstream Detection and Modality Fusion Analysis}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Comparative Evaluation of Causal Post-Processing Methods}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Environmental Robustness and Downstream Operational Impact}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusion}{5}{}\protected@file@percent }
+\newlabel{sec:conclusion}{{VI}{5}{}{section.6}{}}
+\@writefile{toc}{\contentsline {section}{References}{5}{}\protected@file@percent }
 \bibcite{hwang2015multispectral}{4}
 \bibcite{jia2021llvip}{5}
 \bibcite{portmann2014people}{6}
 \bibcite{redmon2016you}{7}
 \bibcite{wang2023yolov7}{8}
-\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Comparative Performance Benchmark of Causal Temporal Post-Processing Methods Under Method-Specific Validation-Optimized Decision Thresholds ($W = 5$ frames / 625 ms)}}{10}{}\protected@file@percent }
-\newlabel{tab:postprocessing_benchmark}{{II}{10}{}{table.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Downstream IoT Telemetry and Drone Battery Impact}{10}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusion}{10}{}\protected@file@percent }
-\newlabel{sec:conclusion}{{VI}{10}{}{section.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Operational Limitations and Future Work}{10}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{References}{10}{}\protected@file@percent }
-\bibcite{jocher2020yolov5}{9}
+\bibcite{jocher2024yolo11}{9}
 \bibcite{liu2016multispectral}{10}
 \bibcite{gu2023mamba}{11}
 \bibcite{li2018illumination}{12}
@@ -113,4 +99,6 @@
 \bibcite{zhu2024vision}{23}
 \bibcite{liu2024vmamba}{24}
 \bibcite{dao2024transformers}{25}
-\gdef \@abspage@last{11}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Comparative Benchmark of Causal Temporal Post-Processing Methods Under Validation-Optimized Decision Thresholds ($W = 5$ frames / 625 ms)}}{6}{}\protected@file@percent }
+\newlabel{tab:postprocessing_benchmark}{{III}{6}{}{table.3}{}}
+\gdef \@abspage@last{6}

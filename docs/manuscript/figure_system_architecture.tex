@@ -2,89 +2,102 @@
     >=Stealth,
     font=\sffamily\small,
     box/.style={draw=black!70, rounded corners=3pt, thick, fill=white, align=center},
-    sensor/.style={box, fill=blue!8, draw=blue!60, font=\sffamily\footnotesize, text width=2.3cm, minimum height=1.0cm},
-    detector/.style={box, fill=cyan!10, draw=cyan!70, font=\sffamily\footnotesize, text width=2.6cm, minimum height=1.0cm},
+    gallerybox/.style={draw=blue!60!black, rounded corners=3pt, thick, fill=black!2, align=center, inner sep=2pt},
+    detector/.style={box, fill=cyan!10, draw=cyan!70, font=\sffamily\footnotesize, text width=2.7cm, minimum height=1.05cm},
     fusion/.style={box, fill=purple!10, draw=purple!70, thick, font=\sffamily\footnotesize, text width=2.7cm, minimum height=1.1cm},
-    method/.style={box, fill=orange!10, draw=orange!75, thick, font=\sffamily\scriptsize, text width=3.6cm, minimum height=0.82cm},
+    method/.style={box, fill=orange!10, draw=orange!75, thick, font=\sffamily\scriptsize, text width=3.6cm, minimum height=0.78cm},
     decision/.style={box, fill=teal!12, draw=teal!70, thick, font=\sffamily\footnotesize, text width=2.2cm, minimum height=1.1cm},
-    eval/.style={box, fill=green!10, draw=green!60!black, thick, font=\sffamily\footnotesize, text width=3.4cm, minimum height=1.4cm},
-    container/.style={draw=black!40, dashed, rounded corners=4pt, fill=black!2, inner sep=6pt},
+    eval/.style={box, fill=green!10, draw=green!60!black, thick, font=\sffamily\footnotesize, text width=3.3cm, minimum height=1.35cm},
+    kpi/.style={draw=red!70!black, fill=red!5, rounded corners=4pt, thick, align=center, inner sep=3pt},
+    container/.style={draw=black!40, dashed, rounded corners=4pt, fill=black!2, inner sep=5pt},
     arrow/.style={->, thick, draw=black!75},
     sig/.style={font=\sffamily\scriptsize\bfseries, text=black!85}
 ]
 
-% 1. Sensor Inputs
-\node[sensor] (rgb) at (0, 1.4) {\textbf{RGB Video Stream}\\$I_{\text{RGB}}[n]$\\{\scriptsize 8 Hz, $640\times 640$}};
-\node[sensor] (tir) at (0, -1.4) {\textbf{Thermal Video Stream}\\$I_{\text{Thermal}}[n]$\\{\scriptsize 8 Hz, $640\times 640$}};
+% 1. Sensor Gallery (6x2 Modality / Environment Grid)
+\node[gallerybox] (gallery) at (0, 0) {
+    \includegraphics[width=2.4cm]{figures/dataset_grid_6x2.png}
+};
+\node[above=2pt of gallery, font=\sffamily\scriptsize\bfseries, align=center, text=blue!80!black] (gal_label) {
+    Multimodal Sensory Inputs\\{\tiny 6$\times$2 Grid (Desert, Forest, Snow)}
+};
 
-% 2. Upstream Detectors
-\node[detector] (yolo_rgb) at (3.6, 1.4) {\textbf{Lightweight Detector}\\RGB Backbone\\{\scriptsize (YOLOv5n)}};
-\node[detector] (yolo_tir) at (3.6, -1.4) {\textbf{Lightweight Detector}\\Thermal Backbone\\{\scriptsize (YOLOv5n)}};
+% 2. Funnel Projection (from Gallery to Parallel Detectors)
+\fill[blue!12, opacity=0.35] (gallery.north east) -- (3.2, 1.95) -- (3.2, 0.85) -- cycle;
+\fill[blue!12, opacity=0.35] (gallery.south east) -- (3.2, -0.85) -- (3.2, -1.95) -- cycle;
+\draw[blue!50, dashed, thick] (gallery.north east) -- (3.2, 1.95);
+\draw[blue!50, dashed, thick] (gallery.south east) -- (3.2, -1.95);
 
-% 3. Common Late Fusion Gate
-\node[fusion] (fusion) at (7.1, 0) {
+% 3. Upstream Parallel YOLO11n Detectors
+\node[detector, text width=2.4cm] (yolo_rgb) at (4.4, 1.4) {\textbf{RGB Detector}\\[1pt]YOLO11n Backbone\\{\scriptsize 2.6M params, FP32}};
+\node[detector, text width=2.4cm] (yolo_tir) at (4.4, -1.4) {\textbf{Thermal Detector}\\[1pt]YOLO11n Backbone\\{\scriptsize 2.6M params, FP32}};
+
+\draw[arrow, blue!70!black] (1.25, 1.4) -- (yolo_rgb.west);
+\draw[arrow, blue!70!black] (1.25, -1.4) -- (yolo_tir.west);
+
+% 4. Soft Disjunctive Late Fusion Gate
+\node[fusion, text width=2.6cm] (fusion) at (8.7, 0) {
     \textbf{Decision Fusion}\\[2pt]
     $s[n] = \max(c_{\text{RGB}}, c_{\text{Thermal}})$\\[2pt]
-    {\scriptsize Unbiased Modality Max}
+    {\scriptsize Modality Max}
 };
 
-% 4. Alternative Temporal Post-Processing Methods (Central Evaluated Core)
-\node[method] (m1) at (11.9, 2.4) {\textbf{M1: Raw Baseline}\\[1pt]$y[n] = \mathbb{I}(s[n] \ge \tau)$};
-\node[method] (m2) at (11.9, 1.2) {\textbf{M2: Moving Average}\\[1pt]$\tilde{s}[n] = \frac{1}{W}\sum_{k=0}^{W-1} s[n-k]$};
-\node[method] (m3) at (11.9, 0.0) {\textbf{M3: Median Filter}\\[1pt]$\tilde{s}[n] = \text{median}\big(s[n],\dots,s[n-4]\big)$};
-\node[method] (m4) at (11.9, -1.2) {\textbf{M4: History Consensus}\\[1pt]$\sum_{k=0}^{W-1}\mathbb{I}(s[n-k]\ge \tau) \ge 3$};
-\node[method] (m5) at (11.9, -2.4) {\textbf{M5: Learned Mamba-SSSM}\\[1pt]Selective State-Space Filter};
+% Connections: Detectors to Fusion
+\draw[arrow] (yolo_rgb.east) -- node[pos=0.48, above=2pt, sig] {$c_{\text{RGB}}[n]$} (fusion.north west);
+\draw[arrow] (yolo_tir.east) -- node[pos=0.48, below=2pt, sig] {$c_{\text{Thermal}}[n]$} (fusion.south west);
 
-% 5. Common Alarm Output
-\node[decision] (alarm) at (16.6, 0) {
+% 5. Causal Temporal Post-Processing Methods (W = 5 frames / 625 ms)
+\node[method, text width=3.4cm] (m1) at (13.7, 2.2) {\textbf{M1: Raw Baseline}\\[1pt]$y[n] = \mathbb{I}(s[n] \ge \tau_{\text{raw}}^*)$};
+\node[method, text width=3.4cm] (m2) at (13.7, 1.1) {\textbf{M2: Moving Average}\\[1pt]$\tilde{s}[n] = \frac{1}{W}\sum_{k=0}^{W-1} s[n-k]$};
+\node[method, text width=3.4cm] (m3) at (13.7, 0.0) {\textbf{M3: Median Filter}\\[1pt]$\tilde{s}[n] = \text{median}\big(s[n],\dots,s[n-4]\big)$};
+\node[method, text width=3.4cm] (m4) at (13.7, -1.1) {\textbf{M4: History Consensus}\\[1pt]$\sum_{k=0}^{W-1}\mathbb{I}(s[n-k]\ge \tau^*_{\text{hist}}) \ge 3$};
+\node[method, text width=3.4cm] (m5) at (13.7, -2.2) {\textbf{M5: Learned Mamba-SSSM}\\[1pt]Selective State-Space Filter};
+
+% Distribution Bus for Common Signal s[n]
+\draw[thick, draw=purple!80] (fusion.east) -- (11.5, 0) node[midway, above=2pt, sig, text=purple!90!black] {Fused $s[n]$};
+\draw[thick, draw=purple!80] (11.5, 2.2) -- (11.5, -2.2);
+\draw[arrow, draw=purple!80] (11.5, 2.2) -- (m1.west);
+\draw[arrow, draw=purple!80] (11.5, 1.1) -- (m2.west);
+\draw[arrow, draw=purple!80] (11.5, 0.0) -- (m3.west);
+\draw[arrow, draw=purple!80] (11.5, -1.1) -- (m4.west);
+\draw[arrow, draw=purple!80] (11.5, -2.2) -- (m5.west);
+
+% Collection Bus from Methods to Alarm
+\draw[thick, draw=teal!80] (16.0, 2.2) -- (16.0, -2.2);
+\draw[arrow, draw=black!75] (m1.east) -- (16.0, 2.2);
+\draw[arrow, draw=black!75] (m2.east) -- (16.0, 1.1);
+\draw[arrow, draw=black!75] (m3.east) -- (16.0, 0.0);
+\draw[arrow, draw=black!75] (m4.east) -- (16.0, -1.1);
+\draw[arrow, draw=black!75] (m5.east) -- (16.0, -2.2);
+
+% 6. Common Alarm Output
+\node[decision] (alarm) at (17.8, 0) {
     \textbf{Binary Alarm}\\[2pt]
     $y_m[n] \in \{0, 1\}$\\[2pt]
-    {\scriptsize Threshold $\tau_m^*$}
+    {\scriptsize Optimal $\tau_m^* \in \mathcal{D}_{\text{val}}$}
 };
+\draw[arrow, draw=teal!80, very thick] (16.0, 0) -- (alarm.west);
 
-% 6. Evaluation Framework
-\node[eval] (eval) at (20.5, 0) {
-    \textbf{Comparative Evaluation}\\[3pt]
+% 7. Operational Evaluation Framework
+\node[eval] (eval) at (21.4, -0.4) {
+    \textbf{Operational Evaluation}\\[3pt]
     $\bullet$ Frame Recall / Precision\\
-    $\bullet$ False Alarm Ratio (FASR)\\
-    $\bullet$ Uplink Telemetry Cost\\
-    $\bullet$ UAV Hover Energy Drain
+    $\bullet$ False Alarm Suppression Ratio\\
+    $\bullet$ IoT Telemetry Uplink ($\Delta \Omega$)\\
+    $\bullet$ Drone Loiter Energy ($\Delta E$)
+};
+\draw[arrow, draw=teal!80, very thick] (alarm.east) -- node[above=2pt, sig, text=teal!90!black] {$y[n]$} (eval.west);
+
+% 8. Top KPI Formula Callout (Funnel Metric Aesthetic)
+\node[kpi] (kpi_box) at (21.4, 1.9) {
+    \textbf{Suppression Efficiency}\\[2pt]
+    $\text{FASR} = \left(1 - \frac{\text{FP}_{\text{filtered}}}{\text{FP}_{\text{raw}}}\right) \times 100\%$
 };
 
 % Background Containers
 \begin{scope}[on background layer]
-    \node[container, fit=(rgb) (tir), label={[font=\sffamily\scriptsize\bfseries, text=blue!70!black]above:Decimated Inputs}] {};
     \node[container, fit=(yolo_rgb) (yolo_tir), label={[font=\sffamily\scriptsize\bfseries, text=cyan!70!black]above:Parallel Detectors}] {};
-    \node[container, fit=(m1) (m5), label={[font=\sffamily\scriptsize\bfseries, text=orange!80!black]above:Compared Causal Post-Processing Methods ($W = 5$ frames / 625 ms)}] (pp_group) {};
+    \node[container, fit=(m1) (m5), label={[font=\sffamily\scriptsize\bfseries, text=orange!80!black]above:Compared Causal Post-Processing ($W = 5$ frames / 625 ms)}] (pp_group) {};
 \end{scope}
-
-% Connections: Sensors to Detectors
-\draw[arrow] (rgb) -- (yolo_rgb);
-\draw[arrow] (tir) -- (yolo_tir);
-
-% Connections: Detectors to Fusion
-\draw[arrow] (yolo_rgb.east) -- node[pos=0.45, above=2pt, sig] {$c_{\text{RGB}}[n]$} (fusion.north west);
-\draw[arrow] (yolo_tir.east) -- node[pos=0.45, below=2pt, sig] {$c_{\text{Thermal}}[n]$} (fusion.south west);
-
-% Distribution Bus for Common Signal s[n]
-\draw[thick, draw=purple!80] (fusion.east) -- (9.3, 0) node[midway, above=2pt, sig, text=purple!90!black] {Common $s[n]$};
-\draw[thick, draw=purple!80] (9.3, 2.4) -- (9.3, -2.4);
-\draw[arrow, draw=purple!80] (9.3, 2.4) -- (m1.west);
-\draw[arrow, draw=purple!80] (9.3, 1.2) -- (m2.west);
-\draw[arrow, draw=purple!80] (9.3, 0.0) -- (m3.west);
-\draw[arrow, draw=purple!80] (9.3, -1.2) -- (m4.west);
-\draw[arrow, draw=purple!80] (9.3, -2.4) -- (m5.west);
-
-% Collection Bus from Methods to Alarm
-\draw[thick, draw=teal!80] (14.5, 2.4) -- (14.5, -2.4);
-\draw[arrow, draw=black!75] (m1.east) -- (14.5, 2.4);
-\draw[arrow, draw=black!75] (m2.east) -- (14.5, 1.2);
-\draw[arrow, draw=black!75] (m3.east) -- (14.5, 0.0);
-\draw[arrow, draw=black!75] (m4.east) -- (14.5, -1.2);
-\draw[arrow, draw=black!75] (m5.east) -- (14.5, -2.4);
-\draw[arrow, draw=teal!80, very thick] (14.5, 0) -- (alarm.west);
-
-% Alarm to Evaluation
-\draw[arrow, draw=teal!80, very thick] (alarm) -- node[above=2pt, sig, text=teal!90!black] {$y[n]$} (eval);
 
 \end{tikzpicture}
