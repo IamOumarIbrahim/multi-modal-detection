@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  12 SEP 2026 11:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  12 SEP 2026 12:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -827,112 +827,49 @@ LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.9> not available
 omarb/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
 
 
-] [2 <./figures/icon_lorem_ipsum.png> <./figures/gemini_logo.png> <./figures/de
-sert_rgb_video.png (PNG copy)> <./figures/forest_rgb_video.png (PNG copy)> <./f
-igures/desert_th_video.png (PNG copy)> <./figures/forest_th_video.png (PNG copy
-)> <./figures/crop_640_left_video.png (PNG copy)> <./figures/crop_640_right_vid
-eo.png (PNG copy)> <./figures/icon_label_studio.png> <./figures/desert_rgb_anno
-tated.png (PNG copy)> <./figures/desert_th_annotated.png (PNG copy)>]
-Underfull \hbox (badness 5726) in paragraph at lines 129--130
+]
+Underfull \vbox (badness 1365) has occurred while \output is active []
+
+ [2 <./figures/icon_lorem_ipsum.png> <./figures/gemini_logo.png> <./figures/des
+ert_rgb_video.png (PNG copy)> <./figures/forest_rgb_video.png (PNG copy)> <./fi
+gures/desert_th_video.png (PNG copy)> <./figures/forest_th_video.png (PNG copy)
+> <./figures/crop_640_left_video.png (PNG copy)> <./figures/crop_640_right_vide
+o.png (PNG copy)> <./figures/icon_label_studio.png> <./figures/desert_rgb_annot
+ated.png (PNG copy)> <./figures/desert_th_annotated.png (PNG copy)>]
+Underfull \hbox (badness 4634) in paragraph at lines 88--89
+[]\OT1/ptm/m/n/10 Per-frame de-tec-tors ap-plied to video pro-duce high-
+ []
+
+
+Underfull \hbox (badness 5726) in paragraph at lines 127--128
 \OT1/ptm/m/n/10 frame-work pro-vides an end-to-end pipeline com-bin-ing
  []
 
-
-Underfull \hbox (badness 2564) in paragraph at lines 144--145
-[]\OT1/ptm/b/n/10 YOLO11n-Thermal: \OT1/ptm/m/n/10 Trained on multi-environment
-
- []
-
 LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 1
-64.
+57.
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 164.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 157.
 
-[3]
-Underfull \hbox (badness 6063) in paragraph at lines 184--186
-\OT1/ptm/m/n/10 sweeping $\OML/cmm/m/it/10 ^^\$ \OT1/ptm/m/n/10 with step $\OT1
-/cmr/m/n/10 ^^A\OML/cmm/m/it/10 ^^\ \OT1/cmr/m/n/10 = 0\OML/cmm/m/it/10 :\OT1/c
-mr/m/n/10 02$ \OT1/ptm/m/n/10 (46 can-di-date
+[3] (figure_temporal_postprocessing.tex) [4]
+Underfull \hbox (badness 1448) in paragraph at lines 332--333
+[]\OT1/ptm/m/n/10 We eval-u-ate across two wilder-ness biomes: (1) \OT1/ptm/b/n
+/10 Arid
  []
 
-
-Underfull \hbox (badness 2285) in paragraph at lines 184--186
-\OT1/ptm/m/n/10 thresh-olds). Once cal-i-brated on $\OMS/cmsy/m/n/10 D[]$\OT1/p
-tm/m/n/10 , thresh-olds re-main
- []
-
-
-Underfull \hbox (badness 2990) in paragraph at lines 184--186
-\OT1/ptm/m/n/10 frozen for test eval-u-a-tion. Com-plete sweep tra-jec-to-ries
- []
-
-(figure_temporal_postprocessing.tex)
-
-! Package amsmath Error: Multiple \label's: label 'eq:ma_filter' will be lost.
-
-See the amsmath package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.214     \label
-                {eq:ma_alarm}
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Overfull \hbox (3.74954pt too wide) detected at line 215
-[][]\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n\OT1/cmr/m/n/10 ] = [] [] \OML/cmm/m/it/
-10 s\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 k
-\OT1/cmr/m/n/10 ]\OML/cmm/m/it/10 ;  y[]\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n\OT1
-/cmr/m/n/10 ] = \U/msb/m/n/10 I[][]\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n\OT1/cmr/
-m/n/10 ] \OMS/cmsy/m/n/10 ^^U \OML/cmm/m/it/10 ^^\[][]:
- []
-
-
-! Package amsmath Error: Multiple \label's: label 'eq:med_filter' will be lost.
-
-
-See the amsmath package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.221     \label
-                {eq:med_alarm}
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Overfull \hbox (48.01051pt too wide) detected at line 222
-[][]\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n\OT1/cmr/m/n/10 ] = [][]\OML/cmm/m/it/10
- s\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n\OT1/cmr/m/n/10 ]\OML/cmm/m/it/10 ; [] ; s
-\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n \OMS/cmsy/m/n/10 ^^@ \OT1/cmr/m/n/10 4][]\O
-ML/cmm/m/it/10 ;  y[]\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n\OT1/cmr/m/n/10 ] = \U/
-msb/m/n/10 I[][]\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n\OT1/cmr/m/n/10 ] \OMS/cmsy/
-m/n/10 ^^U \OML/cmm/m/it/10 ^^\[][]:
- []
-
-
-Underfull \vbox (badness 1983) has occurred while \output is active []
-
- [4]
 LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 3
-07.
-
+34.
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 [5] [6]
-Underfull \hbox (badness 6691) in paragraph at lines 441--442
-[]\OT1/ptm/b/n/10 Hardware-in-the-Loop Val-i-da-tion: \OT1/ptm/m/n/10 La-ten-ci
-es and
+Underfull \hbox (badness 1377) in paragraph at lines 408--409
+\OT1/ptm/m/n/10 and pure-PyTorch causal post-processing im-ple-men-ta-tions
  []
 
-(main.bbl [7])
+(main.bbl)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -944,9 +881,7 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[8
-
-] (main.aux)
+[7] (main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
@@ -956,15 +891,12 @@ L3 programming layer <2025-12-24>
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 2.35pt have occurred.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
  ) 
 Here is how much of TeX's memory you used:
- 16789 strings out of 467871
- 351759 string characters out of 5418376
- 778497 words of memory out of 5000000
- 45341 multiletter control sequences out of 15000+600000
+ 16785 strings out of 467871
+ 351670 string characters out of 5418376
+ 776388 words of memory out of 5000000
+ 45337 multiletter control sequences out of 15000+600000
  702236 words of font info for 184 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,17n,94p,1697b,964s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -998,9 +930,9 @@ urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/
 urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
 /urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
 /urw/times/utmri8a.pfb>
-Output written on main.pdf (8 pages, 5447458 bytes).
+Output written on main.pdf (7 pages, 5445047 bytes).
 PDF statistics:
- 183 PDF objects out of 1000 (max. 8388607)
+ 180 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  68 words of extra memory for PDF output out of 10000 (max. 10000000)
 

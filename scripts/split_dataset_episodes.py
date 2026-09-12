@@ -103,9 +103,6 @@ def split_episodes(
 ) -> dict[str, Any]:
     """Partition the dataset using Option B (Parent-Video Grouped Splitting)."""
     splits_out_dir.mkdir(parents=True, exist_ok=True)
-    biomes = ["desert", "forest"]
-    scenarios = ["positive", "hard_negative", "clear_negative"]
-    modalities = ["rgb", "thermal"]
 
     all_splits: dict[str, list[dict[str, Any]]] = {
         "train": [],
@@ -123,67 +120,94 @@ def split_episodes(
         "partitions": {},
     }
 
-    for biome in biomes:
-        for scenario in scenarios:
-            for modality in modalities:
-                folder = raw_root / biome / scenario / modality
-                if not folder.exists():
-                    continue
+    # Discover all video snippets across data/raw
+    all_videos = sorted(raw_root.glob("*/*/*/*.mp4"))
+    parent_map: dict[str, dict[str, EpisodeMetadata]] = {}
 
-                parent_groups = group_snippets_by_parent(folder)
-                if not parent_groups:
-                    continue
+    import re
 
-                parent_ids = sorted(parent_groups.keys())
-                rng_split = random.Random(seed)
-                shuffled_parents = list(parent_ids)
-                rng_split.shuffle(shuffled_parents)
+    for vid_path in all_videos:
+        stem = vid_path.stem
+        if stem.endswith("_left"):
+            parent_id = stem[:-5]
+            tile_pos = "left"
+        elif stem.endswith("_right"):
+            parent_id = stem[:-6]
+            tile_pos = "right"
+        else:
+            continue
 
-                total_parents = len(shuffled_parents)
-                n_train = max(1, int(round(total_parents * train_ratio)))
-                n_val = max(1, int(round(total_parents * val_ratio))) if total_parents >= 5 else 0
-                n_test = total_parents - n_train - n_val
+        scenario = vid_path.parent.parent.name
+        modality = vid_path.parent.name
+        biome = vid_path.parent.parent.parent.name
 
-                train_parents = set(shuffled_parents[:n_train])
-                val_parents = set(shuffled_parents[n_train : n_train + n_val])
-                test_parents = set(shuffled_parents[n_train + n_val :])
+        ep = EpisodeMetadata(
+            episode_id=f"{parent_id}_{tile_pos}",
+            parent_video_id=parent_id,
+            tile_position=tile_pos,
+            biome=biome,
+            scenario=scenario,
+            modality=modality,
+            frame_count=240,
+            start_frame=0,
+            end_frame=239,
+            fps=24,
+            video_path=str(vid_path.as_posix()),
+        )
+        parent_map.setdefault(parent_id, {})[tile_pos] = ep
 
-                partition_map = {
-                    "train": train_parents,
-                    "val": val_parents,
-                    "test": test_parents,
-                }
+    # Group parent flights into mission series (e.g. desert_RGB_positive, desert_RGB_hard_negative, etc.)
+    series_map: dict[str, list[str]] = {}
+    for parent_id in sorted(parent_map.keys()):
+        m = re.match(r"^(.+)_\d+$", parent_id)
+        series_name = m.group(1) if m else parent_id
+        series_map.setdefault(series_name, []).append(parent_id)
 
-                for split_name, assigned_parents in partition_map.items():
-                    split_episodes_list: list[EpisodeMetadata] = []
-                    for parent_id in assigned_parents:
-                        tile_dict = parent_groups[parent_id]
-                        for tile_pos, vid_path in tile_dict.items():
-                            ep = EpisodeMetadata(
-                                episode_id=f"{parent_id}_{tile_pos}",
-                                parent_video_id=parent_id,
-                                tile_position=tile_pos,
-                                biome=biome,
-                                scenario=scenario,
-                                modality=modality,
-                                frame_count=240,
-                                start_frame=0,
-                                end_frame=239,
-                                fps=24,
-                                video_path=str(vid_path.as_posix()),
-                            )
-                            split_episodes_list.append(ep)
+    partition_assigned: dict[str, list[EpisodeMetadata]] = {
+        "train": [],
+        "val": [],
+        "test": [],
+    }
 
-                    shuffled_split = shuffle_with_anti_adjacency(
-                        split_episodes_list,
-                        seed=seed,
-                        min_distance=2,
-                    )
+    # Partition each series proportionally by parent flight
+    for series_name, parent_ids in sorted(series_map.items()):
+        rng_split = random.Random(seed)
+        shuffled_parents = list(parent_ids)
+        rng_split.shuffle(shuffled_parents)
 
-                    for order_idx, ep in enumerate(shuffled_split):
-                        ep_dict = asdict(ep)
-                        ep_dict["feed_order_index"] = order_idx
-                        all_splits[split_name].append(ep_dict)
+        total_parents = len(shuffled_parents)
+        n_train = max(1, int(round(total_parents * train_ratio)))
+        n_val = max(1, int(round(total_parents * val_ratio))) if total_parents >= 5 else 0
+        n_test = total_parents - n_train - n_val
+
+        train_p = set(shuffled_parents[:n_train])
+        val_p = set(shuffled_parents[n_train : n_train + n_val])
+        test_p = set(shuffled_parents[n_train + n_val :])
+
+        for pid in train_p:
+            for ep in parent_map[pid].values():
+                partition_assigned["train"].append(ep)
+
+        for pid in val_p:
+            for ep in parent_map[pid].values():
+                partition_assigned["val"].append(ep)
+
+        for pid in test_p:
+            for ep in parent_map[pid].values():
+                partition_assigned["test"].append(ep)
+
+    # Apply anti-adjacency shuffling within each split
+    for split_name in ["train", "val", "test"]:
+        ep_list = partition_assigned[split_name]
+        shuffled_split = shuffle_with_anti_adjacency(
+            ep_list,
+            seed=seed,
+            min_distance=2,
+        )
+        for order_idx, ep in enumerate(shuffled_split):
+            ep_dict = asdict(ep)
+            ep_dict["feed_order_index"] = order_idx
+            all_splits[split_name].append(ep_dict)
 
     summary["partitions"]["train_count"] = len(all_splits["train"])
     summary["partitions"]["val_count"] = len(all_splits["val"])
@@ -209,3 +233,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
