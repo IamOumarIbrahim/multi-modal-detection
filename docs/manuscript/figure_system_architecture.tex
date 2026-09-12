@@ -6,7 +6,7 @@
     videobox/.style={draw=blue!60!black, rounded corners=3pt, thick, fill=black!2, align=center, inner sep=2.5pt},
     framebox/.style={draw=teal!60!black, rounded corners=3pt, thick, fill=white, align=center, inner sep=2.5pt},
     stepbox/.style={box, fill=green!12, draw=green!60!black, thick, font=\sffamily\scriptsize, align=center},
-    detector/.style={box, fill=cyan!10, draw=cyan!70, font=\sffamily\footnotesize, text width=2.4cm, minimum height=1.05cm},
+    detector/.style={box, fill=cyan!10, draw=cyan!70, font=\sffamily\footnotesize, text width=2.6cm, minimum height=1.15cm},
     fusion/.style={box, fill=purple!10, draw=purple!70, thick, font=\sffamily\footnotesize, text width=2.5cm, minimum height=1.1cm},
     method/.style={box, fill=orange!10, draw=orange!75, thick, font=\sffamily\scriptsize, text width=3.7cm, inner ysep=6pt, inner xsep=7pt},
     decision/.style={box, fill=teal!12, draw=teal!70, thick, font=\sffamily\footnotesize, text width=2.2cm, minimum height=1.05cm},
@@ -17,116 +17,117 @@
     orangearrow/.style={->, thick, draw=orange!80!black},
     greenarrow/.style={->, thick, draw=green!60!black},
     purplearrow/.style={->, thick, draw=purple!80!black},
-    sig/.style={font=\fontsize{5.8pt}{6.8pt}\selectfont\bfseries, text=black!85},
-    ttl/.style={font=\fontsize{5.8pt}{6.8pt}\selectfont\bfseries}
+    sig/.style={font=\fontsize{5.8pt}{6.8pt}\selectfont\bfseries, text=black},
+    ttl/.style={font=\fontsize{6.2pt}{7.2pt}\selectfont\bfseries}
 ]
 
 % =========================================================================
 % TOP SECTION: SYNTHETIC GENERATION, DUAL CROP & ANNOTATION
+% (Scaled up by 10%, extended to the left to align with left bus line)
 % =========================================================================
 
-% 1. RGB video prompt (Text File Icon - Scaled down 40%)
-\node[iconbox] (prompt_rgb) at (0.5, 5.7) {
-    \includegraphics[height=0.68cm]{figures/icon_lorem_ipsum.png}
+% 1. RGB video prompt (Text File Icon - 10% larger, extended left)
+\node[iconbox] (prompt_rgb) at (-1.3, 5.7) {
+    \includegraphics[height=0.76cm]{figures/icon_lorem_ipsum.png}
 };
 \node[above=4pt of prompt_rgb, ttl, text=blue!80!black] (lbl_p1) {RGB Video Prompt};
-\node[below=2pt of prompt_rgb, font=\fontsize{5pt}{6pt}\selectfont, text=black!65] (sub_p1) {Text Prompt};
+\node[below=2pt of prompt_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_p1) {Text Prompt};
 
-% 2. Video Generator LLM (Gemini Icon - Scaled down 40%)
-\node[iconbox] (gemini_rgb) at (2.8, 5.7) {
-    \includegraphics[height=0.68cm]{figures/gemini_logo.png}
+% 2. Video Generator LLM (Gemini Icon - 10% larger)
+\node[iconbox] (gemini_rgb) at (1.6, 5.7) {
+    \includegraphics[height=0.76cm]{figures/gemini_logo.png}
 };
 \node[above=4pt of gemini_rgb, ttl, text=purple!80!black] (lbl_g1) {Video Generator LLM};
-\node[below=2pt of gemini_rgb, font=\fontsize{5pt}{6pt}\selectfont, text=black!65] (sub_g1) {Gemini 3.8 Flash};
+\node[below=2pt of gemini_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_g1) {Gemini 3.8 Flash};
 
 \draw[bluearrow] (prompt_rgb) -- (gemini_rgb);
 
-% 3. 16:9 RGB Videos (Desert & Forest with Striped Bottom)
-\node[videobox] (rgb_videos) at (5.3, 5.7) {
+% 3. 16:9 RGB Videos (Desert & Forest with Striped Bottom - 10% larger)
+\node[videobox] (rgb_videos) at (4.8, 5.7) {
     \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
-    \includegraphics[width=1.02cm]{figures/desert_rgb_video.png} &
-    \includegraphics[width=1.02cm]{figures/forest_rgb_video.png} \\
-    {\tiny Desert RGB} & {\tiny Forest RGB}
+    \includegraphics[width=1.12cm]{figures/desert_rgb_video.png} &
+    \includegraphics[width=1.12cm]{figures/forest_rgb_video.png} \\
+    {\tiny\bfseries Desert RGB} & {\tiny\bfseries Forest RGB}
     \end{tabular}
 };
-\node[above=4pt of rgb_videos, ttl, text=black!85] (lbl_v1) {16:9 RGB Videos};
-\node[below=2pt of rgb_videos, font=\fontsize{5pt}{6pt}\selectfont, text=black!60] (sub_v1) {1280$\times$720 @ 24 FPS};
+\node[above=4pt of rgb_videos, ttl, text=black] (lbl_v1) {16:9 RGB Videos};
+\node[below=2pt of rgb_videos, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_v1) {1280$\times$720 @ 24 FPS};
 
 \draw[bluearrow] (gemini_rgb) -- (rgb_videos);
 
-% 4. Configure to Thermal (Text File Icon - Scaled down 40%)
-\node[iconbox] (prompt_th) at (7.9, 5.7) {
-    \includegraphics[height=0.68cm]{figures/icon_lorem_ipsum.png}
+% 4. Configure to Thermal (Text File Icon - 10% larger)
+\node[iconbox] (prompt_th) at (8.0, 5.7) {
+    \includegraphics[height=0.76cm]{figures/icon_lorem_ipsum.png}
 };
 \node[above=4pt of prompt_th, ttl, text=orange!80!black] (lbl_p2) {Configure to Thermal};
-\node[below=2pt of prompt_th, font=\fontsize{5pt}{6pt}\selectfont, text=black!65] (sub_p2) {Thermal Prompt};
+\node[below=2pt of prompt_th, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_p2) {Thermal Prompt};
 
 \draw[orangearrow] (rgb_videos) -- (prompt_th);
 
-% 5. Video Generator LLM (Gemini Icon - Modality Transfer)
-\node[iconbox] (gemini_th) at (10.5, 5.7) {
-    \includegraphics[height=0.68cm]{figures/gemini_logo.png}
+% 5. Video Generator LLM (Gemini Icon - Modality Transfer - 10% larger)
+\node[iconbox] (gemini_th) at (11.0, 5.7) {
+    \includegraphics[height=0.76cm]{figures/gemini_logo.png}
 };
 \node[above=4pt of gemini_th, ttl, text=purple!80!black] (lbl_g2) {Video Generator LLM};
-\node[below=2pt of gemini_th, font=\fontsize{5pt}{6pt}\selectfont, text=black!65] (sub_g2) {Modality Transfer};
+\node[below=2pt of gemini_th, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_g2) {Modality Transfer};
 
 \draw[orangearrow] (prompt_th) -- (gemini_th);
 
-% 6. 16:9 Thermal Videos (Generously padded from Gemini and Crops)
-\node[videobox] (th_videos) at (13.8, 5.7) {
+% 6. 16:9 Thermal Videos (10% larger)
+\node[videobox] (th_videos) at (14.5, 5.7) {
     \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
-    \includegraphics[width=1.02cm]{figures/desert_th_video.png} &
-    \includegraphics[width=1.02cm]{figures/forest_th_video.png} \\
-    {\tiny Desert TIR} & {\tiny Forest TIR}
+    \includegraphics[width=1.12cm]{figures/desert_th_video.png} &
+    \includegraphics[width=1.12cm]{figures/forest_th_video.png} \\
+    {\tiny\bfseries Desert TIR} & {\tiny\bfseries Forest TIR}
     \end{tabular}
 };
-\node[above=4pt of th_videos, ttl, text=black!85] (lbl_v2) {16:9 Thermal Videos};
-\node[below=2pt of th_videos, font=\fontsize{5pt}{6pt}\selectfont, text=black!60] (sub_v2) {1280$\times$720 @ 24 FPS};
+\node[above=4pt of th_videos, ttl, text=black] (lbl_v2) {16:9 Thermal Videos};
+\node[below=2pt of th_videos, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_v2) {1280$\times$720 @ 24 FPS};
 
 \draw[orangearrow] (gemini_th) -- (th_videos);
 
-% 7. Crop 640x640 (Generously padded from 16:9 Thermal Videos and Label Studio)
-\node[videobox] (crops) at (17.5, 5.7) {
+% 7. Crop 640x640 (10% larger)
+\node[videobox] (crops) at (18.5, 5.7) {
     \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
-    \includegraphics[width=0.75cm]{figures/crop_640_left_video.png} &
-    \includegraphics[width=0.75cm]{figures/crop_640_right_video.png} \\
-    {\tiny Left ($x=0$)} & {\tiny Right ($x=640$)}
+    \includegraphics[width=0.83cm]{figures/crop_640_left_video.png} &
+    \includegraphics[width=0.83cm]{figures/crop_640_right_video.png} \\
+    {\tiny\bfseries Left ($x=0$)} & {\tiny\bfseries Right ($x=640$)}
     \end{tabular}
 };
 \node[above=4pt of crops, ttl, text=purple!80!black] (lbl_c) {Crop 640$\times$640 (2 Videos)};
-\node[below=2pt of crops, font=\fontsize{5pt}{6pt}\selectfont, text=purple!90!black] (sub_c) {Cropped Videos (24 FPS)};
+\node[below=2pt of crops, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_c) {Cropped Videos (24 FPS)};
 
 \draw[purplearrow] (th_videos) -- (crops);
 
-% 8. Label Studio Video Annotation (User's uploaded logo - Scaled down 40%)
-\node[iconbox] (label_studio) at (20.4, 5.7) {
-    \includegraphics[height=0.68cm]{figures/icon_label_studio.png}
+% 8. Label Studio Video Annotation (10% larger)
+\node[iconbox] (label_studio) at (21.6, 5.7) {
+    \includegraphics[height=0.76cm]{figures/icon_label_studio.png}
 };
 \node[above=4pt of label_studio, ttl, text=red!80!black] (lbl_ls) {Label Studio};
-\node[below=2pt of label_studio, font=\fontsize{5pt}{6pt}\selectfont, text=black!65] (sub_ls) {Video Annotation};
+\node[below=2pt of label_studio, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_ls) {Video Annotation};
 
 \draw[purplearrow] (crops) -- (label_studio);
 
-% 9. Video to Frame Full-Rate 24 Hz Extraction & YOLO Export
-\node[stepbox, text width=1.8cm, inner xsep=2pt] (v2f) at (22.8, 5.7) {
-    \textbf{Video to Frame}\\[1pt]
-    {\tiny Full-Rate Stream}\\[-1pt]
-    {\tiny (24~Hz Sampling)}
+% 9. Video to Frame Full-Rate 24 Hz Extraction (Clean single-line title)
+\node[stepbox, text width=1.95cm, inner xsep=3pt, minimum height=1.15cm] (v2f) at (24.2, 5.7) {
+    \textbf{Video to Frame}\\[2pt]
+    {\scriptsize Full-Rate Stream}\\[-1pt]
+    {\scriptsize (24~Hz Sampling)}
 };
-\node[below=2pt of v2f, font=\fontsize{5pt}{6pt}\selectfont, text=green!60!black] (sub_v2f) {Frame Extraction};
+\node[below=2pt of v2f, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_v2f) {Frame Extraction};
 
 \draw[greenarrow] (label_studio) -- (v2f);
 
-% 10. Annotated Frames (Extracted Clean Frames with YOLO Bounding Boxes)
-\node[framebox] (annotated_frames) at (25.2, 5.7) {
+% 10. Annotated Frames (16:9 Clean Frames with Accurate Person Bounding Boxes)
+\node[framebox] (annotated_frames) at (27.0, 5.7) {
     \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
-    \includegraphics[width=0.82cm]{figures/desert_rgb_annotated.png} &
-    \includegraphics[width=0.82cm]{figures/desert_th_annotated.png} \\
-    {\tiny RGB Frame} & {\tiny Thermal Frame}
+    \includegraphics[width=0.92cm]{figures/desert_rgb_annotated.png} &
+    \includegraphics[width=0.92cm]{figures/desert_th_annotated.png} \\
+    {\tiny\bfseries RGB Frame} & {\tiny\bfseries Thermal Frame}
     \end{tabular}
 };
 \node[above=4pt of annotated_frames, ttl, text=teal!80!black] (lbl_af) {Annotated Frames};
-\node[below=2pt of annotated_frames, font=\fontsize{5pt}{6pt}\selectfont\bfseries, text=teal!90!black] (sub_af) {Dataset Frames};
+\node[below=2pt of annotated_frames, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_af) {Dataset Frames};
 
 \draw[greenarrow] (v2f) -- (annotated_frames);
 
@@ -134,15 +135,16 @@
 % MIDDLE SECTION: TRANSITION DATASET BANNER & FEED CONDUIT
 % =========================================================================
 
-% Benchmark Corpus & Episodic Splitting Card (No MMSAR, generous padding above and below)
-\node[draw=purple!70, fill=purple!6, rounded corners=4pt, thick, font=\fontsize{5.8pt}{7.0pt}\selectfont, text=black!85, inner ysep=4pt, inner xsep=10pt, align=center] (dataset_banner) at (13.0, 3.6) {
+% Benchmark Corpus & Episodic Splitting Card (Generous padding, perfectly balanced)
+\node[draw=purple!70, fill=purple!6, rounded corners=4pt, thick, font=\fontsize{5.8pt}{7.0pt}\selectfont, text=black, inner ysep=4pt, inner xsep=10pt, align=center] (dataset_banner) at (13.5, 3.6) {
     \textbf{\textcolor{purple!90!black}{Benchmark Corpus and Sequence Partitioning [TBD]}}\\[2pt]
     Parent-Video Grouped Split (60\% Train / 20\% Val / 20\% Test) $|$ Co-Located Left and Right Tiles\\
     240 Frames/Episode at 24~Hz ($0 \to 239$ Sequential) $|$ Seed 0 Shuffled with Anti-Adjacency
 };
 
 % Routing from Stage 1 output to Dataset Banner (clean loop via right margin)
-\draw[thick, draw=purple!80, ->] (annotated_frames.east) -- ++(0.4, 0) |- (dataset_banner.east);
+\draw[thick, draw=purple!80, ->] (annotated_frames.east) -- ++(0.5, 0) |- (dataset_banner.east);
+
 
 
 % =========================================================================
@@ -164,8 +166,8 @@
 \draw[arrow, draw=purple!80, thick] (split_bus) |- (split_box.west);
 
 % 1. Parallel Detectors (YOLO11n-RGB & YOLO11n-Thermal)
-\node[detector] (yolo_rgb) at (3.2, 0.6) {\textbf{RGB Detector}\\[1pt]YOLO11n\\{\scriptsize 640$\times$640, 2.6M, FP32}};
-\node[detector] (yolo_tir) at (3.2, -2.0) {\textbf{Thermal Detector}\\[1pt]YOLO11n\\{\scriptsize 640$\times$640, 2.6M, FP32}};
+\node[detector] (yolo_rgb) at (3.2, 0.6) {\textbf{RGB Detector}\\[1pt]YOLO11n\\[1pt]{\scriptsize 640$\times$640, 2.6M}\\[-1pt]{\scriptsize Batch: 16, FP32}};
+\node[detector] (yolo_tir) at (3.2, -2.0) {\textbf{Thermal Detector}\\[1pt]YOLO11n\\[1pt]{\scriptsize 640$\times$640, 2.6M}\\[-1pt]{\scriptsize Batch: 16, FP32}};
 
 % Input arrows from Split Box to Detectors (Clean routing, Horizontal labels)
 \draw[arrow, blue!70!black, thick] (split_box.north east) to[out=20, in=180] node[pos=0.45, above=4pt, sig] {RGB Input} (yolo_rgb.west);

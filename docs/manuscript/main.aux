@@ -8,18 +8,13 @@
 \citation{redmon2016you}
 \citation{wang2023yolov7}
 \citation{jocher2024yolo11}
-\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
 \citation{gu2023mamba}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
 \citation{hwang2015multispectral}
 \citation{jia2021llvip}
 \citation{liu2016multispectral}
 \citation{li2018illumination}
 \citation{zhang2019cross}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces System architecture of the proposed multimodal search and rescue evaluation framework. Visible RGB and thermal infrared video streams are synthesized from text prompts and Gemini video generation, followed by cross-modality thermal transfer, dual-crop ($640 \times 640$) spatial extraction into left and right viewports, video-level annotation in Label Studio, and full-rate 24~Hz frame extraction. Curated sequences are partitioned into 240-frame episodes under a parent-video grouped split protocol ([TBD]) with anti-adjacency snippet shuffling to eliminate cross-tile spatial leakage. At the edge inference stage, parallel lightweight YOLO11n detectors process incoming RGB and thermal frames at 24~Hz ($T_s \approx 41.7$~ms), integrated via soft disjunctive late fusion ($s[n] = \max (c_{\text  {RGB}}[n], c_{\text  {Thermal}}[n])$) and evaluated across five lightweight temporal decision methods ($W = 5$ frames, 208~ms latency bound). Alert decisions are benchmarked across positive event detection, false alert mitigation, decision delay, and edge processing overhead savings.}}{2}{}\protected@file@percent }
-\newlabel{fig:system_architecture}{{1}{2}{}{figure.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{2}{}\protected@file@percent }
-\newlabel{sec:related_work}{{II}{2}{}{section.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Multispectral and Multimodal Person Detection}{2}{}\protected@file@percent }
 \citation{rudol2008human}
 \citation{silvagni2017multipurpose}
 \citation{lygouras2019unsupervised}
@@ -30,6 +25,12 @@
 \citation{wang2024yolov9}
 \citation{wang2024yolov10}
 \citation{jocher2024yolo11}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces System architecture of the MMSAR evaluation framework. Visible RGB and thermal infrared video streams are synthesized from text prompts, followed by cross-modality thermal transfer, dual-crop ($640 \times 640$) spatial extraction, video-level annotation in Label Studio, and 24~Hz frame extraction. Curated sequences are partitioned into 240-frame episodes under a parent-video grouped split protocol ([TBD]) with anti-adjacency snippet shuffling to eliminate cross-tile spatial leakage. At edge inference, parallel lightweight YOLO11n detectors process incoming RGB and thermal frames at 24~Hz ($T_s \approx 41.7$~ms), integrated via soft disjunctive late fusion ($s[n] = \max (c_{\text  {RGB}}[n], c_{\text  {Thermal}}[n])$) and evaluated across five lightweight temporal decision methods ($W = 5$ frames, 208~ms latency bound).}}{2}{}\protected@file@percent }
+\newlabel{fig:system_architecture}{{1}{2}{}{figure.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{2}{}\protected@file@percent }
+\newlabel{sec:related_work}{{II}{2}{}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Multispectral and Multimodal Person Detection}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Lightweight Detectors for Aerial Search and Rescue}{2}{}\protected@file@percent }
 \citation{han2016seq}
 \citation{kang2018tcnn}
 \citation{wald1945sequential}
@@ -40,64 +41,59 @@
 \citation{zhu2024vision}
 \citation{liu2024vmamba}
 \citation{dao2024transformers}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Lightweight Detectors for Aerial Search and Rescue}{3}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Temporal Post-Processing and Sequential Decision Making}{3}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}State-Space Sequence Models}{3}{}\protected@file@percent }
+\citation{jocher2024yolo11}
 \@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Summary of Key Mathematical Notations and System Parameters}}{3}{}\protected@file@percent }
 \newlabel{tab:notation}{{I}{3}{}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Temporal Post-Processing and Sequential Decision Making}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}State-Space Sequence Models}{3}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {III}Methodology}{3}{}\protected@file@percent }
 \newlabel{sec:methodology}{{III}{3}{}{section.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Video Stream Ingestion and Upstream Modality Detectors}{3}{}\protected@file@percent }
 \newlabel{eq:realtime_budget_serial}{{1}{3}{}{equation.1}{}}
-\citation{jocher2024yolo11}
-\newlabel{eq:realtime_budget_parallel}{{2}{4}{}{equation.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Soft Disjunctive Late Fusion Gate}{4}{}\protected@file@percent }
-\newlabel{eq:late_fusion}{{3}{4}{}{equation.3}{}}
+\newlabel{eq:realtime_budget_parallel}{{2}{3}{}{equation.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Soft Disjunctive Late Fusion Gate}{3}{}\protected@file@percent }
+\newlabel{eq:late_fusion}{{3}{3}{}{equation.3}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces MMSAR Causal Alarm Decision (per frame $n$)}}{4}{}\protected@file@percent }
+\newlabel{alg:mmsar_pipeline}{{1}{4}{}{algorithm.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Causal Temporal Post-Processing}{4}{}\protected@file@percent }
 \newlabel{sec:causal_postprocessing}{{\mbox  {III-C}}{4}{}{subsection.3.3}{}}
 \newlabel{eq:threshold_optimization}{{5}{4}{}{equation.5}{}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces MMSAR Causal Alarm Decision (per frame $n$)}}{4}{}\protected@file@percent }
-\newlabel{alg:mmsar_pipeline}{{1}{4}{}{algorithm.1}{}}
+\newlabel{eq:m1_raw}{{6}{4}{}{equation.6}{}}
+\newlabel{eq:ma_alarm}{{7}{4}{}{equation.7}{}}
+\newlabel{eq:med_alarm}{{8}{4}{}{equation.8}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Temporal signal behavior ($W = 5$ frames $\approx $ 208~ms at 24~Hz): (a) an isolated noise spike on a hard-negative scene triggers a spurious raw detection but is rejected by causal filtering ($y[n] = 0$), whereas (b) a sustained victim signature confirms target presence and asserts the alarm ($y[n] = 1$).}}{4}{}\protected@file@percent }
 \newlabel{fig:temporal_postprocessing}{{2}{4}{}{figure.2}{}}
-\newlabel{eq:m1_raw}{{6}{4}{}{equation.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Precision-Recall (or F1-vs-$\tau $) operating curves for M1--M5 across the full validation threshold sweep, retained rather than collapsed to a single point at $\tau _m^*$.}}{4}{}\protected@file@percent }
+\newlabel{fig:pr_curves}{{3}{4}{}{figure.3}{}}
+\newlabel{eq:hist_consensus}{{9}{4}{}{equation.9}{}}
 \citation{kyrkou2021emergencynet}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Precision-Recall (or F1-vs-$\tau $) operating curves for M1--M5 across the full validation threshold sweep, retained rather than collapsed to a single point at $\tau _m^*$.}}{5}{}\protected@file@percent }
-\newlabel{fig:pr_curves}{{3}{5}{}{figure.3}{}}
-\newlabel{eq:ma_filter}{{7}{5}{}{equation.7}{}}
-\newlabel{eq:ma_alarm}{{8}{5}{}{equation.8}{}}
-\newlabel{eq:med_filter}{{9}{5}{}{equation.9}{}}
-\newlabel{eq:med_alarm}{{10}{5}{}{equation.10}{}}
-\newlabel{eq:hist_consensus}{{11}{5}{}{equation.11}{}}
-\newlabel{eq:mamba_discretization}{{12}{5}{}{equation.12}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Theoretical Per-Frame Complexity and State Memory (Independent of Hardware)}}{5}{}\protected@file@percent }
 \newlabel{tab:complexity}{{II}{5}{}{table.2}{}}
-\newlabel{eq:mamba_recurrence}{{13}{5}{}{equation.13}{}}
-\newlabel{eq:mamba_alarm}{{14}{5}{}{equation.14}{}}
+\newlabel{eq:mamba_discretization}{{10}{5}{}{equation.10}{}}
+\newlabel{eq:mamba_recurrence}{{11}{5}{}{equation.11}{}}
+\newlabel{eq:mamba_alarm}{{12}{5}{}{equation.12}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Downstream Operational Metrics}{5}{}\protected@file@percent }
-\newlabel{eq:bandwidth_waste}{{15}{5}{}{equation.15}{}}
-\newlabel{eq:energy_loiter}{{16}{5}{}{equation.16}{}}
-\newlabel{eq:fasr_def}{{17}{5}{}{equation.17}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Controlled 2$\times $2 Experimental Design}}{6}{}\protected@file@percent }
-\newlabel{tab:design_matrix}{{III}{6}{}{table.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {IV}Experimental Setup and Dataset}{6}{}\protected@file@percent }
-\newlabel{sec:experimental_setup}{{IV}{6}{}{section.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Synthetic Multimodal Dataset Specifications}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Sequence Partitioning and Detector Training}{6}{}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Dataset Partitioning and Detector Training Parameters}}{6}{}\protected@file@percent }
-\newlabel{tab:dataset_and_training}{{IV}{6}{}{table.4}{}}
+\newlabel{eq:bandwidth_waste}{{13}{5}{}{equation.13}{}}
+\newlabel{eq:energy_loiter}{{14}{5}{}{equation.14}{}}
+\newlabel{eq:fasr_def}{{15}{5}{}{equation.15}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Experimental Setup and Dataset}{5}{}\protected@file@percent }
+\newlabel{sec:experimental_setup}{{IV}{5}{}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Synthetic Multimodal Dataset Specifications}{5}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Controlled 2$\times $2 Experimental Design}}{5}{}\protected@file@percent }
+\newlabel{tab:design_matrix}{{III}{5}{}{table.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Dataset Partitioning and Detector Training Parameters}}{5}{}\protected@file@percent }
+\newlabel{tab:dataset_and_training}{{IV}{5}{}{table.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Sequence Partitioning and Detector Training}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Results and Discussion}{5}{}\protected@file@percent }
+\newlabel{sec:results}{{V}{5}{}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Upstream Detection Across Modalities and Environments}{5}{}\protected@file@percent }
+\citation{kyrkou2021emergencynet}
 \@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces Frame-Level Upstream Detection Performance Across Modalities and Environments (Test Split, $\tau = 0.50$)}}{6}{}\protected@file@percent }
 \newlabel{tab:fusion_comparison}{{V}{6}{}{table.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {V}Results and Discussion}{6}{}\protected@file@percent }
-\newlabel{sec:results}{{V}{6}{}{section.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Upstream Detection Across Modalities and Environments}{6}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Comparative Evaluation of Causal Post-Processing Methods}{6}{}\protected@file@percent }
-\citation{kyrkou2021emergencynet}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Environmental Robustness and Downstream Operational Impact}{7}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Limitations}{7}{}\protected@file@percent }
-\newlabel{sec:limitations}{{\mbox  {V-D}}{7}{}{subsection.5.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusion}{7}{}\protected@file@percent }
-\newlabel{sec:conclusion}{{VI}{7}{}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Environmental Robustness and Downstream Operational Impact}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Limitations}{6}{}\protected@file@percent }
+\newlabel{sec:limitations}{{\mbox  {V-D}}{6}{}{subsection.5.4}{}}
 \bibstyle{IEEEtran}
 \bibdata{references}
 \bibcite{rudol2008human}{1}
@@ -106,6 +102,13 @@
 \bibcite{hwang2015multispectral}{4}
 \bibcite{jia2021llvip}{5}
 \bibcite{portmann2014people}{6}
+\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces Comparative Benchmark of Causal Temporal Post-Processing Methods Under Validation-Optimized Decision Thresholds ($W = 5$ frames / 208 ms at 24 Hz)}}{7}{}\protected@file@percent }
+\newlabel{tab:postprocessing_benchmark}{{VI}{7}{}{table.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VII}{\ignorespaces Environment-Stratified False-Alarm Suppression and Projected Operational Savings}}{7}{}\protected@file@percent }
+\newlabel{tab:operational_impact}{{VII}{7}{}{table.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusion}{7}{}\protected@file@percent }
+\newlabel{sec:conclusion}{{VI}{7}{}{section.6}{}}
+\@writefile{toc}{\contentsline {section}{References}{7}{}\protected@file@percent }
 \bibcite{redmon2016you}{7}
 \bibcite{wang2023yolov7}{8}
 \bibcite{jocher2024yolo11}{9}
@@ -115,11 +118,6 @@
 \bibcite{zhang2019cross}{13}
 \bibcite{lygouras2019unsupervised}{14}
 \bibcite{wang2024yolov9}{15}
-\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces Comparative Benchmark of Causal Temporal Post-Processing Methods Under Validation-Optimized Decision Thresholds ($W = 5$ frames / 208 ms at 24 Hz)}}{8}{}\protected@file@percent }
-\newlabel{tab:postprocessing_benchmark}{{VI}{8}{}{table.6}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {VII}{\ignorespaces Environment-Stratified False-Alarm Suppression and Projected Operational Savings}}{8}{}\protected@file@percent }
-\newlabel{tab:operational_impact}{{VII}{8}{}{table.7}{}}
-\@writefile{toc}{\contentsline {section}{References}{8}{}\protected@file@percent }
 \bibcite{wang2024yolov10}{16}
 \bibcite{han2016seq}{17}
 \bibcite{kang2018tcnn}{18}
@@ -130,4 +128,4 @@
 \bibcite{zhu2024vision}{23}
 \bibcite{liu2024vmamba}{24}
 \bibcite{dao2024transformers}{25}
-\gdef \@abspage@last{9}
+\gdef \@abspage@last{8}
