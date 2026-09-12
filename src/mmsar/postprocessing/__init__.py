@@ -6,6 +6,7 @@ from mmsar.postprocessing.history_tracking import HistoryTrackingPostProcessor
 from mmsar.postprocessing.moving_average import MovingAveragePostProcessor
 from mmsar.postprocessing.median_filter import MedianFilterPostProcessor
 from mmsar.postprocessing.mamba_sssm import MambaSSSMModel, MambaSSSMPostProcessor
+from mmsar.postprocessing.optimizer import find_optimal_threshold, optimize_all_thresholds
 
 __all__ = [
     "PostProcessor",
@@ -15,4 +16,6 @@ __all__ = [
     "MedianFilterPostProcessor",
     "MambaSSSMModel",
     "MambaSSSMPostProcessor",
+    "find_optimal_threshold",
+    "optimize_all_thresholds",
 ]

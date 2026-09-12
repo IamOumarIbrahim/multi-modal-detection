@@ -79,3 +79,42 @@ def test_single_frame_spike_rejection() -> None:
     spike_idx = 2
     assert baseline_decisions[spike_idx] == 1, "Baseline must accept single-frame spike"
     assert median_decisions[spike_idx] == 0, "Median filter must reject single-frame spike"
+
+
+def test_find_optimal_threshold() -> None:
+    from mmsar.postprocessing.optimizer import find_optimal_threshold, optimize_all_thresholds
+
+    # Ground truth: targets at frames 5, 6, 7 (indices 5, 6, 7)
+    gt = [0, 0, 0, 0, 0, 1, 1, 1, 0, 0]
+    # Synthetic confidence: low background with distinct target peak around 0.6..0.8
+    conf = [0.1, 0.15, 0.2, 0.1, 0.15, 0.65, 0.75, 0.80, 0.2, 0.1]
+
+    proc = BaselinePostProcessor()
+    tau_star, best_f1 = find_optimal_threshold(
+        processor=proc,
+        confidence_sequences=[conf],
+        ground_truth_sequences=[gt],
+        tau_min=0.1,
+        tau_max=0.9,
+        tau_step=0.05,
+    )
+    assert 0.25 <= tau_star <= 0.65
+    assert best_f1 == 1.0
+
+    # Multi-processor batch optimization
+    processors = {
+        "Baseline": BaselinePostProcessor(),
+        "MovingAverage": MovingAveragePostProcessor(window_size=5),
+    }
+    opt_dict = optimize_all_thresholds(
+        processors=processors,
+        confidence_sequences=[conf],
+        ground_truth_sequences=[gt],
+        tau_min=0.1,
+        tau_max=0.9,
+        tau_step=0.05,
+    )
+    assert "Baseline" in opt_dict
+    assert "MovingAverage" in opt_dict
+    assert 0.1 <= opt_dict["Baseline"]["tau_star"] <= 0.9
+    assert 0.1 <= opt_dict["MovingAverage"]["tau_star"] <= 0.9

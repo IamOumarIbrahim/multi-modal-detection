@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  12 SEP 2026 04:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  12 SEP 2026 04:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -697,8 +697,11 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 arb/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
 
 
-] [2] [3]
-(figure_system_architecture.tex
+]
+Underfull \vbox (badness 1024) has occurred while \output is active []
+
+ [2]
+[3] (figure_system_architecture.tex
 LaTeX Font Info:    Trying to load font information for OT1+phv on input line 1
 7.
 
@@ -719,72 +722,83 @@ Underfull \hbox (badness 10000) in paragraph at lines 145--145
  \OT1/ptm/m/it/10 C. De-ter-min-is-tic and Order-Statistic Tem-po-ral Post-
  []
 
-(figure_temporal_postprocessing.tex) [4] [5] (figure_performance_tradeoff.tex
+[4] (figure_temporal_postprocessing.tex) [5] (figure_performance_tradeoff.tex
 LaTeX Font Info:    Font shape `OT1/phv/b/it' in size <5> not available
 (Font)              Font shape `OT1/phv/b/sl' tried instead on input line 45.
 )
+[6]
 LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 2
-67.
-
-(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
+88.
+ (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-[6]
-LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 2
-82.
- (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1pcr.fd
+LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 3
+03.
+
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1pcr.fd
 File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
 )
-Underfull \hbox (badness 10000) in paragraph at lines 281--288
+Underfull \hbox (badness 10000) in paragraph at lines 302--309
 \OT1/pcr/m/n/9 <Video name="video" value="\TS1/pcr/m/n/9 $\OT1/pcr/m/n/9 video"
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 281--288
+Underfull \hbox (badness 10000) in paragraph at lines 302--309
 \OT1/pcr/m/n/9 <VideoRectangle name="box"
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 281--288
+Underfull \hbox (badness 10000) in paragraph at lines 302--309
 \OT1/pcr/m/n/9 <Label value="Person_Detected"
  []
 
 [7]
-Overfull \hbox (1.33656pt too wide) in paragraph at lines 347--356
+Overfull \hbox (1.33656pt too wide) in paragraph at lines 368--377
  [][] 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 362--363
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 383--384
 []\OT1/ptm/m/n/10 Soft dis-junc-tive late fu-sion ($\OML/cmm/m/it/10 s\OT1/cmr/
 m/n/10 [\OML/cmm/m/it/10 n\OT1/cmr/m/n/10 ] =
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 362--363
+Underfull \hbox (badness 10000) in paragraph at lines 383--384
 []\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 c[]\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n\OT1/
 cmr/m/n/10 ]\OML/cmm/m/it/10 ; c[]\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n\OT1/cmr/m
 /n/10 ])$\OT1/ptm/m/n/10 ) in-creases tar-get re-call
  []
 
 
-Underfull \hbox (badness 1418) in paragraph at lines 362--363
+Underfull \hbox (badness 1418) in paragraph at lines 383--384
 \OT1/ptm/m/n/10 to 0.952. By al-low-ing a valid de-tec-tion in ei-ther
  []
 
-[8]
-Underfull \hbox (badness 1603) in paragraph at lines 412--413
+
+Underfull \hbox (badness 1983) in paragraph at lines 414--415
+[]\OT1/ptm/b/n/10 M2 (Five-Frame Mov-ing Av-er-age): \OT1/ptm/m/n/10 Causal lin
+-ear
+ []
+
+
+Underfull \hbox (badness 5578) in paragraph at lines 416--417
+[]\OT1/ptm/b/n/10 M4 (Five-Frame His-tory Con-sen-sus Track-ing):
+ []
+
+[9]
+Underfull \hbox (badness 1603) in paragraph at lines 433--434
 []\OT1/ptm/b/n/10 Uplink Teleme-try Band-width: \OT1/ptm/m/n/10 In re-mote dis-
 as-ter
  []
 
 
-Underfull \hbox (badness 1418) in paragraph at lines 412--413
+Underfull \hbox (badness 1418) in paragraph at lines 433--434
 \OT1/ptm/m/n/10 re-gions, aerial robotic plat-forms com-mu-ni-cate over
  []
 
-(main.bbl [9])
+(main.bbl [10])
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -796,20 +810,22 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[10] (main.aux)
+[11
+
+] (main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 16289 strings out of 467871
- 341695 string characters out of 5418376
- 774952 words of memory out of 5000000
- 44851 multiletter control sequences out of 15000+600000
+ 16290 strings out of 467871
+ 341722 string characters out of 5418376
+ 771067 words of memory out of 5000000
+ 44852 multiletter control sequences out of 15000+600000
  687367 words of font info for 142 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,14n,94p,1825b,1035s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,14n,94p,1898b,1035s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmex10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cmextra/cmex7.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/typ
@@ -825,23 +841,24 @@ mr7.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
 ts/cm/cmr8.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public
 /amsfonts/cm/cmsy10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/typ
 e1/public/amsfonts/cm/cmsy5.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/f
-onts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/omarb/AppData/Local/Programs/
-MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/omarb/AppData/Local/P
-rograms/MiKTeX/fonts/type1/public/amsfonts/symbols/msam7.pfb><C:/Users/omarb/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/
-Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/m
-sbm7.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/courier/
-ucrr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvet
-ic/uhvb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/hel
-vetic/uhvbo8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw
-/helvetic/uhvr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/
-urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/
-urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
-/urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
-/urw/times/utmri8a.pfb>
-Output written on main.pdf (10 pages, 362640 bytes).
+onts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/omarb/AppData/Local/Programs/
+MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/omarb/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/omarb/AppData
+/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam7.pfb><C:/Users/
+omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.
+pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/s
+ymbols/msbm7.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/
+courier/ucrr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/ur
+w/helvetic/uhvb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
+/urw/helvetic/uhvbo8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/urw/helvetic/uhvr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/font
+s/type1/urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/font
+s/type1/urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fon
+ts/type1/urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fon
+ts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (11 pages, 382392 bytes).
 PDF statistics:
- 169 PDF objects out of 1000 (max. 8388607)
+ 177 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
