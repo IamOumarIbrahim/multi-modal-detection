@@ -278,231 +278,6 @@ No watermark.
 
 ---
 
-# Snow — Positive
-
-```text
-Create approximately 10 seconds of photorealistic operational field footage showing a remote snowy search area.
-
-A SINGLE real adult person is present on the ground.
-
-The person is approximately 30–80 meters from the camera and is relatively small in the image.
-
-They are walking naturally across uneven snow rather than standing in a staged pose.
-
-Their clothing should be realistic winter clothing with muted colors and physically plausible interaction with the environment.
-
-Show footprints behind the person where appropriate.
-
-Their feet must correctly contact the snow and their shadow must match the lighting.
-
-The snow surface should NOT be perfectly smooth.
-
-Include wind-formed patterns, compacted areas, footprints, exposed rocks, small vegetation, uneven depth, and subtle changes in snow texture.
-
-The person should be somewhat difficult to detect at first glance because of distance, lighting, and environmental similarity, while still being genuinely visible.
-
-Use realistic overcast or weak winter sunlight rather than dramatic golden-hour lighting.
-
-The camera should move slowly during a practical search sweep with slight stabilization imperfections.
-
-Include realistic exposure, motion blur, sensor noise, compression, and atmospheric conditions.
-
-Do not center the person.
-Do not make them oversized.
-Do not make the snow perfectly white.
-Do not use cinematic composition.
-
-No text.
-No HUD.
-No bounding boxes.
-No watermark.
-```
-
----
-
-# Snow — Hard Negative
-
-```text
-Create approximately 10 seconds of photorealistic operational field footage over a remote snowy area.
-
-THERE MUST BE NO HUMAN BEING PRESENT.
-
-Include one naturally occurring hard negative that could plausibly cause a false person detection.
-
-For example, use a dark backpack partially covered by snow next to a low rock and a shadow, creating an irregular shape that vaguely resembles a small crouched person when viewed from the camera.
-
-The object must remain clearly an object when inspected closely.
-
-Do NOT create a mannequin.
-Do NOT create a human silhouette.
-Do NOT create a statue.
-Do NOT include a person wearing the object.
-
-The surrounding environment should contain realistic snow variation, footprints from earlier activity, exposed rocks, small plants, uneven snow depth, and shadows.
-
-The camera should be conducting a normal search sweep and should not deliberately frame the ambiguous object.
-
-Use realistic camera imperfections, including subtle stabilization movement, vibration, exposure changes, motion blur, sensor noise, compression, and atmospheric haze.
-
-No cinematic staging.
-No dramatic lighting.
-No text.
-No HUD.
-No bounding boxes.
-No watermark.
-```
-
----
-
-# Snow — Clear Negative
-
-```text
-Create approximately 10 seconds of photorealistic operational field footage over an empty snowy search area.
-
-NO PERSON.
-NO HUMAN-LIKE OBJECT.
-NO CLOTHING.
-NO BACKPACK.
-NO MANNEQUIN.
-NO STATUE.
-NO INTENTIONAL HUMAN-SHAPED DECOY.
-
-The camera is conducting a routine search sweep over ordinary snow-covered terrain.
-
-Show realistic variation in the snow:
-wind patterns, compacted snow, footprints from previous non-visible activity, partially exposed rocks, small vegetation, uneven terrain, and natural shadows.
-
-Do not make the environment pristine or cinematic.
-
-The camera is stabilized but has subtle real-world vibration and micro-movement.
-
-Include realistic sensor noise, compression, motion blur, and exposure adaptation.
-
-The scene must remain continuous and empty for the entire clip.
-
-No person should appear in the distance or at the edge of the frame.
-
-No text.
-No HUD.
-No bounding boxes.
-No watermark.
-```
-
----
-
-# Altitude — Positive
-
-```text
-Create approximately 10 seconds of photorealistic operational field footage from a relatively HIGH elevated viewpoint.
-
-The camera looks substantially downward toward the ground, approximately 50–70 degrees downward.
-
-A SINGLE real adult person is visible on the ground.
-
-Because the camera is relatively high, the person must appear SMALL in the image, approximately 0.5–2% of the frame area.
-
-The person should be naturally walking across ordinary terrain and should NOT pose, wave, look toward the camera, or move unnaturally.
-
-The camera is conducting a systematic search sweep.
-
-Do not lock onto the person and do not zoom toward them.
-
-Use realistic ground detail and perspective appropriate for a high elevated viewpoint:
-large patches of terrain, vegetation patterns, rocks, trails, shadows, and irregular ground features.
-
-The person should be genuinely visible but difficult to notice at first glance.
-
-Use realistic camera characteristics:
-moderate compression, limited fine detail, atmospheric haze, slight motion blur, sensor noise, stabilization artifacts, and realistic exposure.
-
-Do not artificially enlarge or sharpen the person.
-
-The footage must look like an operational search recording, not a cinematic aerial photograph.
-
-No dramatic zoom.
-No subject tracking.
-No centered person.
-No text.
-No HUD.
-No bounding boxes.
-No watermark.
-```
-
----
-
-# Altitude — Hard Negative
-
-```text
-Create approximately 10 seconds of photorealistic operational field footage from a relatively HIGH elevated viewpoint.
-
-THERE MUST BE NO HUMAN BEING PRESENT.
-
-The camera looks substantially downward toward ordinary ground terrain.
-
-Include a naturally occurring small ambiguous pattern that could potentially trigger a person detector from this distance.
-
-For example, a dark piece of fabric or abandoned object partially overlapping a rock and casting a small shadow should create a vague human-like pattern when viewed from above.
-
-The object must remain a real object and must NOT form a recognizable human silhouette.
-
-Because the camera is high, the ambiguous object should be small in the image.
-
-The camera is performing a normal search sweep and should not zoom toward or deliberately center the object.
-
-Use realistic elevated perspective, atmospheric haze, compression, limited detail, motion blur, sensor noise, and minor stabilization artifacts.
-
-The environment should contain ordinary terrain variation rather than a perfectly clean landscape.
-
-NO person.
-NO mannequin.
-NO statue.
-NO human body parts.
-NO intentionally constructed human dummy.
-
-No cinematic aerial photography.
-No dramatic zoom.
-No text.
-No HUD.
-No bounding boxes.
-No watermark.
-```
-
----
-
-# Altitude — Clear Negative
-
-```text
-Create approximately 10 seconds of photorealistic operational field footage from a relatively HIGH elevated viewpoint.
-
-The camera looks substantially downward toward the ground.
-
-There must be absolutely NO PERSON anywhere in the scene.
-
-There must also be NO clothing, backpacks, mannequins, statues, human-shaped objects, or deliberate detector decoys.
-
-Show ordinary terrain viewed from a high elevated viewpoint:
-vegetation patterns, rocks, dirt, trails, shadows, small naturally occurring structures if present, uneven terrain, and atmospheric haze.
-
-The scene should look visually ordinary and somewhat difficult to interpret at first glance because of the distance.
-
-The camera moves slowly and steadily during a practical search sweep.
-
-Use realistic camera imperfections:
-compression, limited spatial detail, sensor noise, atmospheric haze, slight motion blur, subtle stabilization movement, and exposure adaptation.
-
-Do not create a beautiful cinematic landscape.
-
-No dramatic camera movement.
-No zoom.
-No artificial sharpening.
-No text.
-No HUD.
-No bounding boxes.
-No watermark.
-```
-
----
-
 # Thermal Conversion Prompt
 
 Use this in a **fresh conversation with the generated RGB video uploaded**:
@@ -678,3 +453,556 @@ TRANSFORM THE EXACT SOURCE VIDEO WHILE PRESERVING ITS GEOMETRY AND TEMPORAL STRU
 ```
 
 The target is **realistic imperfect sensor footage**, not visually impressive footage. This matters because the specification assumes the RGB, Thermal, and NIR versions retain matching geometry for annotation propagation.
+
+
+The uploaded video is the source recording for a computer-vision dataset.
+Transform this EXACT video into realistic thermal infrared camera footage.
+THIS IS A SENSOR-DOMAIN CONVERSION TASK, NOT A VIDEO REGENERATION, SCENE EDIT, OR ARTISTIC RESTYLING TASK.
+The output must represent the SAME recording captured by a real thermal infrared camera.
+The RGB video is the authoritative reference for scene geometry, motion, timing, and object identity.
+
+1. EXACT SOURCE PRESERVATION
+Preserve exactly:
+
+frame count
+frame ordering
+duration
+timing
+camera trajectory
+camera position
+camera orientation
+field of view
+perspective
+framing
+camera movement
+terrain geometry
+vegetation placement
+rock placement
+object positions
+object movement
+person's position
+person's movement
+person's pose
+object boundaries
+occlusions
+relative depth relationships
+Every thermal frame must correspond to the same frame in the RGB source.
+DO NOT:
+
+add objects
+remove objects
+duplicate objects
+move objects
+change object shapes
+add people
+remove people
+change the person's pose
+change the person's movement
+change the person's location
+alter existing occlusions
+reveal hidden objects
+hide visible objects
+zoom
+crop
+rotate
+reframe
+change the camera viewpoint
+change the camera trajectory
+stabilize the footage differently
+create new events
+regenerate the environment
+The person's location and geometry must remain aligned with the source video.
+
+2. THERMAL SENSOR CONVERSION
+Convert the visual appearance into plausible monochrome thermal infrared imagery.
+The output must NOT look like:
+
+RGB converted to grayscale
+RGB with increased contrast
+an RGB image with a thermal color palette
+a simple brightness inversion
+a fixed semantic recoloring
+Do not directly map RGB brightness to thermal brightness.
+Do not assume that bright RGB regions are thermally hot or that dark RGB regions are thermally cold.
+Instead, represent plausible apparent-temperature differences between the EXISTING surfaces and objects in the scene.
+Use realistic thermal differences between:
+
+human body
+clothing
+exposed skin
+rocks
+sand
+compacted soil
+vegetation
+dry bushes
+shaded terrain
+sun-exposed terrain
+Use a natural monochrome thermal presentation with realistic grayscale intensity variation.
+
+3. NATURAL THERMAL VARIATION
+Do NOT use a fixed rule such as:
+person = white
+rocks = white
+sand = gray
+vegetation = dark gray
+Thermal intensity must vary naturally.
+A person does NOT need to be the brightest object in the frame.
+A sun-heated rock may be as bright as, or brighter than, parts of a person.
+A shaded rock may be substantially darker.
+Different rocks may have different thermal intensities.
+Sand should contain natural spatial variation rather than being one uniform gray.
+Vegetation should contain thermal variation rather than always being uniformly dark.
+Different parts of a person may have different thermal intensity.
+Thermal intensities of different materials may overlap.
+Do not artificially increase human-versus-background contrast.
+Do not artificially decrease human-versus-background contrast.
+Allow the thermal appearance to emerge from plausible scene conditions.
+
+4. DESERT THERMAL BEHAVIOR
+For the existing desert environment, preserve every terrain feature and object from the source.
+Represent plausible effects of:
+
+direct solar heating
+shade
+material differences
+thermal inertia
+surface exposure
+local environmental conditions
+distance
+atmospheric attenuation
+Sun-exposed rocks and ground may appear thermally warm.
+Shaded surfaces may have different apparent temperatures.
+Do not make the entire desert uniformly hot.
+Do not deliberately create thermal patterns resembling humans.
+Do not deliberately create or remove false positives.
+Any ambiguity must arise naturally from the existing scene.
+
+5. HUMAN THERMAL SIGNATURE
+If a person is present in the source:
+Preserve their exact:
+
+location
+scale
+pose
+orientation
+movement
+occlusion
+relationship to the terrain
+Represent the person with a plausible thermal signature.
+Do NOT:
+
+make the person artificially glow
+add a bright halo
+make the person pure white by default
+make the person automatically the brightest object
+sharpen the person
+enlarge the person
+center the person
+improve their visibility artificially
+The person's thermal contrast should depend on the surrounding environment.
+If the person is partially occluded in the RGB source, preserve that occlusion.
+Do not hallucinate hidden body parts.
+
+6. THERMAL SENSOR LIMITATIONS
+The output should resemble footage from a real, relatively low-cost or mediocre thermal camera mounted on an operational UAV.
+Include realistic limitations such as:
+
+limited spatial resolution
+reduced fine detail
+sensor noise
+mild temporal noise
+imperfect contrast
+limited dynamic range
+subtle fixed-pattern noise
+mild quantization
+realistic motion blur
+mild compression artifacts
+atmospheric attenuation
+reduced separation between thermally similar surfaces
+Do not make the thermal imagery look like a laboratory-grade scientific visualization.
+Do not make it perfectly clean.
+Do not add excessive noise or artifacts that obscure the scene.
+The footage should remain usable for object detection.
+
+7. TEMPORAL CONSISTENCY
+Maintain consistent thermal appearance throughout the entire video.
+Do not introduce:
+
+flickering objects
+disappearing objects
+appearing objects
+randomly changing temperatures
+unstable human signatures
+inconsistent terrain
+frame-to-frame geometry changes
+Thermal intensity may change gradually when physically plausible, but must remain temporally coherent.
+Preserve all source motion exactly.
+
+8. SHADOWS AND OCCLUSIONS
+Preserve the physical location and geometry of all shadows and occluding objects from the source.
+However, do NOT simply reproduce RGB shadows as black shapes.
+Their thermal appearance should change naturally according to plausible surface temperature.
+The physical geometry of the scene must remain unchanged.
+
+9. DATASET FIDELITY
+This video will be used as training data for a person detector.
+Therefore:
+
+preserve object geometry above visual aesthetics
+preserve small targets
+preserve natural background clutter
+preserve difficult viewing conditions
+preserve occlusions
+preserve realistic thermal ambiguity
+do not make people easier to detect for presentation purposes
+do not clean up the scene
+do not simplify the background
+The goal is realistic sensor-domain variation while preserving the exact underlying recording.
+
+10. OUTPUT RESTRICTIONS
+No text.
+No labels.
+No bounding boxes.
+No HUD.
+No symbols.
+No timestamps.
+No watermarks.
+No cinematic effects.
+No dramatic color grading.
+No artistic styling.
+No new objects.
+No deleted objects.
+No camera changes.
+No scene changes.
+FINAL REQUIREMENT:
+The result must look like the SAME original recording captured using a real thermal infrared camera.
+It must NOT look like an RGB video with a grayscale or thermal filter applied.
+
+
+**THERMAL DESERT PROMPT ABOVE**
+
+---
+**FOREST THERMAL PROMPT BELOW**
+
+The uploaded video is the source recording for a computer-vision dataset.
+
+Transform this EXACT video into realistic thermal infrared camera footage.
+
+THIS IS A SENSOR-DOMAIN CONVERSION TASK, NOT A VIDEO REGENERATION, SCENE EDIT, OR ARTISTIC RESTYLING TASK.
+
+The output must represent the SAME recording captured by a real thermal infrared camera.
+
+The source RGB video is the authoritative reference for scene geometry, motion, timing, and object identity.
+
+## 1. EXACT SOURCE PRESERVATION
+
+Preserve exactly:
+
+* frame count
+* frame ordering
+* duration
+* timing
+* camera trajectory
+* camera position
+* camera orientation
+* field of view
+* perspective
+* framing
+* camera movement
+* terrain geometry
+* tree positions
+* branch positions
+* vegetation placement
+* rock positions
+* fallen branches and logs
+* soil and ground features
+* all other existing objects
+* person's position
+* person's movement
+* person's pose
+* object boundaries
+* occlusions
+* relative depth relationships
+
+Every thermal frame must correspond directly to the same frame in the RGB source.
+
+DO NOT:
+
+* add objects
+* remove objects
+* duplicate objects
+* move objects
+* change object shapes
+* add people
+* remove people
+* change the person's pose
+* change the person's movement
+* change the person's location
+* alter existing occlusions
+* reveal hidden objects
+* hide visible objects
+* zoom
+* crop
+* rotate
+* reframe
+* change the camera viewpoint
+* change the camera trajectory
+* stabilize the footage differently
+* create new events
+* regenerate the environment
+
+The person's location and geometry must remain aligned with the source video.
+
+## 2. THERMAL SENSOR CONVERSION
+
+Convert the visual appearance into plausible monochrome thermal infrared imagery.
+
+The output must NOT look like:
+
+* RGB converted directly to grayscale
+* RGB with increased contrast
+* RGB with a thermal color palette
+* a simple brightness inversion
+* a fixed semantic recoloring
+
+Do not directly map RGB brightness or RGB color to thermal brightness.
+
+Represent plausible apparent-temperature differences between the EXISTING surfaces and objects in the scene.
+
+Use realistic thermal differences between:
+
+* human body
+* exposed skin
+* clothing
+* tree trunks
+* branches
+* leaves
+* bushes
+* fallen vegetation
+* rocks
+* soil
+* exposed ground
+* shaded surfaces
+* sun-exposed surfaces
+
+Use natural monochrome thermal intensity rather than artificial colors.
+
+## 3. NATURAL THERMAL VARIATION
+
+DO NOT use a fixed rule such as:
+
+person = white
+trees = dark
+vegetation = dark
+ground = gray
+
+Thermal intensity must vary naturally within and between materials.
+
+A person does NOT need to be the brightest object.
+
+A sun-exposed tree trunk may be relatively warm.
+
+A shaded tree trunk may be cooler.
+
+Different leaves, branches, rocks, and ground surfaces may have different apparent temperatures.
+
+Sunlit and shaded regions should not automatically have the same thermal intensity.
+
+Thermal intensities of different materials may overlap.
+
+The same material may have different thermal intensity in different parts of the scene.
+
+Do not artificially maximize human-versus-background contrast.
+
+Do not artificially minimize human-versus-background contrast.
+
+Do not deliberately create thermal patterns resembling humans.
+
+Allow realistic thermal ambiguity between the person and environmental objects.
+
+## 4. FOREST THERMAL BEHAVIOR
+
+Preserve the exact existing forest environment.
+
+Represent plausible thermal variation caused by:
+
+* direct sunlight
+* shade
+* canopy coverage
+* material properties
+* moisture differences
+* exposed versus sheltered surfaces
+* thermal inertia
+* local environmental conditions
+* distance
+* atmospheric effects
+
+Sun-exposed vegetation and surfaces may have different thermal intensity from shaded vegetation and surfaces.
+
+Tree trunks, branches, leaves, soil, rocks, and fallen vegetation should not all have identical thermal intensity.
+
+Do not make all vegetation uniformly cold.
+
+Do not make all vegetation uniformly dark.
+
+Do not make the entire forest thermally flat.
+
+Do not deliberately manufacture false positives.
+
+Any ambiguity must arise naturally from the existing scene.
+
+## 5. HUMAN THERMAL SIGNATURE
+
+If a person is present in the source video:
+
+Preserve their exact:
+
+* location
+* scale
+* pose
+* orientation
+* movement
+* occlusion
+* relationship to surrounding vegetation
+
+Represent the person with a plausible thermal signature.
+
+Do NOT:
+
+* make the person artificially glow
+* add a bright halo
+* make the person pure white by default
+* make the person automatically the brightest object
+* sharpen the person
+* enlarge the person
+* center the person
+* improve their visibility artificially
+
+The person's thermal contrast should depend on the surrounding environment.
+
+If clothing covers the body, do not represent the entire person as exposed skin.
+
+Allow clothing and exposed skin to have different thermal appearances.
+
+If the person is partially hidden by leaves, branches, bushes, or trees in the source, preserve those occlusions exactly.
+
+Do not hallucinate hidden body parts.
+
+Do not make thermal imagery "see through" vegetation that physically blocks the person in the source.
+
+## 6. THERMAL SENSOR LIMITATIONS
+
+The output should resemble footage from a real, relatively low-cost or mediocre thermal camera mounted on an operational UAV.
+
+Include realistic limitations such as:
+
+* limited spatial resolution
+* reduced fine detail
+* thermal sensor noise
+* mild temporal noise
+* imperfect contrast
+* limited dynamic range
+* subtle fixed-pattern noise
+* mild quantization
+* realistic motion blur
+* mild compression artifacts
+* atmospheric attenuation
+* reduced separation between thermally similar surfaces
+
+The thermal imagery should contain less fine visual detail than the original RGB footage where appropriate.
+
+Do not make it look like a high-end scientific thermal visualization.
+
+Do not make it perfectly clean.
+
+Do not add excessive noise or artifacts that obscure the scene.
+
+The footage must remain usable for person detection.
+
+## 7. TEMPORAL CONSISTENCY
+
+Maintain consistent thermal appearance throughout the entire video.
+
+Do not introduce:
+
+* flickering objects
+* disappearing objects
+* appearing objects
+* randomly changing temperatures
+* unstable human signatures
+* inconsistent vegetation
+* changing tree geometry
+* frame-to-frame scene changes
+
+Thermal intensity may change gradually when physically plausible, but must remain temporally coherent.
+
+Preserve all source motion exactly.
+
+## 8. SHADOWS AND OCCLUSIONS
+
+Preserve the physical location and geometry of all shadows and occluding objects from the source.
+
+Do NOT simply reproduce RGB shadows as black shapes.
+
+Their thermal appearance should change naturally according to plausible surface temperature.
+
+Preserve all branches, leaves, trunks, and vegetation that physically block the person.
+
+Do not remove vegetation merely to improve human visibility.
+
+## 9. DATASET FIDELITY
+
+This video will be used as training data for a person detector.
+
+Therefore:
+
+* preserve small targets
+* preserve natural forest clutter
+* preserve vegetation occlusion
+* preserve difficult viewing conditions
+* preserve realistic thermal ambiguity
+* preserve object geometry
+* do not make people easier to detect for presentation purposes
+* do not clean up the background
+* do not simplify vegetation
+* do not artificially outline the person
+
+The goal is realistic sensor-domain variation while preserving the exact underlying recording.
+
+## 10. OUTPUT RESTRICTIONS
+
+No text.
+
+No labels.
+
+No bounding boxes.
+
+No HUD.
+
+No symbols.
+
+No timestamps.
+
+No watermarks.
+
+No cinematic effects.
+
+No dramatic color grading.
+
+No artistic styling.
+
+No new objects.
+
+No deleted objects.
+
+No camera changes.
+
+No scene changes.
+
+FINAL REQUIREMENT:
+
+The result must look like the SAME original forest recording captured using a real thermal infrared camera.
+
+It must NOT look like an RGB forest video with a grayscale filter applied.
+
+Preserve the exact source video while replacing its RGB appearance with plausible thermal infrared sensor appearance.

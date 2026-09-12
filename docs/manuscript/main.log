@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  12 SEP 2026 04:53
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  12 SEP 2026 10:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -201,20 +201,35 @@ LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/algorithms\algorithm.st
+y
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+ (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count302
+\float@exts=\toks23
+\float@box=\box57
+\@float@everytoks=\toks24
+\@floatcapt=\box58
+)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty
+Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
+)
+\@float@every@algorithm=\toks25
+\c@algorithm=\count303
+)
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/algorithms\algorithmic.
 sty
 Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
- (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty
-Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
-)
-(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
+ (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
-\KV@toks@=\toks23
+\KV@toks@=\toks26
 )
-\c@ALC@unique=\count302
-\c@ALC@line=\count303
-\c@ALC@rem=\count304
-\c@ALC@depth=\count305
+\c@ALC@unique=\count304
+\c@ALC@line=\count305
+\c@ALC@rem=\count306
+\c@ALC@depth=\count307
 \ALC@tlm=\skip55
 \algorithmicindent=\skip56
 )
@@ -270,12 +285,12 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \cmidrulesep=\dimen190
 \cmidrulekern=\dimen191
 \defaultaddspace=\dimen192
-\@cmidla=\count306
-\@cmidlb=\count307
+\@cmidla=\count308
+\@cmidlb=\count309
 \@aboverulesep=\dimen193
 \@belowrulesep=\dimen194
-\@thisruleclass=\count308
-\@lastruleclass=\count309
+\@thisruleclass=\count310
+\@lastruleclass=\count311
 \@thisrulewidth=\dimen195
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\tikz.
@@ -285,13 +300,13 @@ sty
 y
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil
 -common.tex
-\pgfutil@everybye=\toks24
+\pgfutil@everybye=\toks27
 \pgfutil@tempdima=\dimen196
 \pgfutil@tempdimb=\dimen197
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil
 -latex.def
-\pgfutil@abb=\box57
+\pgfutil@abb=\box59
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfrcs.
 code.tex
@@ -310,12 +325,12 @@ Package: pgfsys 2025-08-29 v3.1.11a (3.1.11a)
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
 .code.tex
-\pgfkeys@pathtoks=\toks25
-\pgfkeys@temptoks=\toks26
+\pgfkeys@pathtoks=\toks28
+\pgfkeys@temptoks=\toks29
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
 libraryfiltered.code.tex
-\pgfkeys@tmptoks=\toks27
+\pgfkeys@tmptoks=\toks30
 ))
 \pgf@x=\dimen198
 \pgf@y=\dimen199
@@ -329,14 +344,14 @@ libraryfiltered.code.tex
 \pgf@yd=\dimen263
 \w@pgf@writea=\write3
 \r@pgf@reada=\read2
-\c@pgf@counta=\count310
-\c@pgf@countb=\count311
-\c@pgf@countc=\count312
-\c@pgf@countd=\count313
-\t@pgf@toka=\toks28
-\t@pgf@tokb=\toks29
-\t@pgf@tokc=\toks30
-\pgf@sys@id@count=\count314
+\c@pgf@counta=\count312
+\c@pgf@countb=\count313
+\c@pgf@countc=\count314
+\c@pgf@countd=\count315
+\t@pgf@toka=\toks31
+\t@pgf@tokb=\toks32
+\t@pgf@tokc=\toks33
+\pgf@sys@id@count=\count316
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgf.c
 fg
@@ -355,8 +370,8 @@ File: pgfsys-common-pdf.def 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
 ssoftpath.code.tex
 File: pgfsyssoftpath.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfsyssoftpath@smallbuffer@items=\count315
-\pgfsyssoftpath@bigbuffer@items=\count316
+\pgfsyssoftpath@smallbuffer@items=\count317
+\pgfsyssoftpath@bigbuffer@items=\count318
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
 sprotocol.code.tex
@@ -373,11 +388,11 @@ code.tex)
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathparse
 r.code.tex
 \pgfmath@dimen=\dimen264
-\pgfmath@count=\count317
-\pgfmath@box=\box58
-\pgfmath@toks=\toks31
-\pgfmath@stack@operand=\toks32
-\pgfmath@stack@operation=\toks33
+\pgfmath@count=\count319
+\pgfmath@box=\box60
+\pgfmath@toks=\toks34
+\pgfmath@stack@operand=\toks35
+\pgfmath@stack@operation=\toks36
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
 ions.code.tex)
@@ -401,7 +416,7 @@ ions.integerarithmetics.code.tex)
 code.tex)
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfloat
 .code.tex
-\c@pgfmathroundto@lastzeros=\count318
+\c@pgfmathroundto@lastzeros=\count320
 ))
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfint.code.
 tex)
@@ -438,10 +453,10 @@ File: pgfcorepathusage.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 escopes.code.tex
 File: pgfcorescopes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfpic=\box59
-\pgf@hbox=\box60
-\pgf@layerbox@main=\box61
-\pgf@picture@serial@count=\count319
+\pgfpic=\box61
+\pgf@hbox=\box62
+\pgf@layerbox@main=\box63
+\pgf@picture@serial@count=\count321
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 egraphicstate.code.tex
@@ -476,8 +491,8 @@ File: pgfcorearrows.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 eshade.code.tex
 File: pgfcoreshade.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \pgf@max=\dimen288
-\pgf@sys@shading@range@num=\count320
-\pgf@shadingcount=\count321
+\pgf@sys@shading@range@num=\count322
+\pgf@shadingcount=\count323
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 eimage.code.tex
@@ -486,7 +501,7 @@ File: pgfcoreimage.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 eexternal.code.tex
 File: pgfcoreexternal.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfexternal@startupbox=\box62
+\pgfexternal@startupbox=\box64
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
 elayers.code.tex
@@ -507,7 +522,7 @@ File: pgfcorerdf.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
 shapes.code.tex
 File: pgfmoduleshapes.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfnodeparttextbox=\box63
+\pgfnodeparttextbox=\box65
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
 plot.code.tex
@@ -537,8 +552,8 @@ code.tex
 Package: pgffor 2025-08-29 v3.1.11a (3.1.11a)
 \pgffor@iter=\dimen291
 \pgffor@skip=\dimen292
-\pgffor@stack=\toks34
-\pgffor@toks=\toks35
+\pgffor@stack=\toks37
+\pgffor@toks=\toks38
 ))
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
 z\tikz.code.tex
@@ -547,7 +562,7 @@ Package: tikz 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
 aryplothandlers.code.tex
 File: pgflibraryplothandlers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@plot@mark@count=\count322
+\pgf@plot@mark@count=\count324
 \pgfplotmarksize=\dimen293
 )
 \tikz@lastx=\dimen294
@@ -558,23 +573,23 @@ File: pgflibraryplothandlers.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 \tikz@lastmovetoy=\dimen299
 \tikzleveldistance=\dimen300
 \tikzsiblingdistance=\dimen301
-\tikz@figbox=\box64
-\tikz@figbox@bg=\box65
-\tikz@tempbox=\box66
-\tikz@tempbox@bg=\box67
-\tikztreelevel=\count323
-\tikznumberofchildren=\count324
-\tikznumberofcurrentchild=\count325
-\tikz@fig@count=\count326
+\tikz@figbox=\box66
+\tikz@figbox@bg=\box67
+\tikz@tempbox=\box68
+\tikz@tempbox@bg=\box69
+\tikztreelevel=\count325
+\tikznumberofchildren=\count326
+\tikznumberofcurrentchild=\count327
+\tikz@fig@count=\count328
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
 matrix.code.tex
 File: pgfmodulematrix.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfmatrixcurrentrow=\count327
-\pgfmatrixcurrentcolumn=\count328
-\pgf@matrix@numberofcolumns=\count329
+\pgfmatrixcurrentrow=\count329
+\pgfmatrixcurrentcolumn=\count330
+\pgf@matrix@numberofcolumns=\count331
 )
-\tikz@expandcount=\count330
+\tikz@expandcount=\count332
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
 z/libraries\tikzlibrarytopaths.code.tex
@@ -611,8 +626,8 @@ File: tikzlibraryfit.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
 z/libraries\tikzlibrarybackgrounds.code.tex
 File: tikzlibrarybackgrounds.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@layerbox@background=\box68
-\pgf@layerboxsaved@background=\box69
+\pgf@layerbox@background=\box70
+\pgf@layerboxsaved@background=\box71
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
 z/libraries\tikzlibrarydecorations.pathreplacing.code.tex
@@ -625,52 +640,52 @@ decorations.code.tex
 \pgfdecoratedinputsegmentcompleteddistance=\dimen308
 \pgfdecoratedinputsegmentremainingdistance=\dimen309
 \pgf@decorate@distancetomove=\dimen310
-\pgf@decorate@repeatstate=\count331
+\pgf@decorate@repeatstate=\count333
 \pgfdecorationsegmentamplitude=\dimen311
 \pgfdecorationsegmentlength=\dimen312
 )
-\tikz@lib@dec@box=\box70
+\tikz@lib@dec@box=\box72
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries/decorat
 ions\pgflibrarydecorations.pathreplacing.code.tex))
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count332
+\l__color_backend_stack_int=\count334
 ) (main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
 
 -- Lines per column: 56 (exact).
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count333
+\scratchcounter=\count335
 \scratchdimen=\dimen313
-\scratchbox=\box71
-\nofMPsegments=\count334
-\nofMParguments=\count335
-\everyMPshowfont=\toks36
-\MPscratchCnt=\count336
+\scratchbox=\box73
+\nofMPsegments=\count336
+\nofMParguments=\count337
+\everyMPshowfont=\toks39
+\MPscratchCnt=\count338
 \MPscratchDim=\dimen314
-\MPnumerator=\count337
-\makeMPintoPDFobject=\count338
-\everyMPtoPDFconversion=\toks37
+\MPnumerator=\count339
+\makeMPintoPDFobject=\count340
+\everyMPtoPDFconversion=\toks40
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
 ase.sty
@@ -682,62 +697,144 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 fg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-LaTeX Font Info:    Trying to load font information for U+msa on input line 38.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 39.
 
  (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 38.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 39.
 
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 (figure_system_architecture.tex
-LaTeX Font Info:    Trying to load font information for OT1+phv on input line 1
-8.
+LaTeX Font Info:    Trying to load font information for OT1+phv on input line 3
+0.
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1phv.fd
 File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
 )
-<figures/dataset_grid_6x2.png, id=4, 281.05pt x 502.87875pt>
-File: figures/dataset_grid_6x2.png Graphic file (type png)
-<use figures/dataset_grid_6x2.png>
-Package pdftex.def Info: figures/dataset_grid_6x2.png  used on input line 19.
-(pdftex.def)             Requested size: 68.28644pt x 122.18198pt.
+<figures/icon_lorem_ipsum.png, id=4, 160.6pt x 200.75pt>
+File: figures/icon_lorem_ipsum.png Graphic file (type png)
+<use figures/icon_lorem_ipsum.png>
+Package pdftex.def Info: figures/icon_lorem_ipsum.png  used on input line 31.
+(pdftex.def)             Requested size: 16.38686pt x 20.48601pt.
+<figures/gemini_logo.png, id=6, 501.875pt x 501.875pt>
+File: figures/gemini_logo.png Graphic file (type png)
+<use figures/gemini_logo.png>
+Package pdftex.def Info: figures/gemini_logo.png  used on input line 38.
+(pdftex.def)             Requested size: 20.4851pt x 20.48601pt.
+<figures/desert_rgb_video.png, id=7, 1284.8pt x 722.7pt>
+File: figures/desert_rgb_video.png Graphic file (type png)
+<use figures/desert_rgb_video.png>
+Package pdftex.def Info: figures/desert_rgb_video.png  used on input line 48.
+(pdftex.def)             Requested size: 32.72049pt x 18.40489pt.
+<figures/forest_rgb_video.png, id=8, 642.4pt x 361.35pt>
+File: figures/forest_rgb_video.png Graphic file (type png)
+<use figures/forest_rgb_video.png>
+Package pdftex.def Info: figures/forest_rgb_video.png  used on input line 49.
+(pdftex.def)             Requested size: 32.72049pt x 18.40489pt.
+File: figures/icon_lorem_ipsum.png Graphic file (type png)
+<use figures/icon_lorem_ipsum.png>
+Package pdftex.def Info: figures/icon_lorem_ipsum.png  used on input line 60.
+(pdftex.def)             Requested size: 16.38686pt x 20.48601pt.
+File: figures/gemini_logo.png Graphic file (type png)
+<use figures/gemini_logo.png>
+Package pdftex.def Info: figures/gemini_logo.png  used on input line 69.
+(pdftex.def)             Requested size: 20.4851pt x 20.48601pt.
+<figures/desert_th_video.png, id=9, 1284.8pt x 722.7pt>
+File: figures/desert_th_video.png Graphic file (type png)
+<use figures/desert_th_video.png>
+Package pdftex.def Info: figures/desert_th_video.png  used on input line 79.
+(pdftex.def)             Requested size: 32.72049pt x 18.40489pt.
+<figures/forest_th_video.png, id=10, 642.4pt x 361.35pt>
+File: figures/forest_th_video.png Graphic file (type png)
+<use figures/forest_th_video.png>
+Package pdftex.def Info: figures/forest_th_video.png  used on input line 80.
+(pdftex.def)             Requested size: 32.72049pt x 18.40489pt.
+<figures/crop_640_left_video.png, id=11, 642.4pt x 642.4pt>
+File: figures/crop_640_left_video.png Graphic file (type png)
+<use figures/crop_640_left_video.png>
+Package pdftex.def Info: figures/crop_640_left_video.png  used on input line 92
+.
+(pdftex.def)             Requested size: 23.33147pt x 23.32928pt.
+<figures/crop_640_right_video.png, id=12, 642.4pt x 642.4pt>
+File: figures/crop_640_right_video.png Graphic file (type png)
+<use figures/crop_640_right_video.png>
+Package pdftex.def Info: figures/crop_640_right_video.png  used on input line 9
+3.
+(pdftex.def)             Requested size: 23.33147pt x 23.32928pt.
+<figures/icon_label_studio.png, id=13, 289.08pt x 289.08pt>
+File: figures/icon_label_studio.png Graphic file (type png)
+<use figures/icon_label_studio.png>
+Package pdftex.def Info: figures/icon_label_studio.png  used on input line 104.
+
+(pdftex.def)             Requested size: 20.48468pt x 20.48601pt.
+<figures/desert_rgb_annotated.png, id=14, 1284.8pt x 722.7pt>
+File: figures/desert_rgb_annotated.png Graphic file (type png)
+<use figures/desert_rgb_annotated.png>
+Package pdftex.def Info: figures/desert_rgb_annotated.png  used on input line 1
+24.
+(pdftex.def)             Requested size: 25.03856pt x 14.0821pt.
+<figures/desert_th_annotated.png, id=15, 1284.8pt x 722.7pt>
+File: figures/desert_th_annotated.png Graphic file (type png)
+<use figures/desert_th_annotated.png>
+Package pdftex.def Info: figures/desert_th_annotated.png  used on input line 12
+5.
+(pdftex.def)             Requested size: 25.03856pt x 14.0821pt.
 )
 [1{C:/Users/omarb/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/om
 arb/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
 
 
 ]
-Underfull \hbox (badness 1509) in paragraph at lines 71--72
-\OT1/ptm/m/n/10 pipeline uti-liz-ing YOLO11n (2.6M pa-ram-e-ters, 6.5
+Underfull \hbox (badness 1635) in paragraph at lines 74--75
+[]\OT1/ptm/b/n/10 Modality and En-vi-ron-ment Sen-si-tiv-ity Anal-y-sis:
  []
 
-[2 <./figures/dataset_grid_6x2.png (PNG copy)>]
-(figure_temporal_postprocessing.tex) [3]
-Underfull \hbox (badness 3323) in paragraph at lines 173--174
+
+Underfull \hbox (badness 2376) in paragraph at lines 74--75
+\OT1/ptm/m/n/10 Sys-tem-atic char-ac-ter-i-za-tion of how tem-po-ral post-
+ []
+
+[2 <./figures/icon_lorem_ipsum.png> <./figures/gemini_logo.png> <./figures/dese
+rt_rgb_video.png (PNG copy)> <./figures/forest_rgb_video.png (PNG copy)> <./fig
+ures/desert_th_video.png (PNG copy)> <./figures/forest_th_video.png (PNG copy)>
+ <./figures/crop_640_left_video.png (PNG copy)> <./figures/crop_640_right_video
+.png (PNG copy)> <./figures/icon_label_studio.png> <./figures/desert_rgb_annota
+ted.png (PNG copy)> <./figures/desert_th_annotated.png (PNG copy)>] [3]
+Underfull \hbox (badness 2564) in paragraph at lines 158--159
+[]\OT1/ptm/b/n/10 YOLO11n-Thermal: \OT1/ptm/m/n/10 Trained on multi-environment
+
+ []
+
+LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 1
+78.
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 178.
+
+(figure_temporal_postprocessing.tex) [4]
+Underfull \hbox (badness 3323) in paragraph at lines 296--297
 []\OT1/ptm/b/n/10 Uplink Teleme-try Band-width: \OT1/ptm/m/n/10 Con-firmed alar
 ms
  []
 
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 1
-93.
-(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
+[5]
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 3
+41.
+ (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-Underfull \hbox (badness 4647) in paragraph at lines 193--194
-[]\OT1/ptm/m/n/10 To sup-port web-based tem-po-ral scrub-bing in La-bel
+[6] [7]
+Underfull \hbox (badness 1540) in paragraph at lines 493--494
+\OT1/ptm/m/n/10 mark-ing in wilder-ness search and res-cue, the MM-SAR
  []
 
-
-Underfull \hbox (badness 2119) in paragraph at lines 193--194
-\OT1/ptm/m/n/10 Stu-dio, raw MP4 files are re-muxed with \OT1/pcr/m/n/10 -movfl
-ags
- []
-
-[4] (main.bbl [5])
+(main.bbl [8])
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -749,56 +846,55 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[6] (main.aux)
+[9
+
+] (main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 16211 strings out of 467871
- 340354 string characters out of 5418376
- 751407 words of memory out of 5000000
- 44776 multiletter control sequences out of 15000+600000
- 689734 words of font info for 147 fonts, out of 8000000 for 9000
+ 16764 strings out of 467871
+ 351359 string characters out of 5418376
+ 780732 words of memory out of 5000000
+ 45319 multiletter control sequences out of 15000+600000
+ 690606 words of font info for 149 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,14n,94p,1915b,1038s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,17n,94p,2192b,1033s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmex10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
-fonts/cmextra/cmex7.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/amsfonts/cmextra/cmex9.pfb><C:/Users/omarb/AppData/Local/Programs/MiK
-TeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/omarb/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/omarb/AppData/L
-ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/omarb/A
-ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users
-/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><
-C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr
-10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfont
-s/cm/cmr5.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-amsfonts/cm/cmr6.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/amsfonts/cm/cmr7.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/omarb/AppData/Local/Program
-s/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/omarb/AppData/Loca
-l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:/Users/omarb/AppD
-ata/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/om
-arb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/
-Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.
-pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
-m/cmsy9.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/am
-sfonts/symbols/msam7.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/amsfonts/symbols/msbm10.pfb><C:/Users/omarb/AppData/Local/Programs/M
-iKTeX/fonts/type1/public/amsfonts/symbols/msbm7.pfb><C:/Users/omarb/AppData/Loc
-al/Programs/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/omarb/AppData/L
-ocal/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/omarb/AppDat
-a/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/omarb/App
-Data/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/omarb/App
-Data/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/omarb/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/omarb/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (6 pages, 548435 bytes).
+fonts/cm/cmmi10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmmi5.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/omarb/AppData/Local/Programs/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/omarb/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/omarb/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/omarb/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/om
+arb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/U
+sers/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pf
+b><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmr8.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
+nts/cm/cmr9.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/publi
+c/amsfonts/cm/cmsy10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/public/amsfonts/cm/cmsy5.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/
+fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/omarb/AppData/Local/Programs
+/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/omarb/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/omarb/AppDat
+a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Users/omar
+b/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam7.pfb><
+C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbol
+s/msbm10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/cour
+ier/ucrr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/he
+lvetic/uhvb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw
+/helvetic/uhvr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/
+urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/
+urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
+/urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
+/urw/times/utmri8a.pfb>
+Output written on main.pdf (9 pages, 5612233 bytes).
 PDF statistics:
- 176 PDF objects out of 1000 (max. 8388607)
+ 186 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 18 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 68 words of extra memory for PDF output out of 10000 (max. 10000000)
 

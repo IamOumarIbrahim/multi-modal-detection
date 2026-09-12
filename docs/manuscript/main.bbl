@@ -75,15 +75,15 @@ G.~Jocher and J.~Qiu, ``Ultralytics {YOLO11},'' 2024. [Online]. Available:
   \url{https://github.com/ultralytics/ultralytics}
 \BIBentrySTDinterwordspacing
 
-\bibitem{liu2016multispectral}
-J.~Liu, S.~Zhang, S.~Wang, and D.~N. Metaxas, ``Multispectral deep neural
-  networks for pedestrian detection,'' in \emph{Proceedings of the British
-  Machine Vision Conference (BMVC)}, 2016, pp. 73.1--73.13.
-
 \bibitem{gu2023mamba}
 A.~Gu and T.~Dao, ``Mamba: Linear-time sequence modeling with selective state
   spaces,'' in \emph{Proceedings of the First Conference on Language Modeling
   (COLM)}, 2024, also arXiv:2312.00752.
+
+\bibitem{liu2016multispectral}
+J.~Liu, S.~Zhang, S.~Wang, and D.~N. Metaxas, ``Multispectral deep neural
+  networks for pedestrian detection,'' in \emph{Proceedings of the British
+  Machine Vision Conference (BMVC)}, 2016, pp. 73.1--73.13.
 
 \bibitem{li2018illumination}
 C.~Li, D.~Song, R.~Tong, and M.~Tang, ``Illumination-aware faster {R-CNN} for
