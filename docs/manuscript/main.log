@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  13 SEP 2026 19:20
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  13 SEP 2026 19:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -662,20 +662,20 @@ File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 ) (main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
 
 -- Lines per column: 56 (exact).
 
@@ -705,19 +705,19 @@ fg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
 LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 3
-0.
+5.
  (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 30.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 34.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 35.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 39.
 
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 34.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 39.
 
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -859,8 +859,8 @@ LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.9> not available
 (Font)              size <5> substituted on input line 163.
 
 )
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 4
-8.
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 5
+3.
  (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
@@ -868,30 +868,36 @@ File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 arb/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
 
 
-] [2 <./figures/icon_lorem_ipsum.png> <./figures/grok_logo.png> <./figures/gemi
-ni_logo.png> <./figures/grok_desert_video.png (PNG copy)> <./figures/grok_fores
-t_video.png (PNG copy)> <./figures/desert_rgb_video.png (PNG copy)> <./figures/
-forest_rgb_video.png (PNG copy)> <./figures/desert_th_video.png (PNG copy)> <./
-figures/forest_th_video.png (PNG copy)> <./figures/crop_640_left_video.png (PNG
- copy)> <./figures/crop_640_right_video.png (PNG copy)> <./figures/icon_label_s
-tudio.png> <./figures/desert_rgb_annotated.png (PNG copy)> <./figures/desert_th
-_annotated.png (PNG copy)>]
-Underfull \hbox (badness 4595) in paragraph at lines 93--95
+]
+Underfull \vbox (badness 3417) has occurred while \output is active []
+
+ [2 <./figures/icon_lorem_ipsum.png> <./figures/grok_logo.png> <./figures/gemin
+i_logo.png> <./figures/grok_desert_video.png (PNG copy)> <./figures/grok_forest
+_video.png (PNG copy)> <./figures/desert_rgb_video.png (PNG copy)> <./figures/f
+orest_rgb_video.png (PNG copy)> <./figures/desert_th_video.png (PNG copy)> <./f
+igures/forest_th_video.png (PNG copy)> <./figures/crop_640_left_video.png (PNG 
+copy)> <./figures/crop_640_right_video.png (PNG copy)> <./figures/icon_label_st
+udio.png> <./figures/desert_rgb_annotated.png (PNG copy)> <./figures/desert_th_
+annotated.png (PNG copy)>]
+Underfull \hbox (badness 4595) in paragraph at lines 98--100
 \OT1/ptm/m/n/10 mod-els [8]: (1) \OT1/ptm/b/n/10 YOLO11n-RGB \OT1/ptm/m/n/10 an
 d (2) \OT1/ptm/b/n/10 YOLO11n-
  []
 
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <8> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 111.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 116.
 
-Underfull \hbox (badness 2050) in paragraph at lines 152--153
+Underfull \hbox (badness 2050) in paragraph at lines 157--158
 []\OT1/ptm/b/n/10 Alert La-tency (Time-to-Alarm): \OT1/ptm/m/n/10 Elapsed time 
 (in
  []
 
-[3] (figure_real_temporal_sequence.tex) [4] (figure_performance_tradeoff.tex)
-(figure_window_ablation.tex) [5]
-Underfull \hbox (badness 1565) in paragraph at lines 301--302
+[3] (figure_real_temporal_sequence.tex) [4]
+Underfull \vbox (badness 2158) has occurred while \output is active []
+
+
+(figure_performance_tradeoff.tex) (figure_window_ablation.tex) [5]
+Underfull \hbox (badness 1565) in paragraph at lines 306--307
 []\OT1/ptm/m/n/10 Several con-straints bound our find-ings. First, pseudo-
  []
 
@@ -925,7 +931,7 @@ LaTeX Font Warning: Size substitutions with differences
 Here is how much of TeX's memory you used:
  17069 strings out of 467871
  356915 string characters out of 5418376
- 784499 words of memory out of 5000000
+ 784507 words of memory out of 5000000
  45602 multiletter control sequences out of 15000+600000
  706818 words of font info for 198 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -962,7 +968,7 @@ KTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/Mi
 KTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/M
 iKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/M
 iKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (6 pages, 10214192 bytes).
+Output written on main.pdf (6 pages, 10214504 bytes).
 PDF statistics:
  189 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

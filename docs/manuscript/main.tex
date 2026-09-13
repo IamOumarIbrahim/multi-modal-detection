@@ -17,6 +17,11 @@
 \usepackage{balance}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc,fit,backgrounds,decorations.pathreplacing}
+\setlength{\textfloatsep}{7pt plus 1pt minus 1pt}
+\setlength{\floatsep}{6pt plus 1pt minus 1pt}
+\setlength{\intextsep}{6pt plus 1pt minus 1pt}
+\setlength{\abovecaptionskip}{3pt plus 1pt minus 1pt}
+\setlength{\belowcaptionskip}{2pt plus 1pt minus 1pt}
 
 \begin{document}
 
@@ -31,7 +36,7 @@
 
 \begingroup
 \renewcommand\thefootnote{}
-\footnotetext{This work involved human subjects or animals in its research. The author(s) confirm(s) that all human/animal subject research procedures and protocols are exempt from review board approval.}
+\footnotetext{This work involved human subject detection in simulated imagery. The author(s) confirm(s) that all human/animal subject research procedures and protocols are exempt from review board approval.}
 \endgroup
 
 \begin{abstract}
@@ -178,15 +183,15 @@ Wilderness SAR dual-spectrum datasets remain scarce in the literature. As summar
 \toprule
 \textbf{System Parameter} & \textbf{Design Specification / Value} \\
 \midrule
-Environments & Arid Desert (30 clips), Temperate Forest (30 clips), \\
-             & Snow-Covered Alpine (30 clips) \\
+Environments & Arid Desert (30 tiles), Temperate Forest (28 tiles), \\
+             & Snow-Covered Alpine (32 tiles) \\
 Sensor Modalities & Synchronized visible RGB and pseudo-thermal infrared (TIR) \\
 Raw Video Format & $1280 \times 720$ at 24~FPS ($T_s \approx 41.7\text{ ms}$), 10.0~s nominal \\
-Dual-Crop Snippets & $2\times$ square tiles ($640 \times 640$, left/right, $y = 40$) \\
-Corpus Volume & 90 clips, 20,364 frames per modality (40,728 total frames; \\
-              & 11,240 positive frames, 9,124 negative distractor frames) \\
-Episodic Partition & Option B nominal 60/20/20 (realized: 44 train [48.9\%], \\
-                   & 22 val [24.4\%], 24 test [26.7\%] clips) \\
+Dual-Crop Tiling & $2\times$ square tiles ($640 \times 640$, left/right, $y = 40$) \\
+Corpus Volume & 90 tiles, 20,364 frames per modality (40,728 total frames; \\
+              & 42 positive tiles [5,620 frames], 48 negative distractor tiles [14,744 frames]) \\
+Episodic Partition & Option B parent-grouped (realized: 44 train [17 pos, 27 neg], \\
+                   & 22 val [12 pos, 10 neg], 24 test [13 pos, 11 neg] tiles per modality) \\
 Upstream Detectors & Dual YOLO11n (2.6M params, 6.5 GFLOPs at $640\times 640$, FP32) \\
 Training Setup & Batch 16, 60 epochs, SGD cosine schedule ($\text{lr}_0=0.01$) \\
 Decision Window & Sliding causal window $W \in \{1, 3, 5, 7\}$ ($W=5$ nominal; 208~ms) \\
@@ -197,9 +202,9 @@ Decision Strategies & Raw (M1), Moving Avg (M2), Median (M3), Consensus (M4), \\
 }
 \end{table}
 
-Raw aerial video is captured in $1280 \times 720$ resolution at 24 frames per second (FPS). To preserve ground sampling distance (GSD) without downsampling small human targets, a $2\times$ dual-crop extraction produces disjoint $640 \times 640$ snippets (left tile $x \in [0, 640]$ and right tile $x \in [640, 1280]$, $y = 40$). This produces 30 desert sequences (20 positive, 10 negative), 30 forest sequences (20 positive, 10 negative), and 30 snow alpine sequences (28 positive, 2 negative; reflecting high-contrast terrain constraints where creating convincing snow negatives without human subjects was constrained), totaling 90 video streams and 20,364 frames at 24~Hz per modality (180 streams and 40,728 frames combined across synchronized RGB and thermal modalities). Sequences are annotated in Label Studio using keyframe interpolation, yielding precise ground-truth bounding boxes.
+Raw aerial video is captured in $1280 \times 720$ resolution at 24 frames per second (FPS). To preserve ground sampling distance (GSD) without downsampling small human targets, a $2\times$ dual-crop extraction produces disjoint $640 \times 640$ square tiles (left tile $x \in [0, 640]$ and right tile $x \in [640, 1280]$, $y = 40$). Because target persons appear within a single spatial tile in positive parent captures while the companion tile captures ambient terrain, classifying tiles by bounding box presence yields 30 desert tiles (13 positive, 17 negative), 28 forest tiles (14 positive, 14 negative), and 32 snow alpine tiles (15 positive, 17 negative). Across the 90 tiles per modality (42 positive, 48 negative distractor tiles; 180 synchronized streams), the corpus comprises 20,364 frames at 24~Hz per modality (40,728 frames total: 5,620 target frames and 14,744 negative distractor frames per modality). Sequences are annotated in Label Studio using keyframe interpolation, yielding precise ground-truth bounding boxes.
 
-Dataset partitioning is conducted strictly at the sequence level under Option B (Parent-Video Grouped Episodic Partitioning) to prevent spatial or temporal data leakage between derived sibling tiles. Sequences follow a 60/20/20 split: 44 training clips (9,800 frames per modality), 22 validation clips (4,994 frames per modality), and 24 testing clips (5,570 frames per modality). Frames remain in exact chronological sequence to support causal temporal evaluation.
+Dataset partitioning is conducted strictly at the parent-video level under Option B (Parent-Video Grouped Episodic Partitioning) to prevent spatial or temporal data leakage between derived sibling tiles. Sibling left and right tiles are assigned to the same partition. The realized partition allocates 44 training tiles (17 positive, 27 negative; 9,800 frames per modality), 22 validation tiles (12 positive, 10 negative; 4,994 frames per modality), and 24 testing tiles (13 positive, 11 negative; 5,570 frames per modality). In the held-out test split, each biome contributes exactly 8 tiles (desert: 4 positive, 4 negative; forest: 4 positive, 4 negative; snow alpine: 5 positive, 3 negative). Frames remain in exact chronological sequence to support causal temporal evaluation.
 
 \section{Results and Discussion}
 \label{sec:results}
@@ -298,7 +303,7 @@ The three wilderness biomes pose distinct sensing challenges. In desert terrain,
 
 \subsection{Limitations}
 \label{sec:limitations}
-Several constraints bound our findings. First, pseudo-thermal infrared streams are generated via a global grayscale lookup table rather than radiometric sensor physics; high-albedo snow renders as the warmest region in frame, inverting thermal contrast relative to physical snowpack. Second, the benchmark evaluates 24 held-out test clips (5,570 frames per modality under Option B parent-video grouping), where snow alpine contains 28 positive and 2 negative clips due to synthetic generation constraints; broader distractor balance across maritime and urban domains remains future work. Third, clips capture nominal aerial trajectories ($30$--$50$\,m AGL at $8$--$15$\,m/s) in clear conditions; violent turbulence and degraded weather (heavy fog, blizzard snowfall) require further study. Finally, timing benchmarks reflect desktop GPU execution; embedded Jetson Orin Nano flight validation is planned for subsequent work.
+Several constraints bound our findings. First, pseudo-thermal infrared streams are generated via a global grayscale lookup table rather than radiometric sensor physics; high-albedo snow renders as the warmest region in frame, inverting thermal contrast relative to physical snowpack. Second, the benchmark evaluates 24 held-out test tiles (5,570 frames per modality under Option B parent-video grouping, 8 tiles per biome with 13 positive and 11 negative tiles); broader distractor balance across maritime and urban domains remains future work. Third, clips capture nominal aerial trajectories ($30$--$50$\,m AGL at $8$--$15$\,m/s) in clear conditions; violent turbulence and degraded weather (heavy fog, blizzard snowfall) require further study. Finally, timing benchmarks reflect desktop GPU execution; embedded Jetson Orin Nano flight validation is planned for subsequent work.
 
 \section{Conclusion}
 \label{sec:conclusion}
