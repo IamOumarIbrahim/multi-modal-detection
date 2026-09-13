@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  13 SEP 2026 19:36
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  13 SEP 2026 20:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -868,40 +868,29 @@ File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 arb/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
 
 
-]
+] [2 <./figures/icon_lorem_ipsum.png> <./figures/grok_logo.png> <./figures/gemi
+ni_logo.png> <./figures/grok_desert_video.png (PNG copy)> <./figures/grok_fores
+t_video.png (PNG copy)> <./figures/desert_rgb_video.png (PNG copy)> <./figures/
+forest_rgb_video.png (PNG copy)> <./figures/desert_th_video.png (PNG copy)> <./
+figures/forest_th_video.png (PNG copy)> <./figures/crop_640_left_video.png (PNG
+ copy)> <./figures/crop_640_right_video.png (PNG copy)> <./figures/icon_label_s
+tudio.png> <./figures/desert_rgb_annotated.png (PNG copy)> <./figures/desert_th
+_annotated.png (PNG copy)>]
 Underfull \hbox (badness 1521) in paragraph at lines 93--95
 \OT1/ptm/m/n/10 la-tency. We de-ploy two par-al-lel YOLO11n mod-els [8]:
  []
 
-[2 <./figures/icon_lorem_ipsum.png> <./figures/grok_logo.png> <./figures/gemini
-_logo.png> <./figures/grok_desert_video.png (PNG copy)> <./figures/grok_forest_
-video.png (PNG copy)> <./figures/desert_rgb_video.png (PNG copy)> <./figures/fo
-rest_rgb_video.png (PNG copy)> <./figures/desert_th_video.png (PNG copy)> <./fi
-gures/forest_th_video.png (PNG copy)> <./figures/crop_640_left_video.png (PNG c
-opy)> <./figures/crop_640_right_video.png (PNG copy)> <./figures/icon_label_stu
-dio.png> <./figures/desert_rgb_annotated.png (PNG copy)> <./figures/desert_th_a
-nnotated.png (PNG copy)>]
-Underfull \hbox (badness 2050) in paragraph at lines 121--122
-[]\OT1/ptm/b/n/10 Alert La-tency (Time-to-Alarm): \OT1/ptm/m/n/10 Elapsed time 
-(in
- []
-
 [3] (figure_real_temporal_sequence.tex)
-Underfull \hbox (badness 2334) in paragraph at lines 234--235
+Underfull \hbox (badness 2334) in paragraph at lines 246--247
 []\OT1/ptm/m/n/10 Across the held-out test split, causal tem-po-ral post-
  []
 
-(figure_window_ablation.tex) [4]
-Underfull \hbox (badness 1565) in paragraph at lines 282--283
+[4] (figure_window_ablation.tex) [5]
+Underfull \hbox (badness 1565) in paragraph at lines 300--301
 []\OT1/ptm/m/n/10 Several con-straints bound our find-ings. First, pseudo-
  []
 
-(main.bbl
-
-Package balance Warning: You have called \balance in second column
-(balance)                Columns might not be balanced.
-
-[5])
+(main.bbl)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -914,7 +903,7 @@ Before submitting the final camera ready copy, remember to:
  process uses the appropriate paper size.
 
 
-Overfull \vbox (1.16797pt too high) has occurred while \output is active []
+Overfull \vbox (15.53131pt too high) has occurred while \output is active []
 
 
 [6] (main.aux)
@@ -929,13 +918,13 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 16941 strings out of 467871
- 354801 string characters out of 5418376
- 785442 words of memory out of 5000000
- 45477 multiletter control sequences out of 15000+600000
+ 16948 strings out of 467871
+ 354890 string characters out of 5418376
+ 787504 words of memory out of 5000000
+ 45484 multiletter control sequences out of 15000+600000
  706818 words of font info for 198 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,17n,94p,1938b,968s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,17n,94p,2336b,968s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmbx10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmex10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -957,18 +946,19 @@ s/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy5.pfb><C:/Users/omarb/AppData/Local
 /Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/omarb/AppDa
 ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/oma
 rb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/U
-sers/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/ms
-am5.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/courier/u
-crr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helveti
-c/uhvb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helv
-etic/uhvr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/t
-imes/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/t
-imes/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/
-times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/
-times/utmri8a.pfb>
-Output written on main.pdf (6 pages, 10191940 bytes).
+sers/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.p
+fb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/sy
+mbols/msam5.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/c
+ourier/ucrr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw
+/helvetic/uhvb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/
+urw/helvetic/uhvr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/urw/times/utmri8a.pfb>
+Output written on main.pdf (6 pages, 10210616 bytes).
 PDF statistics:
- 179 PDF objects out of 1000 (max. 8388607)
+ 184 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  83 words of extra memory for PDF output out of 10000 (max. 10000000)
 

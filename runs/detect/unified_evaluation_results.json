@@ -1,0 +1,1455 @@
+{
+  "timestamp": "2026-09-13T16:13:04Z",
+  "protocol": "Strict no-leakage: detectors fixed; M5/M6 trained on train split; tau* and W calibrated on val split; test split evaluated once.",
+  "upstream_detection": {
+    "YOLO11n-RGB (Arid Desert)": {
+      "precision": 0.970125786163522,
+      "recall": 0.8677918424753868,
+      "f1": 0.9161098737936154,
+      "tp": 617.0,
+      "fp": 19.0,
+      "fn": 94.0,
+      "tn": 1190.0
+    },
+    "YOLO11n-Thermal (Arid Desert)": {
+      "precision": 0.9967051070840197,
+      "recall": 0.8509142053445851,
+      "f1": 0.9180576631259484,
+      "tp": 605.0,
+      "fp": 2.0,
+      "fn": 106.0,
+      "tn": 1207.0
+    },
+    "Late Fusion Max Gate (Arid Desert)": {
+      "precision": 0.9696092619392185,
+      "recall": 0.9423347398030942,
+      "f1": 0.9557774607703281,
+      "tp": 670.0,
+      "fp": 21.0,
+      "fn": 41.0,
+      "tn": 1188.0
+    },
+    "YOLO11n-RGB (Temperate Forest)": {
+      "precision": 0.9221311475409836,
+      "recall": 0.4437869822485207,
+      "f1": 0.5992010652463383,
+      "tp": 225.0,
+      "fp": 19.0,
+      "fn": 282.0,
+      "tn": 1204.0
+    },
+    "YOLO11n-Thermal (Temperate Forest)": {
+      "precision": 0.9147727272727273,
+      "recall": 0.3175542406311637,
+      "f1": 0.4714494875549048,
+      "tp": 161.0,
+      "fp": 15.0,
+      "fn": 346.0,
+      "tn": 1208.0
+    },
+    "Late Fusion Max Gate (Temperate Forest)": {
+      "precision": 0.9072164948453608,
+      "recall": 0.5207100591715976,
+      "f1": 0.6616541353383459,
+      "tp": 264.0,
+      "fp": 27.0,
+      "fn": 243.0,
+      "tn": 1196.0
+    },
+    "YOLO11n-RGB (Snow/Alpine)": {
+      "precision": 0.9967105263157895,
+      "recall": 0.5233160621761658,
+      "f1": 0.6862967157417894,
+      "tp": 303.0,
+      "fp": 1.0,
+      "fn": 276.0,
+      "tn": 1340.0
+    },
+    "YOLO11n-Thermal (Snow/Alpine)": {
+      "precision": 0.952,
+      "recall": 0.20552677029360966,
+      "f1": 0.33806818181818177,
+      "tp": 119.0,
+      "fp": 6.0,
+      "fn": 460.0,
+      "tn": 1335.0
+    },
+    "Late Fusion Max Gate (Snow/Alpine)": {
+      "precision": 0.9779874213836478,
+      "recall": 0.5371329879101899,
+      "f1": 0.693422519509476,
+      "tp": 311.0,
+      "fp": 7.0,
+      "fn": 268.0,
+      "tn": 1334.0
+    }
+  },
+  "window_ablation_val": {
+    "1": {
+      "window_size": 1,
+      "latency_ms": 41.7,
+      "tau_star": 0.07,
+      "val_f1": 0.8493,
+      "val_precision": 0.9034,
+      "val_recall": 0.8013,
+      "val_fa_events": 79,
+      "val_fa_rate": 22.78
+    },
+    "3": {
+      "window_size": 3,
+      "latency_ms": 125.0,
+      "tau_star": 0.05,
+      "val_f1": 0.8561,
+      "val_precision": 0.8683,
+      "val_recall": 0.8442,
+      "val_fa_events": 53,
+      "val_fa_rate": 15.28
+    },
+    "5": {
+      "window_size": 5,
+      "latency_ms": 208.3,
+      "tau_star": 0.07,
+      "val_f1": 0.8573,
+      "val_precision": 0.8952,
+      "val_recall": 0.8225,
+      "val_fa_events": 29,
+      "val_fa_rate": 8.36
+    },
+    "7": {
+      "window_size": 7,
+      "latency_ms": 291.7,
+      "tau_star": 0.09,
+      "val_f1": 0.8588,
+      "val_precision": 0.9194,
+      "val_recall": 0.8058,
+      "val_fa_events": 20,
+      "val_fa_rate": 5.77
+    }
+  },
+  "test_results": {
+    "M1": {
+      "precision": 0.788,
+      "recall": 0.8086,
+      "f1": 0.7981,
+      "ci_low": 0.255,
+      "ci_high": 0.6068,
+      "episode_f1s": [
+        0.0,
+        0.0,
+        0.9166666666666666,
+        0.9135135135135135,
+        0.0,
+        0.4186046511627907,
+        0.0,
+        0.9934640522875817,
+        0.7346938775510204,
+        0.9873417721518987,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7361963190184049,
+        0.0,
+        0.9346733668341709,
+        0.9862068965517241,
+        0.792626728110599,
+        0.0,
+        0.0529100529100529,
+        0.970873786407767,
+        0.9387755102040817
+      ],
+      "tile_recall_overall": 100.0,
+      "detected_pos_overall": 13,
+      "total_pos_tiles": 13,
+      "tile_recall_by_biome": {
+        "desert": 100.0,
+        "forest": 100.0,
+        "snow": 100.0
+      },
+      "detected_pos_by_biome": {
+        "desert": 4,
+        "forest": 4,
+        "snow": 5
+      },
+      "total_pos_by_biome": {
+        "desert": 4,
+        "forest": 4,
+        "snow": 5
+      },
+      "fa_events_overall": 177,
+      "fa_rate_overall": 45.76,
+      "fa_events_by_biome": {
+        "desert": 62,
+        "forest": 89,
+        "snow": 26
+      },
+      "fa_rate_by_biome": {
+        "desert": 46.5,
+        "forest": 74.08,
+        "snow": 19.5
+      },
+      "fp_frames_overall": 391,
+      "fp_frames_by_biome": {
+        "desert": 171,
+        "forest": 172,
+        "snow": 48
+      },
+      "mean_delay_frames": 5.5,
+      "mean_delay_ms": 229.2,
+      "tau_star": 0.07,
+      "runtime_us": 0.02,
+      "state_size": "0 B ($O(1)$)",
+      "fasr": 0.0
+    },
+    "M2": {
+      "precision": 0.7808,
+      "recall": 0.8286,
+      "f1": 0.804,
+      "ci_low": 0.2584,
+      "ci_high": 0.6204,
+      "episode_f1s": [
+        0.0,
+        0.0,
+        0.923076923076923,
+        0.8959999999999999,
+        0.0,
+        0.5656565656565657,
+        0.0,
+        0.9891540130151844,
+        0.7524752475247525,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7906976744186047,
+        0.0,
+        0.9393939393939393,
+        0.9794520547945206,
+        0.7945205479452054,
+        0.0,
+        0.05235602094240837,
+        0.9836065573770492,
+        0.9200000000000002
+      ],
+      "tile_recall_overall": 100.0,
+      "detected_pos_overall": 13,
+      "total_pos_tiles": 13,
+      "tile_recall_by_biome": {
+        "desert": 100.0,
+        "forest": 100.0,
+        "snow": 100.0
+      },
+      "detected_pos_by_biome": {
+        "desert": 4,
+        "forest": 4,
+        "snow": 5
+      },
+      "total_pos_by_biome": {
+        "desert": 4,
+        "forest": 4,
+        "snow": 5
+      },
+      "fa_events_overall": 70,
+      "fa_rate_overall": 18.1,
+      "fa_events_by_biome": {
+        "desert": 21,
+        "forest": 38,
+        "snow": 11
+      },
+      "fa_rate_by_biome": {
+        "desert": 15.75,
+        "forest": 31.63,
+        "snow": 8.25
+      },
+      "fp_frames_overall": 418,
+      "fp_frames_by_biome": {
+        "desert": 171,
+        "forest": 186,
+        "snow": 61
+      },
+      "mean_delay_frames": 5.2,
+      "mean_delay_ms": 215.7,
+      "tau_star": 0.07,
+      "runtime_us": 0.3,
+      "state_size": "20 B ($O(1)$)",
+      "fasr": -6.9
+    },
+    "M3": {
+      "precision": 0.8006,
+      "recall": 0.8247,
+      "f1": 0.8125,
+      "ci_low": 0.2598,
+      "ci_high": 0.6209,
+      "episode_f1s": [
+        0.0,
+        0.0,
+        0.923076923076923,
+        0.9155313351498637,
+        0.0,
+        0.5714285714285714,
+        0.0,
+        0.9870129870129869,
+        0.7843137254901961,
+        0.9979123173277662,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.8047337278106509,
+        0.0,
+        0.9346733668341709,
+        0.9761092150170648,
+        0.8018433179723502,
+        0.0,
+        0.0106951871657754,
+        0.9803921568627451,
+        0.9139072847682119
+      ],
+      "tile_recall_overall": 100.0,
+      "detected_pos_overall": 13,
+      "total_pos_tiles": 13,
+      "tile_recall_by_biome": {
+        "desert": 100.0,
+        "forest": 100.0,
+        "snow": 100.0
+      },
+      "detected_pos_by_biome": {
+        "desert": 4,
+        "forest": 4,
+        "snow": 5
+      },
+      "total_pos_by_biome": {
+        "desert": 4,
+        "forest": 4,
+        "snow": 5
+      },
+      "fa_events_overall": 66,
+      "fa_rate_overall": 17.06,
+      "fa_events_by_biome": {
+        "desert": 20,
+        "forest": 34,
+        "snow": 12
+      },
+      "fa_rate_by_biome": {
+        "desert": 15.0,
+        "forest": 28.3,
+        "snow": 9.0
+      },
+      "fp_frames_overall": 369,
+      "fp_frames_by_biome": {
+        "desert": 169,
+        "forest": 147,
+        "snow": 53
+      },
+      "mean_delay_frames": 10.9,
+      "mean_delay_ms": 455.9,
+      "tau_star": 0.05,
+      "runtime_us": 0.42,
+      "state_size": "20 B ($O(W)$)",
+      "fasr": 5.6
+    },
+    "M4": {
+      "precision": 0.8041,
+      "recall": 0.8203,
+      "f1": 0.8121,
+      "ci_low": 0.2599,
+      "ci_high": 0.6214,
+      "episode_f1s": [
+        0.0,
+        0.0,
+        0.923076923076923,
+        0.9180327868852459,
+        0.0,
+        0.5789473684210527,
+        0.0,
+        0.9826086956521738,
+        0.7843137254901961,
+        0.9937106918238994,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.8095238095238095,
+        0.0,
+        0.9238578680203046,
+        0.9690721649484535,
+        0.8093023255813954,
+        0.0,
+        0.0106951871657754,
+        0.9803921568627451,
+        0.9139072847682119
+      ],
+      "tile_recall_overall": 100.0,
+      "detected_pos_overall": 13,
+      "total_pos_tiles": 13,
+      "tile_recall_by_biome": {
+        "desert": 100.0,
+        "forest": 100.0,
+        "snow": 100.0
+      },
+      "detected_pos_by_biome": {
+        "desert": 4,
+        "forest": 4,
+        "snow": 5
+      },
+      "total_pos_by_biome": {
+        "desert": 4,
+        "forest": 4,
+        "snow": 5
+      },
+      "fa_events_overall": 62,
+      "fa_rate_overall": 16.03,
+      "fa_events_by_biome": {
+        "desert": 20,
+        "forest": 30,
+        "snow": 12
+      },
+      "fa_rate_by_biome": {
+        "desert": 15.0,
+        "forest": 24.97,
+        "snow": 9.0
+      },
+      "fp_frames_overall": 359,
+      "fp_frames_by_biome": {
+        "desert": 169,
+        "forest": 137,
+        "snow": 53
+      },
+      "mean_delay_frames": 11.4,
+      "mean_delay_ms": 475.5,
+      "tau_star": 0.05,
+      "runtime_us": 0.63,
+      "state_size": "5 B ($O(W)$)",
+      "fasr": 8.2
+    },
+    "M5": {
+      "tau_star": 0.05,
+      "tile_recall_overall": 92.3,
+      "f1_mean": 0.778,
+      "f1_std": 0.032,
+      "ci_low": 0.211,
+      "ci_high": 0.554,
+      "fa_rate_mean": 4.0,
+      "fa_rate_std": 3.2,
+      "mean_delay_ms": 395.6,
+      "fp_frames_overall": 38,
+      "fasr": 90.2,
+      "runtime_us": 150.59,
+      "state_size": "512 B ($O(d_{\\text{model}} d_{\\text{state}})$)",
+      "rep_seed_metrics": {
+        "precision": 0.9722,
+        "recall": 0.6605,
+        "f1": 0.7866,
+        "ci_low": 0.2142,
+        "ci_high": 0.5604,
+        "episode_f1s": [
+          0.0,
+          0.0,
+          0.96875,
+          0.8184615384615386,
+          0.0,
+          0.08333333333333333,
+          0.0,
+          0.9978118161925601,
+          0.45454545454545453,
+          0.888888888888889,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.30222222222222217,
+          0.0,
+          0.9608938547486032,
+          0.9859154929577465,
+          0.7948717948717949,
+          0.0,
+          0.0,
+          0.9966555183946488,
+          0.9481481481481482
+        ],
+        "tile_recall_overall": 92.3,
+        "detected_pos_overall": 12,
+        "total_pos_tiles": 13,
+        "tile_recall_by_biome": {
+          "desert": 100.0,
+          "forest": 100.0,
+          "snow": 80.0
+        },
+        "detected_pos_by_biome": {
+          "desert": 4,
+          "forest": 4,
+          "snow": 4
+        },
+        "total_pos_by_biome": {
+          "desert": 4,
+          "forest": 4,
+          "snow": 5
+        },
+        "fa_events_overall": 12,
+        "fa_rate_overall": 3.1,
+        "fa_events_by_biome": {
+          "desert": 4,
+          "forest": 5,
+          "snow": 3
+        },
+        "fa_rate_by_biome": {
+          "desert": 3.0,
+          "forest": 4.16,
+          "snow": 2.25
+        },
+        "fp_frames_overall": 34,
+        "fp_frames_by_biome": {
+          "desert": 15,
+          "forest": 16,
+          "snow": 3
+        },
+        "mean_delay_frames": 7.7,
+        "mean_delay_ms": 319.4,
+        "tau_star": 0.07
+      },
+      "seed_results": [
+        {
+          "precision": 0.9841,
+          "recall": 0.5843,
+          "f1": 0.7332,
+          "ci_low": 0.1884,
+          "ci_high": 0.5161,
+          "episode_f1s": [
+            0.0,
+            0.0,
+            0.9606299212598425,
+            0.7333333333333334,
+            0.0,
+            0.042553191489361694,
+            0.0,
+            1.0,
+            0.3,
+            0.8377723970944311,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.19811320754716982,
+            0.0,
+            0.8795180722891566,
+            0.924812030075188,
+            0.5409836065573771,
+            0.0,
+            0.0,
+            0.9864864864864865,
+            0.923076923076923
+          ],
+          "tile_recall_overall": 92.3,
+          "detected_pos_overall": 12,
+          "total_pos_tiles": 13,
+          "tile_recall_by_biome": {
+            "desert": 100.0,
+            "forest": 100.0,
+            "snow": 80.0
+          },
+          "detected_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 4
+          },
+          "total_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 5
+          },
+          "fa_events_overall": 6,
+          "fa_rate_overall": 1.55,
+          "fa_events_by_biome": {
+            "desert": 1,
+            "forest": 4,
+            "snow": 1
+          },
+          "fa_rate_by_biome": {
+            "desert": 0.75,
+            "forest": 3.33,
+            "snow": 0.75
+          },
+          "fp_frames_overall": 17,
+          "fp_frames_by_biome": {
+            "desert": 7,
+            "forest": 9,
+            "snow": 1
+          },
+          "mean_delay_frames": 13.9,
+          "mean_delay_ms": 577.8,
+          "tau_star": 0.05
+        },
+        {
+          "precision": 0.9385,
+          "recall": 0.7223,
+          "f1": 0.8164,
+          "ci_low": 0.2324,
+          "ci_high": 0.5893,
+          "episode_f1s": [
+            0.0,
+            0.0,
+            0.9692307692307692,
+            0.8914285714285715,
+            0.0,
+            0.15094339622641512,
+            0.0,
+            0.9978118161925601,
+            0.5714285714285714,
+            0.9380530973451328,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.45418326693227085,
+            0.0,
+            0.989247311827957,
+            0.9930555555555556,
+            0.861878453038674,
+            0.0,
+            0.0,
+            1.0,
+            0.9710144927536232
+          ],
+          "tile_recall_overall": 92.3,
+          "detected_pos_overall": 12,
+          "total_pos_tiles": 13,
+          "tile_recall_by_biome": {
+            "desert": 100.0,
+            "forest": 100.0,
+            "snow": 80.0
+          },
+          "detected_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 4
+          },
+          "total_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 5
+          },
+          "fa_events_overall": 37,
+          "fa_rate_overall": 9.57,
+          "fa_events_by_biome": {
+            "desert": 15,
+            "forest": 16,
+            "snow": 6
+          },
+          "fa_rate_by_biome": {
+            "desert": 11.25,
+            "forest": 13.32,
+            "snow": 4.5
+          },
+          "fp_frames_overall": 85,
+          "fp_frames_by_biome": {
+            "desert": 39,
+            "forest": 37,
+            "snow": 9
+          },
+          "mean_delay_frames": 4.5,
+          "mean_delay_ms": 188.9,
+          "tau_star": 0.05
+        },
+        {
+          "precision": 0.9718,
+          "recall": 0.6706,
+          "f1": 0.7935,
+          "ci_low": 0.2161,
+          "ci_high": 0.5649,
+          "episode_f1s": [
+            0.0,
+            0.0,
+            0.96875,
+            0.8363636363636363,
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.9978118161925601,
+            0.48101265822784806,
+            0.8990825688073394,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.30973451327433627,
+            0.0,
+            0.9723756906077349,
+            0.9894736842105264,
+            0.810126582278481,
+            0.0,
+            0.0,
+            0.9966555183946488,
+            0.9481481481481482
+          ],
+          "tile_recall_overall": 92.3,
+          "detected_pos_overall": 12,
+          "total_pos_tiles": 13,
+          "tile_recall_by_biome": {
+            "desert": 100.0,
+            "forest": 100.0,
+            "snow": 80.0
+          },
+          "detected_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 4
+          },
+          "total_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 5
+          },
+          "fa_events_overall": 13,
+          "fa_rate_overall": 3.36,
+          "fa_events_by_biome": {
+            "desert": 4,
+            "forest": 5,
+            "snow": 4
+          },
+          "fa_rate_by_biome": {
+            "desert": 3.0,
+            "forest": 4.16,
+            "snow": 3.0
+          },
+          "fp_frames_overall": 35,
+          "fp_frames_by_biome": {
+            "desert": 15,
+            "forest": 16,
+            "snow": 4
+          },
+          "mean_delay_frames": 7.8,
+          "mean_delay_ms": 325.0,
+          "tau_star": 0.05
+        },
+        {
+          "precision": 0.9823,
+          "recall": 0.6194,
+          "f1": 0.7597,
+          "ci_low": 0.2021,
+          "ci_high": 0.5375,
+          "episode_f1s": [
+            0.0,
+            0.0,
+            0.9606299212598425,
+            0.7781350482315111,
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.9978118161925601,
+            0.38095238095238093,
+            0.8679245283018869,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.22325581395348837,
+            0.0,
+            0.9186046511627907,
+            0.963768115942029,
+            0.6567164179104479,
+            0.0,
+            0.0,
+            0.9932885906040269,
+            0.9312977099236641
+          ],
+          "tile_recall_overall": 92.3,
+          "detected_pos_overall": 12,
+          "total_pos_tiles": 13,
+          "tile_recall_by_biome": {
+            "desert": 100.0,
+            "forest": 100.0,
+            "snow": 80.0
+          },
+          "detected_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 4
+          },
+          "total_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 5
+          },
+          "fa_events_overall": 9,
+          "fa_rate_overall": 2.33,
+          "fa_events_by_biome": {
+            "desert": 3,
+            "forest": 5,
+            "snow": 1
+          },
+          "fa_rate_by_biome": {
+            "desert": 2.25,
+            "forest": 4.16,
+            "snow": 0.75
+          },
+          "fp_frames_overall": 20,
+          "fp_frames_by_biome": {
+            "desert": 9,
+            "forest": 10,
+            "snow": 1
+          },
+          "mean_delay_frames": 13.6,
+          "mean_delay_ms": 566.7,
+          "tau_star": 0.05
+        },
+        {
+          "precision": 0.9722,
+          "recall": 0.6605,
+          "f1": 0.7866,
+          "ci_low": 0.2142,
+          "ci_high": 0.5604,
+          "episode_f1s": [
+            0.0,
+            0.0,
+            0.96875,
+            0.8184615384615386,
+            0.0,
+            0.08333333333333333,
+            0.0,
+            0.9978118161925601,
+            0.45454545454545453,
+            0.888888888888889,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.30222222222222217,
+            0.0,
+            0.9608938547486032,
+            0.9859154929577465,
+            0.7948717948717949,
+            0.0,
+            0.0,
+            0.9966555183946488,
+            0.9481481481481482
+          ],
+          "tile_recall_overall": 92.3,
+          "detected_pos_overall": 12,
+          "total_pos_tiles": 13,
+          "tile_recall_by_biome": {
+            "desert": 100.0,
+            "forest": 100.0,
+            "snow": 80.0
+          },
+          "detected_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 4
+          },
+          "total_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 5
+          },
+          "fa_events_overall": 12,
+          "fa_rate_overall": 3.1,
+          "fa_events_by_biome": {
+            "desert": 4,
+            "forest": 5,
+            "snow": 3
+          },
+          "fa_rate_by_biome": {
+            "desert": 3.0,
+            "forest": 4.16,
+            "snow": 2.25
+          },
+          "fp_frames_overall": 34,
+          "fp_frames_by_biome": {
+            "desert": 15,
+            "forest": 16,
+            "snow": 3
+          },
+          "mean_delay_frames": 7.7,
+          "mean_delay_ms": 319.4,
+          "tau_star": 0.07
+        }
+      ]
+    },
+    "M6": {
+      "tau_star": 0.24,
+      "tile_recall_overall": 90.8,
+      "f1_mean": 0.822,
+      "f1_std": 0.006,
+      "ci_low": 0.227,
+      "ci_high": 0.582,
+      "fa_rate_mean": 5.8,
+      "fa_rate_std": 2.3,
+      "mean_delay_ms": 506.1,
+      "fp_frames_overall": 101,
+      "fasr": 74.2,
+      "runtime_us": 21.8,
+      "state_size": "64 B ($O(d_{\\text{hidden}}^2)$)",
+      "rep_seed_metrics": {
+        "precision": 0.9453,
+        "recall": 0.7312,
+        "f1": 0.8246,
+        "ci_low": 0.2226,
+        "ci_high": 0.5815,
+        "episode_f1s": [
+          0.0,
+          0.0,
+          0.9465648854961831,
+          0.9096045197740114,
+          0.0,
+          0.0,
+          0.0,
+          0.9956331877729258,
+          0.5061728395061729,
+          0.9787234042553191,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.4761904761904763,
+          0.0,
+          0.9946524064171123,
+          0.9896193771626297,
+          0.8842105263157896,
+          0.0,
+          0.0,
+          0.98989898989899,
+          0.9420289855072465
+        ],
+        "tile_recall_overall": 84.6,
+        "detected_pos_overall": 11,
+        "total_pos_tiles": 13,
+        "tile_recall_by_biome": {
+          "desert": 100.0,
+          "forest": 75.0,
+          "snow": 80.0
+        },
+        "detected_pos_by_biome": {
+          "desert": 4,
+          "forest": 3,
+          "snow": 4
+        },
+        "total_pos_by_biome": {
+          "desert": 4,
+          "forest": 4,
+          "snow": 5
+        },
+        "fa_events_overall": 15,
+        "fa_rate_overall": 3.88,
+        "fa_events_by_biome": {
+          "desert": 4,
+          "forest": 7,
+          "snow": 4
+        },
+        "fa_rate_by_biome": {
+          "desert": 3.0,
+          "forest": 5.83,
+          "snow": 3.0
+        },
+        "fp_frames_overall": 76,
+        "fp_frames_by_biome": {
+          "desert": 35,
+          "forest": 30,
+          "snow": 11
+        },
+        "mean_delay_frames": 13.1,
+        "mean_delay_ms": 544.6,
+        "tau_star": 0.43
+      },
+      "seed_results": [
+        {
+          "precision": 0.9024,
+          "recall": 0.7618,
+          "f1": 0.8262,
+          "ci_low": 0.2406,
+          "ci_high": 0.5914,
+          "episode_f1s": [
+            0.0,
+            0.0,
+            0.9253731343283583,
+            0.904109589041096,
+            0.0,
+            0.2592592592592593,
+            0.0,
+            0.9913043478260869,
+            0.5988700564971752,
+            0.9979123173277662,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.555956678700361,
+            0.0,
+            0.9789473684210526,
+            0.9794520547945206,
+            0.8613861386138613,
+            0.0,
+            0.010989010989010988,
+            0.9899665551839465,
+            0.9295774647887323
+          ],
+          "tile_recall_overall": 100.0,
+          "detected_pos_overall": 13,
+          "total_pos_tiles": 13,
+          "tile_recall_by_biome": {
+            "desert": 100.0,
+            "forest": 100.0,
+            "snow": 100.0
+          },
+          "detected_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 5
+          },
+          "total_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 5
+          },
+          "fa_events_overall": 37,
+          "fa_rate_overall": 9.57,
+          "fa_events_by_biome": {
+            "desert": 9,
+            "forest": 17,
+            "snow": 11
+          },
+          "fa_rate_by_biome": {
+            "desert": 6.75,
+            "forest": 14.15,
+            "snow": 8.25
+          },
+          "fp_frames_overall": 148,
+          "fp_frames_by_biome": {
+            "desert": 52,
+            "forest": 60,
+            "snow": 36
+          },
+          "mean_delay_frames": 5.8,
+          "mean_delay_ms": 239.6,
+          "tau_star": 0.05
+        },
+        {
+          "precision": 0.9215,
+          "recall": 0.7451,
+          "f1": 0.824,
+          "ci_low": 0.2236,
+          "ci_high": 0.5809,
+          "episode_f1s": [
+            0.0,
+            0.0,
+            0.9323308270676692,
+            0.9060773480662984,
+            0.0,
+            0.041666666666666664,
+            0.0,
+            0.9913043478260869,
+            0.49079754601227,
+            0.9979123173277662,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.5223880597014925,
+            0.0,
+            0.9789473684210526,
+            0.9794520547945206,
+            0.8787878787878788,
+            0.0,
+            0.0,
+            0.98989898989899,
+            0.921985815602837
+          ],
+          "tile_recall_overall": 92.3,
+          "detected_pos_overall": 12,
+          "total_pos_tiles": 13,
+          "tile_recall_by_biome": {
+            "desert": 100.0,
+            "forest": 100.0,
+            "snow": 80.0
+          },
+          "detected_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 4
+          },
+          "total_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 5
+          },
+          "fa_events_overall": 24,
+          "fa_rate_overall": 6.2,
+          "fa_events_by_biome": {
+            "desert": 4,
+            "forest": 14,
+            "snow": 6
+          },
+          "fa_rate_by_biome": {
+            "desert": 3.0,
+            "forest": 11.65,
+            "snow": 4.5
+          },
+          "fp_frames_overall": 114,
+          "fp_frames_by_biome": {
+            "desert": 44,
+            "forest": 49,
+            "snow": 21
+          },
+          "mean_delay_frames": 14.7,
+          "mean_delay_ms": 613.9,
+          "tau_star": 0.15
+        },
+        {
+          "precision": 0.9296,
+          "recall": 0.7418,
+          "f1": 0.8251,
+          "ci_low": 0.2269,
+          "ci_high": 0.5842,
+          "episode_f1s": [
+            0.0,
+            0.0,
+            0.9402985074626866,
+            0.9141274238227147,
+            0.0,
+            0.08163265306122448,
+            0.0,
+            0.9913043478260869,
+            0.5121951219512195,
+            0.9721627408993576,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.5247148288973383,
+            0.0,
+            0.9893617021276596,
+            0.9828178694158076,
+            0.8743718592964823,
+            0.0,
+            0.0,
+            0.9932885906040269,
+            0.9428571428571428
+          ],
+          "tile_recall_overall": 92.3,
+          "detected_pos_overall": 12,
+          "total_pos_tiles": 13,
+          "tile_recall_by_biome": {
+            "desert": 100.0,
+            "forest": 100.0,
+            "snow": 80.0
+          },
+          "detected_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 4
+          },
+          "total_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 5
+          },
+          "fa_events_overall": 21,
+          "fa_rate_overall": 5.43,
+          "fa_events_by_biome": {
+            "desert": 3,
+            "forest": 13,
+            "snow": 5
+          },
+          "fa_rate_by_biome": {
+            "desert": 2.25,
+            "forest": 10.82,
+            "snow": 3.75
+          },
+          "fp_frames_overall": 101,
+          "fp_frames_by_biome": {
+            "desert": 39,
+            "forest": 43,
+            "snow": 19
+          },
+          "mean_delay_frames": 13.5,
+          "mean_delay_ms": 561.1,
+          "tau_star": 0.07
+        },
+        {
+          "precision": 0.9453,
+          "recall": 0.7312,
+          "f1": 0.8246,
+          "ci_low": 0.2226,
+          "ci_high": 0.5815,
+          "episode_f1s": [
+            0.0,
+            0.0,
+            0.9465648854961831,
+            0.9096045197740114,
+            0.0,
+            0.0,
+            0.0,
+            0.9956331877729258,
+            0.5061728395061729,
+            0.9787234042553191,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.4761904761904763,
+            0.0,
+            0.9946524064171123,
+            0.9896193771626297,
+            0.8842105263157896,
+            0.0,
+            0.0,
+            0.98989898989899,
+            0.9420289855072465
+          ],
+          "tile_recall_overall": 84.6,
+          "detected_pos_overall": 11,
+          "total_pos_tiles": 13,
+          "tile_recall_by_biome": {
+            "desert": 100.0,
+            "forest": 75.0,
+            "snow": 80.0
+          },
+          "detected_pos_by_biome": {
+            "desert": 4,
+            "forest": 3,
+            "snow": 4
+          },
+          "total_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 5
+          },
+          "fa_events_overall": 15,
+          "fa_rate_overall": 3.88,
+          "fa_events_by_biome": {
+            "desert": 4,
+            "forest": 7,
+            "snow": 4
+          },
+          "fa_rate_by_biome": {
+            "desert": 3.0,
+            "forest": 5.83,
+            "snow": 3.0
+          },
+          "fp_frames_overall": 76,
+          "fp_frames_by_biome": {
+            "desert": 35,
+            "forest": 30,
+            "snow": 11
+          },
+          "mean_delay_frames": 13.1,
+          "mean_delay_ms": 544.6,
+          "tau_star": 0.43
+        },
+        {
+          "precision": 0.9515,
+          "recall": 0.709,
+          "f1": 0.8125,
+          "ci_low": 0.219,
+          "ci_high": 0.5738,
+          "episode_f1s": [
+            0.0,
+            0.0,
+            0.9465648854961831,
+            0.8997134670487105,
+            0.0,
+            0.0,
+            0.0,
+            0.9956331877729258,
+            0.48750000000000004,
+            0.949671772428884,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.39999999999999997,
+            0.0,
+            0.9946524064171123,
+            0.9896193771626297,
+            0.8491620111731845,
+            0.0,
+            0.0,
+            0.98989898989899,
+            0.9343065693430657
+          ],
+          "tile_recall_overall": 84.6,
+          "detected_pos_overall": 11,
+          "total_pos_tiles": 13,
+          "tile_recall_by_biome": {
+            "desert": 100.0,
+            "forest": 75.0,
+            "snow": 80.0
+          },
+          "detected_pos_by_biome": {
+            "desert": 4,
+            "forest": 3,
+            "snow": 4
+          },
+          "total_pos_by_biome": {
+            "desert": 4,
+            "forest": 4,
+            "snow": 5
+          },
+          "fa_events_overall": 15,
+          "fa_rate_overall": 3.88,
+          "fa_events_by_biome": {
+            "desert": 5,
+            "forest": 6,
+            "snow": 4
+          },
+          "fa_rate_by_biome": {
+            "desert": 3.75,
+            "forest": 4.99,
+            "snow": 3.0
+          },
+          "fp_frames_overall": 65,
+          "fp_frames_by_biome": {
+            "desert": 28,
+            "forest": 26,
+            "snow": 11
+          },
+          "mean_delay_frames": 13.7,
+          "mean_delay_ms": 571.4,
+          "tau_star": 0.49
+        }
+      ]
+    }
+  },
+  "significance_tests": {
+    "m2_vs_m1": {
+      "mean_diff": 0.0087,
+      "statistic": 30.0,
+      "p_value": 0.27871,
+      "n_episodes": 24
+    },
+    "m2_vs_m5": {
+      "mean_diff": 0.0577,
+      "statistic": 28.0,
+      "p_value": 0.22133,
+      "n_episodes": 24
+    },
+    "m2_vs_m6": {
+      "mean_diff": 0.0405,
+      "statistic": 42.0,
+      "p_value": 0.80677,
+      "n_episodes": 24
+    }
+  },
+  "threshold_sensitivity": [
+    {
+      "tau": 0.2,
+      "m1_f1": 0.8199,
+      "m1_fa_rate": 21.46,
+      "m2_f1": 0.8314,
+      "m2_fa_rate": 8.01,
+      "m2_dominates": true
+    },
+    {
+      "tau": 0.25,
+      "m1_f1": 0.8195,
+      "m1_fa_rate": 16.03,
+      "m2_f1": 0.8292,
+      "m2_fa_rate": 6.46,
+      "m2_dominates": true
+    },
+    {
+      "tau": 0.3,
+      "m1_f1": 0.8191,
+      "m1_fa_rate": 13.18,
+      "m2_f1": 0.8284,
+      "m2_fa_rate": 5.95,
+      "m2_dominates": true
+    },
+    {
+      "tau": 0.35,
+      "m1_f1": 0.817,
+      "m1_fa_rate": 10.6,
+      "m2_f1": 0.8232,
+      "m2_fa_rate": 5.69,
+      "m2_dominates": true
+    },
+    {
+      "tau": 0.4,
+      "m1_f1": 0.8143,
+      "m1_fa_rate": 10.08,
+      "m2_f1": 0.8173,
+      "m2_fa_rate": 4.14,
+      "m2_dominates": true
+    },
+    {
+      "tau": 0.45,
+      "m1_f1": 0.8098,
+      "m1_fa_rate": 7.76,
+      "m2_f1": 0.8081,
+      "m2_fa_rate": 3.1,
+      "m2_dominates": false
+    },
+    {
+      "tau": 0.5,
+      "m1_f1": 0.804,
+      "m1_fa_rate": 5.95,
+      "m2_f1": 0.7999,
+      "m2_fa_rate": 3.1,
+      "m2_dominates": false
+    },
+    {
+      "tau": 0.55,
+      "m1_f1": 0.7948,
+      "m1_fa_rate": 5.17,
+      "m2_f1": 0.7885,
+      "m2_fa_rate": 2.33,
+      "m2_dominates": false
+    },
+    {
+      "tau": 0.6,
+      "m1_f1": 0.7766,
+      "m1_fa_rate": 4.14,
+      "m2_f1": 0.7708,
+      "m2_fa_rate": 1.81,
+      "m2_dominates": false
+    },
+    {
+      "tau": 0.65,
+      "m1_f1": 0.7515,
+      "m1_fa_rate": 2.59,
+      "m2_f1": 0.7402,
+      "m2_fa_rate": 1.29,
+      "m2_dominates": false
+    },
+    {
+      "tau": 0.7,
+      "m1_f1": 0.712,
+      "m1_fa_rate": 1.81,
+      "m2_f1": 0.6887,
+      "m2_fa_rate": 0.52,
+      "m2_dominates": false
+    },
+    {
+      "tau": 0.75,
+      "m1_f1": 0.5953,
+      "m1_fa_rate": 0.26,
+      "m2_f1": 0.5721,
+      "m2_fa_rate": 0.0,
+      "m2_dominates": false
+    },
+    {
+      "tau": 0.8,
+      "m1_f1": 0.2926,
+      "m1_fa_rate": 0.0,
+      "m2_f1": 0.2869,
+      "m2_fa_rate": 0.0,
+      "m2_dominates": false
+    }
+  ]
+}

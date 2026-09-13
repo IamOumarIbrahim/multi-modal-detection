@@ -160,7 +160,7 @@
 % Benchmark Corpus & Episodic Splitting Card (Lifted to y = 3.65 for generous clearance above M1)
 \node[draw=purple!70, fill=purple!6, rounded corners=4pt, thick, font=\fontsize{5.8pt}{7.0pt}\selectfont, text=black, inner ysep=4pt, inner xsep=10pt, align=center] (dataset_banner) at (13.5, 3.65) {
     \textbf{\textcolor{purple!90!black}{Benchmark Corpus and Sequence Partitioning (Option B)}}\\[2pt]
-    Parent-Video Grouped Split (60\% Train / 20\% Val / 20\% Test) $|$ Co-Located Left and Right Tiles\\
+    Parent-Video Grouped Split (Nominal 60/20/20; Realized 44/22/24 Tiles) $|$ Co-Located Left and Right Tiles\\
     240 Frames/Episode at 24~Hz ($0 \to 239$ Sequential) $|$ Seed 0 Shuffled with Anti-Adjacency
 };
 
@@ -210,23 +210,26 @@
 \node[method] (m3) at (13.3, -0.7) {\textbf{M3: Median Filter}\\[1pt]Order-Statistic Median\\{\tiny (Spike Rejection, 5 Frames)}};
 \node[method] (m4) at (13.3, -2.0) {\textbf{M4: History Consensus}\\[1pt]Majority Rule Persistence\\{\tiny (At Least 3 of 5 Detections)}};
 \node[method] (m5) at (13.3, -3.3) {\textbf{M5: Learned Mamba-SSSM}\\[1pt]Selective State-Space Filter\\{\tiny (Learned Recurrent Dynamics)}};
+\node[method] (m6) at (13.3, -4.6) {\textbf{M6: Learned GRU Baseline}\\[1pt]Gated Recurrent Unit\\{\tiny (Single-Layer Recurrent Gating)}};
 
 % Distribution Bus (Horizontal Fused Score label)
 \draw[thick, draw=purple!80] (fusion.east) -- (10.2, -0.7) node[midway, above=4pt, sig, text=purple!90!black] {Fused Score};
-\draw[thick, draw=purple!80] (10.2, 1.9) -- (10.2, -3.3);
+\draw[thick, draw=purple!80] (10.2, 1.9) -- (10.2, -4.6);
 \draw[arrow, draw=purple!80] (10.2, 1.9) -- (m1.west);
 \draw[arrow, draw=purple!80] (10.2, 0.6) -- (m2.west);
 \draw[arrow, draw=purple!80] (10.2, -0.7) -- (m3.west);
 \draw[arrow, draw=purple!80] (10.2, -2.0) -- (m4.west);
 \draw[arrow, draw=purple!80] (10.2, -3.3) -- (m5.west);
+\draw[arrow, draw=purple!80] (10.2, -4.6) -- (m6.west);
 
 % Collection Bus
-\draw[thick, draw=teal!80] (16.4, 1.9) -- (16.4, -3.3);
+\draw[thick, draw=teal!80] (16.4, 1.9) -- (16.4, -4.6);
 \draw[arrow, draw=teal!80] (m1.east) -- (16.4, 1.9);
 \draw[arrow, draw=teal!80] (m2.east) -- (16.4, 0.6);
 \draw[arrow, draw=teal!80] (m3.east) -- (16.4, -0.7);
 \draw[arrow, draw=teal!80] (m4.east) -- (16.4, -2.0);
 \draw[arrow, draw=teal!80] (m5.east) -- (16.4, -3.3);
+\draw[arrow, draw=teal!80] (m6.east) -- (16.4, -4.6);
 
 % 4. Common Alarm Output (Lightweight Temporal Decision Gate)
 \node[decision] (alarm) at (18.9, -0.7) {
@@ -240,7 +243,7 @@
 \node[kpi] (kpi_box) at (23.8, 0.75) {
     \textbf{Reliable Alert Generation}\\[1pt]
     {\scriptsize False Alert Mitigation (FASR)}\\[-1pt]
-    {\tiny Bounded Decision Latency (208~ms)}
+    {\tiny Filter Buffering Delay Bound ($\leq$208~ms)}
 };
 \coordinate (alarm_split) at (20.6, -0.7);
 \draw[thick, draw=teal!80] (alarm.east) -- (alarm_split);
@@ -251,7 +254,7 @@
     \textbf{Operational Evaluation}\\[2pt]
     Detection ($R, P, F_1$)\\[1pt]
     False Alert Mitigation\\[1pt]
-    Decision Delay ($<$208~ms)\\[1pt]
+    Alert Latency (Time-to-Alarm)\\[1pt]
     Compute \& Energy Savings
 };
 \draw[arrow, draw=blue!70!black, thick, rounded corners=5pt] (alarm_split) |- node[pos=0.72, below=5pt, sig, text=blue!80!black] {Alarm Signal} (eval.west);

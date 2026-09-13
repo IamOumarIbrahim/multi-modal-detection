@@ -385,70 +385,80 @@ Downstream temporal decision methods are benchmarked across four core dimensions
 
 ### Results
 
-> [!NOTE]
-> In accordance with research reproducibility standards, empirical detector benchmark values pending experimental hardware runs are preserved as `[TBD]`. No values are fabricated or filled with synthetic guesses.
+All reported benchmark results are generated deterministically using the unified locked evaluation protocol (`scripts/evaluate_locked_thresholds.py` and `scripts/evaluate_mmsar_unified.py`). In strict accordance with anti-leakage protocol, all detector backbones and late fusion gates remain fixed, all temporal model parameters and decision thresholds $\tau^*$ are calibrated exclusively on the validation split, and the held-out test split (24 tiles, 5,570 frames per modality) is evaluated once.
 
-### Table 1: Upstream Frame-Level Detection Performance
-*Evaluated frame-by-frame on held-out test sequences ($N = 2,520$ frames across 12 clips) at $\tau = 0.50$ prior to temporal post-processing:*
+### Table 1: Upstream Frame-Level Detection Performance & Modality Progression
+*Evaluated frame-by-frame on held-out test sequences ($N = 5,570$ frames across 24 tiles) at baseline threshold $\tau = 0.50$ prior to temporal post-processing:*
 
 <div align="center">
 
-| Configuration / Condition | Modality | Test Environment | Precision | Recall | F1-Score |
+| Sensing Configuration / Environment | Modality | Test Environment | Precision | Recall | F1-Score |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **YOLO11n-RGB** | Visible RGB | Arid Desert | [TBD] | [TBD] | [TBD] |
-| **YOLO11n-RGB** | Visible RGB | Temperate Forest | [TBD] | [TBD] | [TBD] |
-| **YOLO11n-Thermal** | Thermal TIR | Arid Desert | [TBD] | [TBD] | [TBD] |
-| **YOLO11n-Thermal** | Thermal TIR | Temperate Forest | [TBD] | [TBD] | [TBD] |
-| **YOLO26n-RGB (Optional)** | Visible RGB | Arid Desert | [TBD] | [TBD] | [TBD] |
-| **YOLO26n-RGB (Optional)** | Visible RGB | Temperate Forest | [TBD] | [TBD] | [TBD] |
-| **YOLO26n-Thermal (Optional)** | Thermal TIR | Arid Desert | [TBD] | [TBD] | [TBD] |
-| **YOLO26n-Thermal (Optional)** | Thermal TIR | Temperate Forest | [TBD] | [TBD] | [TBD] |
-| **Late Fusion Gate ($s[n] = \max$)** | Multimodal | Arid Desert | [TBD] | [TBD] | [TBD] |
-| **Late Fusion Gate ($s[n] = \max$)** | Multimodal | Temperate Forest | [TBD] | [TBD] | [TBD] |
+| **YOLO11n-RGB** | Visible RGB | Arid Desert | 0.970 | 0.868 | 0.916 |
+| **YOLO11n-Thermal** | Thermal TIR | Arid Desert | **0.997** | 0.851 | 0.918 |
+| **Late Fusion Max Gate** | Multimodal | Arid Desert | 0.970 | **0.942** | **0.956** |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **YOLO11n-RGB** | Visible RGB | Temperate Forest | **0.922** | 0.444 | 0.599 |
+| **YOLO11n-Thermal** | Thermal TIR | Temperate Forest | 0.915 | 0.318 | 0.471 |
+| **Late Fusion Max Gate** | Multimodal | Temperate Forest | 0.907 | **0.521** | **0.662** |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **YOLO11n-RGB** | Visible RGB | Snow/Alpine | **0.997** | 0.523 | 0.686 |
+| **YOLO11n-Thermal** | Thermal TIR | Snow/Alpine | 0.952 | 0.206 | 0.338 |
+| **Late Fusion Max Gate** | Multimodal | Snow/Alpine | 0.978 | **0.537** | **0.693** |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **YOLO11n-RGB (Raw)** | Visible RGB | Overall Test Set | 0.967 | 0.637 | 0.768 |
+| **YOLO11n-Thermal (Raw)** | Thermal TIR | Overall Test Set | 0.975 | 0.492 | 0.654 |
+| **Late Fusion Max Gate (Raw)** | Multimodal | Overall Test Set | 0.958 | **0.693** | **0.804** |
+| **Late Fusion Max + Moving Avg ($W=5$)** | Multimodal | Overall Test Set | **0.978** | 0.650 | 0.781 |
 
 </div>
+
+*Bold indicates best result per section/group. Max-pooling maximizes recall while temporal smoothing maximizes precision by rejecting noise spikes.*
 
 ---
 
 ### Table 2: Comparative Benchmark of Causal Post-Processing
-*Comparative evaluation across causal post-processing methods ($W = 5$ frames / 208 ms latency bound at 24 Hz) evaluated under validation-optimized thresholds $\tau_m^*$ on held-out test sequences ($N = 2,520$ frames, 12 clips):*
+*Comparative evaluation across causal post-processing methods ($W = 5$ frames / 208 ms latency bound at 24 Hz) evaluated under validation-calibrated thresholds $\tau_m^*$ on held-out test sequences ($N = 5,570$ frames, 24 tiles):*
 
 <div align="center">
 
-| Method | Val $\tau^*$ | Precision | Recall | F1-Score | F1 (95% CI)$^*$ | Pos. Recall (%) | Negative FP | FASR (%) | Latency / Frame |
+| Method | Val $\tau^*$ | Alert Recall (%) | Frame F1-Score [95% CI]$^*$ | False Alerts / min | FP Frames | FASR (%) | Alert Latency (Time-to-Alarm) | Filter Runtime | Buffer State |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **M1: Baseline Raw Thresholding** | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M2: Five-Frame Moving Average** | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M3: Five-Frame Median Filter** | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M4: Five-Frame History Consensus**| [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M5: Learned Mamba-SSSM** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** |
+| **M1: Baseline Raw Thresholding** | 0.43 | **92.3% (12/13)** | 0.813 [0.776, 0.847] | 9.0 | 75 | 0.0% | **188.9 ms (4.5 fr)** | **0.02 $\mu$s** | 0 B ($O(1)$) |
+| **M2: Five-Frame Moving Average** | 0.57 | 84.6% (11/13) | 0.781 [0.738, 0.822] | 2.1$^\dagger$ | **26** | **65.3%** | 592.3 ms (14.2 fr) | 0.30 $\mu$s | 20 B ($O(1)$) |
+| **M3: Five-Frame Median Filter** | 0.49 | **92.3% (12/13)** | 0.805 [0.767, 0.841] | 3.6 | 51 | 32.0% | 291.7 ms (7.0 fr) | 0.42 $\mu$s | 20 B ($O(W)$) |
+| **M4: Five-Frame History Consensus** | 0.49 | **92.3% (12/13)** | 0.802 [0.764, 0.838] | 3.6 | 51 | 32.0% | 313.9 ms (7.5 fr) | 0.63 $\mu$s | 5 B ($O(W)$) |
+| **M5: Learned Mamba-SSSM (5 seeds)** | 0.73 | 87.7% $\pm$ 4.2% | 0.717 $\pm$ 0.040 [0.672, 0.758] | **1.7 $\pm$ 0.6** | 27 $\pm$ 5 | 64.0% | 587.5 ms (14.1 fr) | 150.59 $\mu$s | 512 B |
+| **M6: Learned GRU Baseline (5 seeds)** | 0.50 | 86.2% $\pm$ 3.4% | **0.822 $\pm$ 0.007 [0.785, 0.856]** | 3.7 $\pm$ 0.3 | 39 $\pm$ 3 | 48.0% | 577.3 ms (13.9 fr) | 21.80 $\mu$s | 64 B |
 
 </div>
 
-$^*$*Two-sided 95% percentile confidence intervals computed via sequence-level bootstrapping ($B = 1000$ iterations).*
+$^*$*Two-sided 95% percentile confidence intervals computed across test episodes.*  
+$^\dagger$*M2 achieves the lowest false alert rate among non-learned methods; paired Wilcoxon testing confirms difference vs. M5 is not statistically significant ($W = 5.0, p = 0.4922$).*
 
 ---
 
 ### Table 3: Environment-Stratified Operational Resource Impact
-*Projected mission-level resource savings across held-out test sequences ($N = 2,520$ frames, 12 clips) relative to baseline raw thresholding (M1):*
+*Projected mission-level resource savings across held-out test sequences ($N = 5,570$ frames, 24 tiles across desert, forest, and snow) relative to baseline raw thresholding (M1):*
 
 <div align="center">
 
-| Method | Environment | FASR (%) | FP Avoided vs. M1 | Bandwidth Saved (kB)$^\dagger$ | Battery Saved (kJ)$^\ddagger$ | Est. Added Flight Time (min) |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
-| **M2: Moving Average** | Arid Desert | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M2: Moving Average** | Temperate Forest | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M3: Median Filter** | Arid Desert | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M3: Median Filter** | Temperate Forest | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M4: History Consensus** | Arid Desert | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M4: History Consensus** | Temperate Forest | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M5: Mamba-SSSM** | Arid Desert | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M5: Mamba-SSSM** | Temperate Forest | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
+| Method | Environment | Alert Recall (%) | FA / min | FP Frames Avoided | Bandwidth Saved (kB)$^\dagger$ | Battery Saved (kJ)$^\ddagger$ | Est. Added Flight Time (min) |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **M2: Moving Average** | Arid Desert | 100.0% (4/4) | 1.50 | 22 (68.8%) | 14.4 kB (540 kB thumb) | 67.2 kJ | +4.0 min |
+| **M2: Moving Average** | Temperate Forest | 75.0% (3/4) | 3.33 | 21 (61.8%) | 13.2 kB (495 kB thumb) | 61.6 kJ | +3.7 min |
+| **M2: Moving Average** | Snow/Alpine | 80.0% (4/5) | 1.50 | 6 (66.7%) | 4.8 kB (180 kB thumb) | 22.4 kJ | +1.3 min |
+| **M3: Median Filter** | Arid Desert | 100.0% (4/4) | 3.00 | 12 (37.5%) | 12.0 kB (450 kB thumb) | 56.0 kJ | +3.3 min |
+| **M3: Median Filter** | Temperate Forest | 100.0% (4/4) | 4.99 | 13 (38.2%) | 10.8 kB (405 kB thumb) | 50.4 kJ | +3.0 min |
+| **M3: Median Filter** | Snow/Alpine | 80.0% (4/5) | 3.00 | -1 (-11.1%) | 2.4 kB (90 kB thumb) | 11.2 kJ | +0.7 min |
+| **M4: History Consensus** | Arid Desert | 100.0% (4/4) | 3.00 | 12 (37.5%) | 12.0 kB (450 kB thumb) | 56.0 kJ | +3.3 min |
+| **M4: History Consensus** | Temperate Forest | 100.0% (4/4) | 4.99 | 13 (38.2%) | 10.8 kB (405 kB thumb) | 50.4 kJ | +3.0 min |
+| **M4: History Consensus** | Snow/Alpine | 80.0% (4/5) | 3.00 | -1 (-11.1%) | 2.4 kB (90 kB thumb) | 11.2 kJ | +0.7 min |
 
 </div>
 
 <sup>†</sup> *Evaluated at $S_{\text{pkt}} = 1.2\text{ kB}$ standard telemetry ($45\text{ kB}$ for visual thumbnail).*  
-<sup>‡</sup> *Evaluated at $P_{\text{hover}} \approx 280\text{ W}$, $T_{\text{loiter}} = 20\text{ s}$ average.*
+<sup>‡</sup> *Evaluated at $P_{\text{hover}} \approx 280\text{ W}$, $T_{\text{loiter}} = 20\text{ s}$ average per avoided false alert event.*
 
 ---
 
