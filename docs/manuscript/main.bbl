@@ -95,6 +95,12 @@ V.~Lygouras, N.~Santavas, A.~Taitzoglou, K.~Tarchanidis, A.~Mitropoulos, and
   on a fully autonomous {UAV} for search and rescue operations,''
   \emph{Sensors}, vol.~19, no.~16, p. 3542, 2019.
 
+\bibitem{broyles2022wisard}
+D.~Broyles, C.~R. Hayner, and K.~Leung, ``{WiSARD}: A labeled visual and
+  thermal image dataset for wilderness search and rescue,'' in
+  \emph{Proceedings of the IEEE/RSJ International Conference on Intelligent
+  Robots and Systems (IROS)}, 2022, pp. 9467--9474.
+
 \bibitem{wald1945sequential}
 A.~Wald, ``Sequential tests of statistical hypotheses,'' \emph{The Annals of
   Mathematical Statistics}, vol.~16, no.~2, pp. 117--186, 1945.

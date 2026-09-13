@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  13 SEP 2026 18:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  13 SEP 2026 19:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -812,19 +812,18 @@ d (2) \OT1/ptm/b/n/10 YOLO11n-
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <8> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 111.
 
-Underfull \hbox (badness 2050) in paragraph at lines 151--152
+Underfull \hbox (badness 2050) in paragraph at lines 152--153
 []\OT1/ptm/b/n/10 Alert La-tency (Time-to-Alarm): \OT1/ptm/m/n/10 Elapsed time 
 (in
  []
 
 [3] (figure_real_temporal_sequence.tex) [4] (figure_performance_tradeoff.tex)
-(figure_window_ablation.tex)
-Underfull \hbox (badness 7221) in paragraph at lines 303--304
-[]\OT1/ptm/b/n/10 Synthetic Ther-mal Syn-the-sis: \OT1/ptm/m/n/10 Ther-mal in-f
-rared
+(figure_window_ablation.tex) [5]
+Underfull \hbox (badness 1565) in paragraph at lines 301--302
+[]\OT1/ptm/m/n/10 Several con-straints bound our find-ings. First, pseudo-
  []
 
-[5] (main.bbl)
+(main.bbl)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -835,6 +834,13 @@ Before submitting the final camera ready copy, remember to:
  2. Ensure that any PostScript and/or PDF output post-processing
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
+
+
+Overfull \vbox (0.8014pt too high) has occurred while \output is active []
+
+
+Overfull \vbox (20.28328pt too high) has occurred while \output is active []
+
 
 [6] (main.aux)
  ***********
@@ -848,13 +854,13 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 16967 strings out of 467871
- 353399 string characters out of 5418376
- 791683 words of memory out of 5000000
- 45500 multiletter control sequences out of 15000+600000
+ 16980 strings out of 467871
+ 353601 string characters out of 5418376
+ 791883 words of memory out of 5000000
+ 45513 multiletter control sequences out of 15000+600000
  706818 words of font info for 198 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,20n,94p,1830b,994s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,20n,94p,1938b,994s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmbx10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmbx8.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/pu
@@ -878,17 +884,18 @@ ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Users/oma
 rb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/U
 sers/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.p
 fb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/sy
-mbols/msam5.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/c
-ourier/ucrr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw
-/helvetic/uhvb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/
-urw/helvetic/uhvr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/urw/times/utmri8a.pfb>
-Output written on main.pdf (6 pages, 369897 bytes).
+mbols/msam5.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/publi
+c/amsfonts/symbols/msbm10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fon
+ts/type1/urw/courier/ucrr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/f
+onts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTe
+X/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/omarb/AppData/Local/Programs/Mi
+KTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/Mi
+KTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/M
+iKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/M
+iKTeX/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (6 pages, 376932 bytes).
 PDF statistics:
- 165 PDF objects out of 1000 (max. 8388607)
+ 170 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
