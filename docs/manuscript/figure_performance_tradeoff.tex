@@ -3,70 +3,71 @@
     font=\sffamily\small,
     gridline/.style={draw=black!10, dotted, line width=0.6pt},
     axisline/.style={draw=black!80, ->, thick},
-    pareto/.style={draw=orange!90!black, dashed, line width=1.5pt},
-    point/.style={circle, inner sep=2.8pt, thick},
-    labelnode/.style={font=\sffamily\scriptsize\bfseries, align=center}
+    pareto/.style={draw=orange!90!black, dashed, line width=1.4pt},
+    point/.style={circle, inner sep=2.6pt, thick},
+    labelnode/.style={font=\sffamily\tiny\bfseries, align=center}
 ]
 
 % Coordinate Transformation:
-% X-axis: FASR from 0% to 100% -> Canvas X from 0.0 to 7.0 (scale: 0.07 per %)
-% Y-axis: Recall from 86% to 98% -> Canvas Y from 0.0 to 4.8 (scale: 0.40 per %)
+% X-axis: False Alerts / min from 14 down to 0 (lower is better -> right side is lower!)
+% Canvas X from 0.0 (14 FA/min) to 6.3 (0 FA/min) -> scale: 0.45 cm per 1 FA/min
+% Y-axis: Recall from 88% to 102% -> Canvas Y from 0.0 to 4.2 (scale: 0.30 cm per %)
 
-% 1. Shaded Optimal Operational Zone (Top-Right)
-\fill[green!7, rounded corners=5pt] (4.0, 1.8) rectangle (7.1, 4.9);
-\node[font=\sffamily\scriptsize\bfseries, text=green!60!black, anchor=north west] at (4.1, 4.8) {Optimal Operating Zone};
+% 1. Shaded Optimal Operational Zone (Top-Right: Low FA/min <= 5 -> Canvas X >= 4.05, Recall >= 96%)
+\fill[green!8, rounded corners=4pt] (3.8, 2.4) rectangle (6.5, 4.3);
+\node[font=\sffamily\tiny\bfseries, text=green!60!black, anchor=north west] at (3.9, 4.2) {Optimal Operational Zone};
 
 % 2. Grid lines
-\foreach \x/\label in {0.0/0\%, 1.4/20\%, 2.8/40\%, 4.2/60\%, 5.6/80\%, 7.0/100\%} {
-    \draw[gridline] (\x, 0) -- (\x, 4.8);
-    \draw (\x, 0) -- (\x, -3pt) node[below=2pt, font=\sffamily\scriptsize] {\label};
+\foreach \fa/\x in {14/0.0, 12/0.9, 10/1.8, 8/2.7, 6/3.6, 4/4.5, 2/5.4, 0/6.3} {
+    \draw[gridline] (\x, 0) -- (\x, 4.2);
+    \draw (\x, 0) -- (\x, -2pt) node[below=1pt, font=\sffamily\tiny] {\fa};
 }
-\foreach \y/\label in {0.0/86\%, 0.8/88\%, 1.6/90\%, 2.4/92\%, 3.2/94\%, 4.0/96\%, 4.8/98\%} {
-    \draw[gridline] (0, \y) -- (7.0, \y);
-    \draw (0, \y) -- (-3pt, \y) node[left=2pt, font=\sffamily\scriptsize] {\label};
+\foreach \y/\label in {0.0/88\%, 0.6/90\%, 1.2/92\%, 1.8/94\%, 2.4/96\%, 3.0/98\%, 3.6/100\%} {
+    \draw[gridline] (0, \y) -- (6.3, \y);
+    \draw (0, \y) -- (-2pt, \y) node[left=1pt, font=\sffamily\tiny] {\label};
 }
 
 % 3. Axes
-\draw[axisline] (0, 0) -- (7.6, 0) node[right=3pt, font=\sffamily\scriptsize\bfseries] {FASR (\%)};
-\node[below=17pt, font=\sffamily\scriptsize] at (3.5, 0) {False Alarm Suppression Ratio (Higher is better $\to$)};
+\draw[axisline] (0, 0) -- (6.8, 0) node[right=2pt, font=\sffamily\scriptsize\bfseries] {FA/min};
+\node[below=12pt, font=\sffamily\tiny] at (3.2, 0) {False Alerts per Minute ($\leftarrow$ Lower is better)};
 
-\draw[axisline] (0, 0) -- (0, 5.2);
-\node[rotate=90, anchor=south, font=\sffamily\scriptsize\bfseries] at (-0.9, 2.4) {Positive Target Recall (\%)};
+\draw[axisline] (0, 0) -- (0, 4.5);
+\node[rotate=90, anchor=south, font=\sffamily\scriptsize\bfseries] at (-0.65, 2.1) {Positive Target Recall (\%)};
 
-% 4. Pareto Optimal Frontier Curve (Connecting M2 -> M3 -> M4 -> M5)
-\draw[pareto] (4.34, 1.20) -- (5.18, 2.60) -- (5.74, 3.28) -- (6.26, 3.92);
-
-% Label along the Pareto Frontier
-\node[font=\sffamily\tiny\bfseries, text=orange!90!black, rotate=58, anchor=south] at (4.75, 1.95) {Pareto Frontier};
+% 4. Pareto Frontier (Connecting M1 (12.0, 98.5%) -> M5 (6.0, 100%) -> M2 (4.0, 100%))
+% M1: x = (14 - 12)*0.45 = 0.90, y = (98.5 - 88)*0.30 = 3.15
+% M5: x = (14 - 6.0)*0.45 = 3.60, y = (100.0 - 88)*0.30 = 3.60
+% M2: x = (14 - 4.0)*0.45 = 4.50, y = (100.0 - 88)*0.30 = 3.60
+\draw[pareto] (0.90, 3.15) -- (3.60, 3.60) -- (4.50, 3.60);
+\node[font=\sffamily\tiny\bfseries, text=orange!90!black, anchor=south] at (2.2, 3.42) {Pareto Frontier};
 
 % 5. Data Points:
-% M1: Raw Baseline (FASR=0%, Recall=95.2% -> x=0.0, y=(95.2-86)*0.4 = 3.68)
-\node[point, draw=red!80!black, fill=red!25] (pt1) at (0.0, 3.68) {};
-\node[labelnode, text=red!80!black, anchor=south west] at (0.1, 3.72) {\textbf{M1: Raw Baseline}\\{\tiny (0.0\%, 95.2\%)}\\{\tiny \textit{Zero Suppression}}};
+% M1: Raw Baseline (12.0 FA/min, 98.5% Recall)
+\node[point, draw=red!80!black, fill=red!30] (pt1) at (0.90, 3.15) {};
+\node[labelnode, text=red!80!black, anchor=north west] at (0.95, 3.05) {\textbf{M1: Raw Baseline}\\{\tiny (12.0 FA/min, 98.5\%)}};
 
-% M2: Moving Average (FASR=62.0%, Recall=89.0% -> x=4.34, y=(89.0-86)*0.4 = 1.20)
-\node[point, draw=blue!80!black, fill=blue!25] (pt2) at (4.34, 1.20) {};
-\node[labelnode, text=blue!80!black, anchor=north] at (4.34, 0.95) {\textbf{M2: Moving Avg}\\{\tiny (62.0\%, 89.0\%)}\\{\tiny \textit{Edge Attenuation}}};
+% M4: History Consensus (4.0 FA/min, 97.1% Recall -> x = 4.50, y = (97.1 - 88)*0.30 = 2.73)
+\node[point, draw=teal!80!black, fill=teal!30] (pt4) at (4.50, 2.73) {};
+\node[labelnode, text=teal!80!black, anchor=north] at (4.50, 2.65) {\textbf{M4: Consensus}\\{\tiny (4.0, 97.1\%)}};
 
-% M3: Median Filter (FASR=74.0%, Recall=92.5% -> x=5.18, y=(92.5-86)*0.4 = 2.60)
-\node[point, draw=purple!80!black, fill=purple!25] (pt3) at (5.18, 2.60) {};
-\node[labelnode, text=purple!80!black, anchor=south east] at (5.10, 2.70) {\textbf{M3: Median}\\{\tiny (74.0\%, 92.5\%)}};
+% M5: Learned Mamba-SSSM (6.0 FA/min, 100.0% Recall -> x = 3.60, y = 3.60)
+\node[point, draw=purple!80!black, fill=purple!30] (pt5) at (3.60, 3.60) {};
+\node[labelnode, text=purple!80!black, anchor=south east] at (3.50, 3.65) {\textbf{M5: Mamba}\\{\tiny (6.0, 100\%)}};
 
-% M4: History Consensus (FASR=82.0%, Recall=94.2% -> x=5.74, y=(94.2-86)*0.4 = 3.28)
-\node[point, draw=teal!80!black, fill=teal!25] (pt4) at (5.74, 3.28) {};
-\node[labelnode, text=teal!80!black, anchor=south east] at (5.65, 3.40) {\textbf{M4: Consensus}\\{\tiny (82.0\%, 94.2\%)}};
+% M3: Median Filter (4.0 FA/min, 100.0% Recall -> x = 4.50, y = 3.60)
+\node[point, draw=blue!80!black, fill=blue!30] (pt3) at (4.50, 3.60) {};
 
-% M5: Learned Mamba-SSSM (FASR=89.4%, Recall=95.8% -> x=6.26, y=(95.8-86)*0.4 = 3.92)
-\node[point, draw=orange!90!black, fill=orange!35, inner sep=3.5pt] (pt5) at (6.26, 3.92) {};
-\node[labelnode, text=orange!90!black, anchor=west] at (6.45, 3.92) {\textbf{M5: Mamba-SSSM}\\{\tiny (89.4\%, 95.8\%)}\\{\tiny \textbf{Best Trade-off}}};
+% M2: Moving Average (4.0 FA/min, 100.0% Recall, F1=0.971 -> x = 4.50, y = 3.60)
+\node[point, draw=teal!90!black, fill=teal!40, inner sep=3.2pt] (pt2) at (4.50, 3.60) {};
+\node[labelnode, text=teal!90!black, anchor=north west] at (4.60, 3.75) {\textbf{M2: Moving Avg} / \textbf{M3: Median}\\{\tiny \textbf{(4.0 FA/min, 100.0\%)}}\\{\tiny \textbf{Optimal Trade-off}}};
 
-% Bottom Legend / Summary Bar
-\node[draw=black!30, fill=white, rounded corners=3pt, inner sep=4pt, font=\sffamily\tiny, anchor=north] at (3.5, -0.9) {
-    \textcolor{red!80!black}{$\bullet$ M1: Raw Baseline} \quad
-    \textcolor{blue!80!black}{$\bullet$ M2: Moving Average} \quad
-    \textcolor{purple!80!black}{$\bullet$ M3: Median Filter} \quad
-    \textcolor{teal!80!black}{$\bullet$ M4: History Consensus} \quad
-    \textcolor{orange!90!black}{$\bullet$ M5: Learned Mamba-SSSM}
+% Legend
+\node[draw=black!25, fill=white, rounded corners=2pt, inner sep=3pt, font=\sffamily\tiny, anchor=north] at (3.2, -0.65) {
+    \textcolor{red!80!black}{$\bullet$ M1: Raw} \quad
+    \textcolor{teal!90!black}{$\bullet$ M2: Moving Avg} \quad
+    \textcolor{blue!80!black}{$\bullet$ M3: Median} \quad
+    \textcolor{teal!80!black}{$\bullet$ M4: Consensus} \quad
+    \textcolor{purple!80!black}{$\bullet$ M5: Mamba}
 };
 
 \end{tikzpicture}

@@ -63,12 +63,6 @@ J.~Redmon, S.~Divvala, R.~Girshick, and A.~Farhadi, ``You only look once:
   Conference on Computer Vision and Pattern Recognition (CVPR)}, 2016, pp.
   779--788.
 
-\bibitem{wang2023yolov7}
-C.-Y. Wang, A.~Bochkovskiy, and H.-Y.~M. Liao, ``{YOLOv7}: Trainable
-  bag-of-freebies sets new state-of-the-art for real-time object detectors,''
-  in \emph{Proceedings of the IEEE/CVF Conference on Computer Vision and
-  Pattern Recognition (CVPR)}, 2023, pp. 7464--7475.
-
 \bibitem{jocher2024yolo11}
 \BIBentryALTinterwordspacing
 G.~Jocher and J.~Qiu, ``Ultralytics {YOLO11},'' 2024. [Online]. Available:
@@ -101,29 +95,6 @@ V.~Lygouras, N.~Santavas, A.~Taitzoglou, K.~Tarchanidis, A.~Mitropoulos, and
   on a fully autonomous {UAV} for search and rescue operations,''
   \emph{Sensors}, vol.~19, no.~16, p. 3542, 2019.
 
-\bibitem{wang2024yolov9}
-C.-Y. Wang, I.-H. Yeh, and H.-Y.~M. Liao, ``{YOLOv9}: Learning what you want to
-  learn using programmable gradient information,'' in \emph{Proceedings of the
-  European Conference on Computer Vision (ECCV)}, 2024, pp. 1--18, also
-  arXiv:2402.13616.
-
-\bibitem{wang2024yolov10}
-A.~Wang, H.~Chen, L.~Liu, K.~Chen, Z.~Lin, J.~Han, and G.~Ding, ``{YOLOv10}:
-  Real-time end-to-end object detection,'' in \emph{Advances in Neural
-  Information Processing Systems (NeurIPS)}, vol.~37, 2024, pp.
-  107\,982--108\,006, also arXiv:2405.14458.
-
-\bibitem{han2016seq}
-W.~Han, P.~Khorrami, T.~L. Paine, P.~Ramachandran, M.~Babaeizadeh, H.~Shi,
-  J.~Li, S.~Yan, and T.~S. Huang, ``{Seq-NMS} for video object detection,''
-  \emph{arXiv preprint arXiv:1602.08465}, 2016.
-
-\bibitem{kang2018tcnn}
-K.~Kang, H.~Li, T.~Xiao, W.~Ouyang, J.~Yan, X.~Liu, and X.~Wang, ``{T-CNN}:
-  Tubelets with convolutional neural networks for object detection from
-  videos,'' \emph{IEEE Transactions on Circuits and Systems for Video
-  Technology}, vol.~28, no.~10, pp. 2896--2907, 2018.
-
 \bibitem{wald1945sequential}
 A.~Wald, ``Sequential tests of statistical hypotheses,'' \emph{The Annals of
   Mathematical Statistics}, vol.~16, no.~2, pp. 117--186, 1945.
@@ -146,23 +117,5 @@ A.~Gu, K.~Goel, and C.~R{\'e}, ``Efficiently modeling long sequences with
   Conference on Learning Representations (ICLR)}, 2022. [Online]. Available:
   \url{https://openreview.net/forum?id=uYLFoz1vlAC}
 \BIBentrySTDinterwordspacing
-
-\bibitem{zhu2024vision}
-L.~Zhu, B.~Liao, Q.~Zhang, X.~Wang, W.~Liu, and X.~Wang, ``Vision mamba:
-  Efficient visual sequence modeling with bidirectional state spaces,'' in
-  \emph{Proceedings of the International Conference on Machine Learning
-  (ICML)}, 2024, pp. 62\,429--62\,441, also arXiv:2401.09417.
-
-\bibitem{liu2024vmamba}
-Y.~Liu, Y.~Tian, Y.~Zhao, H.~Yu, L.~Xie, Y.~Wang, Q.~Ye, and Y.~Liu,
-  ``{VMamba}: Visual state space model,'' in \emph{Advances in Neural
-  Information Processing Systems (NeurIPS)}, vol.~37, 2024, pp.
-  103\,031--103\,063, also arXiv:2401.10166.
-
-\bibitem{dao2024transformers}
-T.~Dao and A.~Gu, ``Transformers are {SSMs}: Generalized models and efficient
-  algorithms through structured state space duality,'' in \emph{Proceedings of
-  the International Conference on Machine Learning (ICML)}, 2024, pp.
-  10\,041--10\,071, also arXiv:2405.21060.
 
 \end{thebibliography}
