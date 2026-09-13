@@ -6,16 +6,10 @@
       "count": 5,
       "target": 5
     },
-    "hard_negative": {
+    "negative": {
       "condition": "desert",
-      "scenario": "hard_negative",
+      "scenario": "negative",
       "count": 3,
-      "target": 5
-    },
-    "clear_negative": {
-      "condition": "desert",
-      "scenario": "clear_negative",
-      "count": 0,
       "target": 5
     }
   },
@@ -26,15 +20,9 @@
       "count": 0,
       "target": 5
     },
-    "hard_negative": {
+    "negative": {
       "condition": "forest",
-      "scenario": "hard_negative",
-      "count": 0,
-      "target": 5
-    },
-    "clear_negative": {
-      "condition": "forest",
-      "scenario": "clear_negative",
+      "scenario": "negative",
       "count": 0,
       "target": 5
     }
@@ -46,15 +34,9 @@
       "count": 0,
       "target": 5
     },
-    "hard_negative": {
+    "negative": {
       "condition": "altitude",
-      "scenario": "hard_negative",
-      "count": 0,
-      "target": 5
-    },
-    "clear_negative": {
-      "condition": "altitude",
-      "scenario": "clear_negative",
+      "scenario": "negative",
       "count": 0,
       "target": 5
     }

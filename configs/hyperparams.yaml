@@ -1,12 +1,12 @@
 # MMSAR Main Benchmark Run Protocol & Hyperparameters Configuration
-# Reference: YOLO11n Desert SAR Detection — Multi-Seed Rigor Protocol
+# Reference: YOLO11n Desert SAR Detection - Multi-Seed Rigor Protocol
 
 # -----------------------------------------------------------------------------
 # Training & Hardware Settings (Section 2)
 # -----------------------------------------------------------------------------
 batch: 16
-epochs: 100
-early_stopping: true
+epochs: 60
+early_stopping: false
 patience: 20
 early_stopping_monitor: "val/loss"
 imgsz: 640
@@ -19,10 +19,8 @@ log_peak_vram: true
 # Multi-Seed Protocol (Section 2)
 # -----------------------------------------------------------------------------
 seeds:
-  - 0
   - 42
-  - 1234
-min_seeds: 3
+min_seeds: 1
 
 # -----------------------------------------------------------------------------
 # Optimizer & Learning Rate Schedule (Section 2)
@@ -48,8 +46,6 @@ fliplr: 0.5
 # Model Architectures & Experimental Arms (Section 3)
 # -----------------------------------------------------------------------------
 primary_model: "yolo11n.yaml"
-optional_models:
-  - "yolo26n.yaml"
 include_optional: false
 
 experimental_arms:
@@ -62,35 +58,6 @@ experimental_arms:
     tta: false
     description: "YOLO11n, full curriculum, rebalanced split"
 
-  arm_2_architecture_baseline:
-    name: "Architecture Baseline"
-    model: "yolo26n.yaml"
-    curriculum: "full"
-    split: "rebalanced"
-    optimizer: "MuSGD"
-    tta: false
-    notes: "Ultralytics Jan 2026: DFL removed, NMS-free dual-branch head, MuSGD optimizer"
-    description: "YOLO26n baseline with identical split and hyperparameters"
-
-  arm_3_hard_negative_ablation:
-    name: "Hard-Negative Ablation"
-    model: "yolo11n.yaml"
-    curriculum: "no_hard_negatives"
-    split: "rebalanced"
-    optimizer: "SGD"
-    tta: false
-    exclude_hard_negatives_from_train: true
-    description: "Identical model, all currently-available hard-negative episodes removed from training only"
-
-  arm_4_tta:
-    name: "Test-Time Augmentation (TTA)"
-    model: "yolo11n.yaml"
-    curriculum: "full"
-    split: "rebalanced"
-    optimizer: "SGD"
-    tta: true
-    description: "Inference-time augmentation across full seed set"
-
 # -----------------------------------------------------------------------------
 # Dataset & Split Protocol (Section 1)
 # -----------------------------------------------------------------------------
@@ -98,13 +65,15 @@ dataset_split_protocol:
   strategy: "Option B parent-video grouped episodic"
   visual_leakage: 0
   dynamic_allocation: true
-  min_positive_floor_per_split: 2
+  floor_policy: "runtime_derived"
+  floor_derivation_rule: "max(2, floor(total_positive_episodes * val_ratio))"
   val_test_priority_routing: true
   balance_difficulty: true
   difficulty_metrics:
     - "target_presence_rate"
     - "occlusion_contrast_flag"
   archive_manifest: true
+  manifest_output_path: "data/splits/dataset_episodes_split.json"
 
 # -----------------------------------------------------------------------------
 # Evaluation, Diagnostics & Safeguards (Sections 4, 5 & 6)

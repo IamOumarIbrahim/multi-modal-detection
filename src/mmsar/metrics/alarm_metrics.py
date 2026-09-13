@@ -149,3 +149,40 @@ def count_alarm_false_triggers(
                 counts[lbl] = counts.get(lbl, 0) + 1
 
     return counts
+
+
+def calculate_time_to_alarm(
+    y_true: Sequence[int],
+    y_pred: Sequence[int],
+    fps: float = 24.0,
+) -> dict[str, Any]:
+    """Calculate latency from ground-truth target onset to first predicted alarm.
+
+    For each ground-truth target event [t_start, t_end), finds the first frame i >= t_start
+    such that y_pred[i] == 1.
+    """
+    if len(y_true) != len(y_pred):
+        raise ValueError(
+            f"Length mismatch: y_true has {len(y_true)} items, y_pred has {len(y_pred)}"
+        )
+
+    true_events = _extract_events(y_true)
+    delays_frames: list[int] = []
+
+    for t_start, t_end in true_events:
+        for i in range(t_start, t_end):
+            if y_pred[i] == 1:
+                delays_frames.append(i - t_start)
+                break
+
+    mean_delay_frames = sum(delays_frames) / len(delays_frames) if delays_frames else 0.0
+    mean_delay_seconds = mean_delay_frames / fps
+
+    return {
+        "mean_delay_frames": round(mean_delay_frames, 2),
+        "mean_delay_seconds": round(mean_delay_seconds, 4),
+        "detected_events": len(delays_frames),
+        "total_true_events": len(true_events),
+        "delays_frames": delays_frames,
+    }
+

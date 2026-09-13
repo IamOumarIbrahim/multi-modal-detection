@@ -23,58 +23,80 @@
 
 % =========================================================================
 % TOP SECTION: SYNTHETIC GENERATION, DUAL CROP & ANNOTATION
-% (Scaled up by 10%, extended to the left to align with left bus line)
+% (Extended to the left for generous spacing between LLMs, videos, upscale, and Melo)
 % =========================================================================
 
-% 1. RGB video prompt (Text File Icon - 10% larger, extended left)
-\node[iconbox] (prompt_rgb) at (-1.3, 5.7) {
+% 1. RGB video prompt (Text File Icon, placed at x = -4.6)
+\node[iconbox] (prompt_rgb) at (-4.6, 6.10) {
     \includegraphics[height=0.76cm]{figures/icon_lorem_ipsum.png}
 };
 \node[above=4pt of prompt_rgb, ttl, text=blue!80!black] (lbl_p1) {RGB Video Prompt};
 \node[below=2pt of prompt_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_p1) {Text Prompt};
 
-% 2. Video Generator LLM (Gemini Icon - 10% larger)
-\node[iconbox] (gemini_rgb) at (1.6, 5.7) {
-    \includegraphics[height=0.76cm]{figures/gemini_logo.png}
+% 2. Video Generator LLMs (Grok above Gemini at x = -1.4)
+\node[iconbox] (grok_rgb) at (-1.4, 7.35) {
+    \includegraphics[height=0.72cm]{figures/grok_logo.png}
 };
-\node[above=4pt of gemini_rgb, ttl, text=purple!80!black] (lbl_g1) {Video Generator LLM};
+\node[above=3pt of grok_rgb, ttl, text=purple!80!black] (lbl_g1) {Video Generator LLM};
+\node[below=2pt of grok_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_grok) {xAI Grok};
+
+\node[iconbox] (gemini_rgb) at (-1.4, 4.85) {
+    \includegraphics[height=0.72cm]{figures/gemini_logo.png}
+};
 \node[below=2pt of gemini_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_g1) {Gemini 3.8 Flash};
 
-\draw[bluearrow] (prompt_rgb) -- (gemini_rgb);
+\draw[bluearrow] (prompt_rgb.east) -- (grok_rgb.west);
+\draw[bluearrow] (prompt_rgb.east) -- (gemini_rgb.west);
 
-% 3. 16:9 RGB Videos (Desert & Forest with Striped Bottom - 10% larger)
-\node[videobox] (rgb_videos) at (4.8, 5.7) {
+% 3. 16:9 RGB Videos for Grok (752x416 @ 24 FPS) & Gemini (1280x720 @ 24 FPS)
+\node[videobox] (grok_videos) at (2.6, 7.35) {
+    \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
+    \includegraphics[width=1.12cm]{figures/grok_desert_video.png} &
+    \includegraphics[width=1.12cm]{figures/grok_forest_video.png} \\
+    {\tiny\bfseries Desert RGB} & {\tiny\bfseries Forest RGB}
+    \end{tabular}
+};
+\node[above=3pt of grok_videos, ttl, text=black] (lbl_gv) {16:9 RGB Videos};
+\node[below=2pt of grok_videos, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_gv) {752$\times$416 @ 24 FPS};
+
+\draw[bluearrow] (grok_rgb.east) -- (grok_videos.west);
+
+\node[videobox] (rgb_videos) at (2.6, 4.85) {
     \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
     \includegraphics[width=1.12cm]{figures/desert_rgb_video.png} &
     \includegraphics[width=1.12cm]{figures/forest_rgb_video.png} \\
     {\tiny\bfseries Desert RGB} & {\tiny\bfseries Forest RGB}
     \end{tabular}
 };
-\node[above=4pt of rgb_videos, ttl, text=black] (lbl_v1) {16:9 RGB Videos};
+\node[above=3pt of rgb_videos, ttl, text=black] (lbl_v1) {16:9 RGB Videos};
 \node[below=2pt of rgb_videos, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_v1) {1280$\times$720 @ 24 FPS};
 
-\draw[bluearrow] (gemini_rgb) -- (rgb_videos);
+\draw[bluearrow] (gemini_rgb.east) -- (rgb_videos.west);
 
-% 4. Configure to Thermal (Text File Icon - 10% larger)
-\node[iconbox] (prompt_th) at (8.0, 5.7) {
-    \includegraphics[height=0.76cm]{figures/icon_lorem_ipsum.png}
+% 4. Resolution Upscale (from Grok 752x416 to 1280x720)
+\node[box, fill=blue!8, draw=blue!70!black, thick, font=\fontsize{5.6pt}{6.6pt}\selectfont, text width=2.1cm, align=center, minimum height=1.05cm] (upscale_box) at (6.6, 7.35) {
+    \textbf{Upscale to}\\[1pt]
+    \textbf{1280$\times$720}\\[2pt]
+    {\tiny Spatial Scaling}
 };
-\node[above=4pt of prompt_th, ttl, text=orange!80!black] (lbl_p2) {Configure to Thermal};
-\node[below=2pt of prompt_th, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_p2) {Thermal Prompt};
+\node[above=3pt of upscale_box, ttl, text=blue!80!black] (lbl_up) {Resolution Upscale};
 
-\draw[orangearrow] (rgb_videos) -- (prompt_th);
+\draw[bluearrow] (grok_videos.east) -- (upscale_box.west);
 
-% 5. Video Generator LLM (Gemini Icon - Modality Transfer - 10% larger)
-\node[iconbox] (gemini_th) at (11.0, 5.7) {
-    \includegraphics[height=0.76cm]{figures/gemini_logo.png}
+% 5. Melo Thermal Stylizing (Inputs from Upscaled Grok and Native 720p Gemini)
+\node[box, fill=orange!10, draw=orange!80!black, thick, font=\fontsize{5.6pt}{6.6pt}\selectfont, text width=2.6cm, align=center, minimum height=1.15cm] (melo_th) at (10.0, 6.0) {
+    \textbf{Melobytes 256-Level LUT}\\[2pt]
+    {\scriptsize Pseudo-Thermal Color Transfer}\\[1pt]
+    {\tiny Non-Radiometric Emulation}
 };
-\node[above=4pt of gemini_th, ttl, text=purple!80!black] (lbl_g2) {Video Generator LLM};
-\node[below=2pt of gemini_th, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_g2) {Modality Transfer};
+\node[above=4pt of melo_th, ttl, text=orange!80!black] (lbl_melo) {Melo Thermal Stylizing};
+\node[below=2pt of melo_th, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_melo) {\texttt{melo\_lut} Processing};
 
-\draw[orangearrow] (prompt_th) -- (gemini_th);
+\draw[orangearrow] (upscale_box.east) -- ([yshift=5pt]melo_th.west);
+\draw[orangearrow] (rgb_videos.east) -- ([yshift=-5pt]melo_th.west);
 
-% 6. 16:9 Thermal Videos (10% larger)
-\node[videobox] (th_videos) at (14.5, 5.7) {
+% 6. 16:9 Thermal Videos
+\node[videobox] (th_videos) at (14.5, 6.0) {
     \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
     \includegraphics[width=1.12cm]{figures/desert_th_video.png} &
     \includegraphics[width=1.12cm]{figures/forest_th_video.png} \\
@@ -84,10 +106,10 @@
 \node[above=4pt of th_videos, ttl, text=black] (lbl_v2) {16:9 Thermal Videos};
 \node[below=2pt of th_videos, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_v2) {1280$\times$720 @ 24 FPS};
 
-\draw[orangearrow] (gemini_th) -- (th_videos);
+\draw[orangearrow] (melo_th.east) -- (th_videos.west);
 
-% 7. Crop 640x640 (10% larger)
-\node[videobox] (crops) at (18.5, 5.7) {
+% 7. Crop 640x640 (2 Videos)
+\node[videobox] (crops) at (18.5, 6.0) {
     \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
     \includegraphics[width=0.83cm]{figures/crop_640_left_video.png} &
     \includegraphics[width=0.83cm]{figures/crop_640_right_video.png} \\
@@ -99,8 +121,8 @@
 
 \draw[purplearrow] (th_videos) -- (crops);
 
-% 8. Label Studio Video Annotation (10% larger)
-\node[iconbox] (label_studio) at (21.6, 5.7) {
+% 8. Label Studio Video Annotation
+\node[iconbox] (label_studio) at (21.6, 6.0) {
     \includegraphics[height=0.76cm]{figures/icon_label_studio.png}
 };
 \node[above=4pt of label_studio, ttl, text=red!80!black] (lbl_ls) {Label Studio};
@@ -108,8 +130,8 @@
 
 \draw[purplearrow] (crops) -- (label_studio);
 
-% 9. Video to Frame Full-Rate 24 Hz Extraction (Clean single-line title)
-\node[stepbox, text width=1.95cm, inner xsep=3pt, minimum height=1.15cm] (v2f) at (24.2, 5.7) {
+% 9. Video to Frame Full-Rate 24 Hz Extraction
+\node[stepbox, text width=1.95cm, inner xsep=3pt, minimum height=1.15cm] (v2f) at (24.2, 6.0) {
     \textbf{Video to Frame}\\[2pt]
     {\scriptsize Full-Rate Stream}\\[-1pt]
     {\scriptsize (24~Hz Sampling)}
@@ -118,11 +140,11 @@
 
 \draw[greenarrow] (label_studio) -- (v2f);
 
-% 10. Annotated Frames (16:9 Clean Frames with Accurate Person Bounding Boxes)
-\node[framebox] (annotated_frames) at (27.0, 5.7) {
+% 10. Annotated Frames (Square Clean Frames with Accurate Person Bounding Boxes)
+\node[framebox] (annotated_frames) at (27.0, 6.0) {
     \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
-    \includegraphics[width=0.92cm]{figures/desert_rgb_annotated.png} &
-    \includegraphics[width=0.92cm]{figures/desert_th_annotated.png} \\
+    \includegraphics[width=0.82cm]{figures/desert_rgb_annotated.png} &
+    \includegraphics[width=0.82cm]{figures/desert_th_annotated.png} \\
     {\tiny\bfseries RGB Frame} & {\tiny\bfseries Thermal Frame}
     \end{tabular}
 };
@@ -135,17 +157,15 @@
 % MIDDLE SECTION: TRANSITION DATASET BANNER & FEED CONDUIT
 % =========================================================================
 
-% Benchmark Corpus & Episodic Splitting Card (Generous padding, perfectly balanced)
-\node[draw=purple!70, fill=purple!6, rounded corners=4pt, thick, font=\fontsize{5.8pt}{7.0pt}\selectfont, text=black, inner ysep=4pt, inner xsep=10pt, align=center] (dataset_banner) at (13.5, 3.6) {
-    \textbf{\textcolor{purple!90!black}{Benchmark Corpus and Sequence Partitioning [TBD]}}\\[2pt]
+% Benchmark Corpus & Episodic Splitting Card (Lifted to y = 3.65 for generous clearance above M1)
+\node[draw=purple!70, fill=purple!6, rounded corners=4pt, thick, font=\fontsize{5.8pt}{7.0pt}\selectfont, text=black, inner ysep=4pt, inner xsep=10pt, align=center] (dataset_banner) at (13.5, 3.65) {
+    \textbf{\textcolor{purple!90!black}{Benchmark Corpus and Sequence Partitioning (Option B)}}\\[2pt]
     Parent-Video Grouped Split (60\% Train / 20\% Val / 20\% Test) $|$ Co-Located Left and Right Tiles\\
     240 Frames/Episode at 24~Hz ($0 \to 239$ Sequential) $|$ Seed 0 Shuffled with Anti-Adjacency
 };
 
 % Routing from Stage 1 output to Dataset Banner (clean loop via right margin)
 \draw[thick, draw=purple!80, ->] (annotated_frames.east) -- ++(0.5, 0) |- (dataset_banner.east);
-
-
 
 % =========================================================================
 % BOTTOM SECTION: ONBOARD DETECTION, FUSION & CAUSAL POST-PROCESSING
@@ -156,13 +176,13 @@
 \node[box, fill=purple!10, draw=purple!75, thick, font=\fontsize{5.2pt}{6.4pt}\selectfont, text width=1.9cm, align=center] (split_box) at (-1.0, -0.7) {
     \textbf{Corpus Split}\\[1pt]
     \textbf{Dispatch}\\[2pt]
-    {\scriptsize [TBD Partition]}\\[1pt]
+    {\scriptsize Option B Partition}\\[1pt]
     {\tiny Shuffled Episodes}
 };
 
 % Routing from Dataset Banner to Pre-Detector Split Box
-\coordinate (split_bus) at (-2.4, 3.6);
-\draw[thick, draw=purple!80] (dataset_banner.west) -- node[midway, above=4pt, sig, text=purple!90!black] {Curated Dataset Stream} (split_bus);
+\coordinate (split_bus) at (-3.2, 3.65);
+\draw[thick, draw=purple!80] (dataset_banner.west) -- node[midway, below=3.5pt, sig, text=purple!90!black] {Curated Dataset Stream} (split_bus);
 \draw[arrow, draw=purple!80, thick] (split_bus) |- (split_box.west);
 
 % 1. Parallel Detectors (YOLO11n-RGB & YOLO11n-Thermal)

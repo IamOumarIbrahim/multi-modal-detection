@@ -158,7 +158,7 @@ ax.plot([26.2, 27.3, 27.3, 1.4, 1.4, 2.2], [7.3, 7.3, 5.75, 5.75, 3.5, 3.5],
 ax.annotate('', xy=(2.4, 3.5), xytext=(1.4, 3.5),
             arrowprops=dict(arrowstyle='->', lw=2.8, color='#7C3AED'), zorder=5)
 
-ax.text(14.0, 5.75, 'Harvested Dataset: 30 Snippets per Environment (60% Train / 20% Val / 20% Test) — 240 Frames/Clip @ 24 Hz',
+ax.text(14.0, 5.75, 'Harvested Dataset: 30 Snippets per Environment (60% Train / 20% Val / 20% Test) - 240 Frames/Clip @ 24 Hz',
         fontsize=10.0, fontweight='bold', color='#4C1D95', ha='center', va='center',
         bbox=dict(boxstyle='round,pad=0.35', facecolor='#EDE9FE', edgecolor='#8B5CF6', lw=1.6), zorder=6)
 

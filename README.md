@@ -25,7 +25,7 @@
 - [Dataset Corpus & Harvesting](#dataset-corpus--harvesting)
   - [Controlled 2×2 Experimental Design](#controlled-22-experimental-design)
   - [Dual-Crop Harvesting Procedure](#dual-crop-harvesting-procedure)
-  - [Full-Rate Stream & Sequence-Level 60/20/20 Split](#full-rate-stream--sequence-level-602020-split)
+  - [Full-Rate Stream & Option B Episodic Splitting](#full-rate-stream--option-b-episodic-splitting)
   - [Dataset Composition Matrix](#dataset-composition-matrix)
 - [Results & Benchmarks](#results--benchmarks)
   - [Table 1: Upstream Frame-Level Detection Performance](#table-1-upstream-frame-level-detection-performance)
@@ -46,7 +46,7 @@ This repository contains the official implementation, dataset harvesting pipelin
 
 > **"Lightweight Multimodal Person Detection and Temporal Post-Processing for Aerial Search and Rescue"**  
 > *Oumar Mamoun Ibrahim and Mohamad Khairi bin Ishak*  
-> Planned for submission to the 10th International Conference on Signal Processing and Integrated Networks (**ICSPIS 2026**).
+> Planned for submission to the 9th International Conference on Signal Processing and Information Security (**ICSPIS 2026**), 10–12 November 2026, Palace Downtown, Dubai, UAE.
 
 ---
 
@@ -72,7 +72,7 @@ flowchart TD
         LateFusion["Soft Disjunctive Late Fusion\ns[n] = max(c_RGB[n], c_Thermal[n])\nScalar Confidence s[n] in [0, 1]"]
     end
 
-    subgraph S4 ["Stage 4: Causal Temporal Post-Processing (W = 5 frames / 625 ms)"]
+    subgraph S4 ["Stage 4: Causal Temporal Post-Processing (W = 5 frames / 208 ms)"]
         direction TB
         M1["M1: Baseline Raw Thresholding\ny_raw[n] = I(s[n] >= tau_raw*)"]
         M2["M2: 5-Frame Moving Average\ny_MA[n] = I(s_MA[n] >= tau_MA*)"]
@@ -106,14 +106,14 @@ flowchart TD
 ## Research Framework
 
 ### Research Question
-> *How do causal temporal post-processing methods compare in reducing false alarms across visual modalities (RGB versus thermal infrared) and wilderness environments (arid desert versus temperate forest) in lightweight aerial detection?*
+> *How do causal temporal post-processing methods compare in reducing false alarms across visual modalities (RGB versus thermal infrared) and wilderness environments (arid desert, temperate forest, and snow-covered alpine terrain) in lightweight aerial detection?*
 
 ### Core Contributions
-1. **Controlled 2×2 Video Corpus:** A dual-stream RGB and long-wave thermal infrared (TIR) benchmark across arid desert and temperate forest environments, systematically structured into positive target scenarios, challenging hard-negative distractors (sun-heated rocks, animal clutter, moving canopy shadows), and clear-negative scenes.
+1. **Controlled 3×2 Video Corpus:** A dual-stream RGB and long-wave thermal infrared (TIR) benchmark across arid desert, temperate forest, and snow/alpine environments, systematically structured into positive target scenarios and challenging negative distractor scenes (sun-heated rocks, animal clutter, terrain clutter, moving canopy shadows).
 2. **Modality-Specific Detection Baselines:** A standardized edge detection framework deploying two separate Ultralytics YOLO11n models (2.6M parameters, 6.5 GFLOPs at $640 \times 640$): one specialized on multi-environment RGB sequences and one specialized on multi-environment thermal sequences, trained in single-precision floating-point (FP32) arithmetic with batch size 16 for deterministic numerical stability on embedded avionics.
 3. **Comparative Post-Processing Benchmark:** An empirical evaluation of five causal post-processing techniques (raw thresholding, 5-frame moving average, 5-frame median filtering, 5-frame history consensus, and a pure-PyTorch Mamba selective state-space model), with each method operating under a validation-optimized decision threshold $\tau_m^*$.
-4. **Modality and Environment Sensitivity Analysis:** Systematic characterization of how causal temporal filters suppress false alarms differently across RGB and thermal confidence streams, and across disparate wilderness biomes (thermal crossover in desert vs. canopy shadow occlusion in forest).
-5. **Operational Resource Impact Analysis:** Rigorous modeling of downstream benefits, translating false alarm suppression into preserved UAV battery reserves, expanded search flight endurance, and conserved satellite/cellular IoT telemetry bandwidth.
+4. **Modality and Environment Sensitivity Analysis:** Systematic characterization of how causal temporal filters suppress false alarms differently across RGB and thermal confidence streams, and across disparate wilderness biomes (thermal crossover in desert, canopy shadow occlusion in forest, vs. high-albedo/thermal camouflage in snow/alpine).
+5. **Operational Resource Impact Analysis:** Rigorous modeling of downstream benefits across desert, forest, and snow biomes, translating false alarm suppression into preserved UAV battery reserves, expanded search flight endurance, and conserved satellite/cellular IoT telemetry bandwidth.
 
 ---
 
@@ -140,24 +140,21 @@ To isolate temporal post-processing dynamics without conflating single-model wei
 | :--- | :--- | :--- |
 | **Batch Size** | 16 | Optimal gradient variance for small target feature representation |
 | **Arithmetic Precision** | Full FP32 (`amp=False`) | Prevents underflow and numerical instability on edge embedded GPUs |
-| **Epochs** | 100 (Max Horizon) | Extended past rapid verification with early stopping |
-| **Early Stopping** | Enabled (`patience=20` on `val/loss`) | Halts training when validation loss plateaus to prevent overfitting |
+| **Epochs** | 60 | Fixed horizon training |
+| **Early Stopping** | Disabled | Fixed 60 epochs for uniform comparison |
 | **Optimizer** | SGD | Momentum: 0.937, Weight Decay: 0.0005 |
 | **Learning Rate Schedule** | $\text{lr}_0 = 0.01$, $\text{lrf} = 0.01$ | Linear warmup (3 epochs), cosine decay schedule |
 | **Data Augmentation** | Mosaic ($p=1.0$), HSV ($0.015/0.7/0.4$), Fliplr ($p=0.5$) | Multi-scale terrain and illumination invariance |
-| **Multi-Seed Protocol** | Seeds: 0, 42, 1234 (Min. 3 seeds) | Mean $\pm$ standard deviation reported across all experimental arms |
+| **Multi-Seed Protocol** | Seed: 42 (single-seed for detectors) | Fixed single seed for detectors. Multi-seed for post-processors only. |
 | **Hardware GPU** | NVIDIA GeForce RTX 4060 | 8 GB Dedicated VRAM |
 
 </div>
 
 #### Publication Benchmark Protocol & Experimental Arms
 
-To ensure statistical rigor and eliminate single-seed evaluation variance, all comparisons evaluate across identical seeds (0, 42, 1234) under four required experimental arms:
-
-1. **Main Model (YOLO11n):** Primary detector with full curriculum and Option B rebalanced episodic split.
-2. **Architecture Baseline (YOLO26n):** Ultralytics baseline with Distribution Focal Loss (DFL) removed, Non-Maximum Suppression (NMS) free dual-branch head, and MuSGD optimizer.
-3. **Hard-Negative Ablation:** Identical YOLO11n model trained with all available hard-negative episodes removed from the training curriculum to quantify distractor suppression.
-4. **Test-Time Augmentation (TTA):** Multiscale and flip inference evaluated across all seeds to determine if accuracy gains exceed seed-to-seed variance.
+To ensure statistical rigor while maintaining computational feasibility, the evaluation protocol follows a streamlined design:
+- **Single-Arm Baselines:** YOLO11n-RGB and YOLO11n-Thermal trained with seed 42.
+- **Multi-Seed Post-Processing Evaluation:** 5 seeds (42, 101, 2024, 777, 999) used exclusively for GRU and Mamba-SSSM temporal post-processors to bound variance in causal filter behavior.
 
 #### Reporting Safeguards and Diagnostic Protocol
 
@@ -168,17 +165,19 @@ To ensure statistical rigor and eliminate single-seed evaluation variance, all c
 - **Extended Diagnostics:** Qualitative failure gallery for misses, empirical intersection-over-union (IoU) jitter curve, confidence score calibration diagram, and out-of-distribution spot checks.
 
 #### Real-Time Edge Budget Constraint
-At an operating timebase of $f_s = 8\text{ Hz}$ ($T_s = 125\text{ ms}$), the pipeline satisfies frame-synchronous execution without buffering delays:
-- **Serial Execution:** $T_{\text{RGB}} + T_{\text{Thermal}} + T_{\text{fusion}} + T_{\text{postproc}} \le 125\text{ ms}$
-- **Parallel Multi-Core Execution:** $\max(T_{\text{RGB}}, \, T_{\text{Thermal}}) + T_{\text{fusion}} + T_{\text{postproc}} \le 125\text{ ms}$
+At an operating timebase of $f_s = 24\text{ Hz}$ ($T_s \approx 41.7\text{ ms}$), the pipeline satisfies frame-synchronous execution without buffering delays:
+- **Serial Execution:** $T_{\text{RGB}} + T_{\text{Thermal}} + T_{\text{fusion}} + T_{\text{postproc}} \le T_s \approx 41.7\text{ ms}$
+- **Parallel Multi-Core Execution:** $\max(T_{\text{RGB}}, \, T_{\text{Thermal}}) + T_{\text{fusion}} + T_{\text{postproc}} \le T_s \approx 41.7\text{ ms}$
 
 ---
 
 ### Multimodal Late Decision Fusion
 
-To preserve true human detections when one sensor branch is compromised without multiplying miss rates, detector confidence scores are integrated via soft disjunctive (OR) late fusion via max-pooling:
+To preserve true human detections when one sensor branch degrades without multiplying miss rates, detector confidence scores combine through soft disjunctive (OR) late fusion via max-pooling:
 
-$$s[n] = \max\big(c_{\text{RGB}}[n], \, c_{\text{Thermal}}[n]\big) \in [0.0, 1.0]$$
+$$
+s[n] = \max\big(c_{\text{RGB}}[n], \, c_{\text{Thermal}}[n]\big) \in [0.0, 1.0]
+$$
 
 This scalar fused confidence $s[n]$ feeds directly into downstream causal temporal post-processing.
 
@@ -186,31 +185,54 @@ This scalar fused confidence $s[n]$ feeds directly into downstream causal tempor
 
 ### Causal Temporal Post-Processing Methods
 
-All methods operate causally over a sliding window of length $W = 5$ frames ($625\text{ ms}$ latency budget at $8\text{ Hz}$):
-$$\mathcal{W}[n] = \big\{s[n-4], \, s[n-3], \, s[n-2], \, s[n-1], \, s[n]\big\}$$
+All methods operate causally over a sliding window of length $W = 5$ frames ($208\text{ ms}$ latency bound at $24\text{ Hz}$):
 
-1. **M1 — Baseline Raw Thresholding (Instantaneous):**
-   $$y_{\text{raw}}[n] = \mathbb{I}(s[n] \ge \tau_{\text{raw}}^*)$$
-   Memoryless per-frame baseline. Vulnerable to isolated single-frame distractor spikes.
+$$
+\mathcal{W}[n] = \big\{s[n-4], \, s[n-3], \, s[n-2], \, s[n-1], \, s[n]\big\}
+$$
 
-2. **M2 — Five-Frame Moving Average (Sliding Mean):**
-   $$\tilde{s}_{\text{MA}}[n] = \frac{1}{W} \sum_{k=0}^{W-1} s[n-k], \qquad y_{\text{MA}}[n] = \mathbb{I}\big(\tilde{s}_{\text{MA}}[n] \ge \tau_{\text{MA}}^*\big)$$
-   Attenuates an isolated single-frame spike of $1.0$ down to $0.20$. Lowers $\tau_{\text{MA}}^*$ to maintain target onset sensitivity.
+#### M1: Baseline Raw Thresholding (Instantaneous)
+Memoryless per-frame baseline. Vulnerable to isolated single-frame distractor spikes:
 
-3. **M3 — Five-Frame Median Filter (Order-Statistic):**
-   $$\tilde{s}_{\text{med}}[n] = \text{median}\big(s[n], \, s[n-1], \, \dots, \, s[n-4]\big), \qquad y_{\text{med}}[n] = \mathbb{I}\big(\tilde{s}_{\text{med}}[n] \ge \tau_{\text{med}}^*\big)$$
-   Completely suppresses impulse noise bursts spanning fewer than $\lfloor W/2 \rfloor + 1 = 3$ frames while preserving step edges.
+$$
+y_{\text{raw}}[n] = \mathbb{I}(s[n] \ge \tau_{\text{raw}}^*)
+$$
 
-4. **M4 — Five-Frame History Consensus ($M$-out-of-$N$ Voting):**
-   $$y_{\text{hist}}[n] = \mathbb{I}\left( \sum_{k=0}^{W-1} \mathbb{I}\big(s[n-k] \ge \tau_{\text{hist}}^*\big) \ge 3 \right)$$
-   Discrete binary consensus requiring at least 3 out of 5 consecutive frames to independently exceed candidate threshold $\tau_{\text{hist}}^*$.
+#### M2: Five-Frame Moving Average (Sliding Mean)
+Attenuates an isolated single-frame spike of $1.0$ down to $0.20$. Lowers $\tau_{\text{MA}}^*$ to maintain target onset sensitivity:
 
-5. **M5 — Learned Mamba Selective State-Space Model (Mamba-SSSM):**
-   Pure-PyTorch implementation of a selective state-space sequence model ($d_{\text{model}} = 16, d_{\text{state}} = 8$, 753 parameters):
-   $$\Delta_t = \text{softplus}(W_\Delta x_t + b_\Delta), \quad \bar{A}_t = \exp(\Delta_t \cdot A), \quad \bar{B}_t = (\Delta_t \cdot B_t) \odot x_t$$
-   $$h_t = \bar{A}_t \odot h_{t-1} + \bar{B}_t, \quad u_t = \sum_{j=1}^{d_{\text{state}}} h_{t, j} \odot C_{t, j}$$
-   $$y_{\text{ssm}}[n] = \mathbb{I}\big(\sigma(W_{\text{out}} u_t + b_{\text{out}}) \ge \tau_{\text{ssm}}^*\big)$$
-   Maintains recurrent hidden state $h_t$ in exactly 512 bytes of memory, achieving strictly causal $O(1)$ per-frame execution.
+$$
+\tilde{s}_{\text{MA}}[n] = \frac{1}{W} \sum_{k=0}^{W-1} s[n-k], \qquad y_{\text{MA}}[n] = \mathbb{I}\big(\tilde{s}_{\text{MA}}[n] \ge \tau_{\text{MA}}^*\big)
+$$
+
+#### M3: Five-Frame Median Filter (Order-Statistic)
+Suppresses impulse noise bursts spanning fewer than $\lfloor W/2 \rfloor + 1 = 3$ frames while preserving step edges:
+
+$$
+\tilde{s}_{\text{med}}[n] = \text{median}\big(s[n], \, s[n-1], \, \dots, \, s[n-4]\big), \qquad y_{\text{med}}[n] = \mathbb{I}\big(\tilde{s}_{\text{med}}[n] \ge \tau_{\text{med}}^*\big)
+$$
+
+#### M4: Five-Frame History Consensus ($M$-out-of-$N$ Voting)
+Discrete binary consensus requiring at least 3 out of 5 consecutive frames to independently exceed candidate threshold $\tau_{\text{hist}}^*$:
+
+$$
+y_{\text{hist}}[n] = \mathbb{I}\left( \sum_{k=0}^{W-1} \mathbb{I}\big(s[n-k] \ge \tau_{\text{hist}}^*\big) \ge 3 \right)
+$$
+
+#### M5: Learned Mamba Selective State-Space Model (Mamba-SSSM)
+Pure-PyTorch implementation of a selective state-space sequence model ($d_{\text{model}} = 16$, $d_{\text{state}} = 8$, 753 parameters). Maintains recurrent hidden state $h_t$ in exactly 512 bytes of memory, achieving strictly causal $O(1)$ per-frame execution:
+
+$$
+\Delta_t = \text{softplus}(W_\Delta x_t + b_\Delta), \quad \bar{A}_t = \exp(\Delta_t \cdot A), \quad \bar{B}_t = (\Delta_t \cdot B_t) \odot x_t
+$$
+
+$$
+h_t = \bar{A}_t \odot h_{t-1} + \bar{B}_t, \quad u_t = \sum_{j=1}^{d_{\text{state}}} h_{t, j} \odot C_{t, j}
+$$
+
+$$
+y_{\text{ssm}}[n] = \mathbb{I}\big(\sigma(W_{\text{out}} u_t + b_{\text{out}}) \ge \tau_{\text{ssm}}^*\big)
+$$
 
 ---
 
@@ -220,91 +242,107 @@ $$\mathcal{W}[n] = \big\{s[n-4], \, s[n-3], \, s[n-2], \, s[n-1], \, s[n]\big\}$
 
 | Post-Processing Method | Computational Complexity | Trainable Parameters | State Memory Footprint |
 | :--- | :---: | :---: | :---: |
-| **M1: Raw Thresholding** | $O(1)$ | 0 | 0 Bytes (Memoryless) |
-| **M2: Moving Average** | $O(1)$ amortized$^*$ | 0 | $5 \times 4\text{ B} = 20\text{ Bytes}$ |
-| **M3: Median Filter** | $O(W)$ (Sorted Insert) | 0 | $5 \times 4\text{ B} = 20\text{ Bytes}$ |
-| **M4: History Consensus** | $O(W)$ | 0 | $5\text{ Bytes}$ (Packed Booleans) |
-| **M5: Mamba-SSSM** | $O(d_{\text{model}} \cdot d_{\text{state}})$ | 753 | $16 \times 8 \times 4\text{ B} = 512\text{ Bytes}$ |
+| **M1: Raw Thresholding** | `O(1)` | 0 | 0 B (Memoryless) |
+| **M2: Moving Average** | `O(1)` amortized <sup>†</sup> | 0 | 20 B (5 × 4 B) |
+| **M3: Median Filter** | `O(W)` (sorted insertion) | 0 | 20 B (5 × 4 B) |
+| **M4: History Consensus** | `O(W)` | 0 | 5 B (packed booleans) |
+| **M5: Mamba-SSSM** | `O(d_model · d_state)` | 753 | 512 B (16 × 8 × 4 B) |
 
 </div>
 
-$^*$*With circular buffer / running sum.*
+<sup>†</sup> *With circular buffer running sum.*
 
 ---
 
 ### Validation Threshold Optimization & Bootstrapping
 
-- **Threshold Optimization ($\tau_m^*$):**  
-  Enforcing a uniform arbitrary threshold across filters with distinct transfer functions penalizes performance. For each method $m$, the optimal decision threshold $\tau_m^*$ is farmed exclusively on the disjoint validation partition $\mathcal{D}_{\text{val}}$:
-  $$\tau_m^* = \arg\max_{\tau \in [0.05, 0.95]} F_1\big(\tau; \, \mathcal{D}_{\text{val}}, \, \mathcal{M}_m\big)$$
-  sweeping with step $\Delta \tau = 0.02$ (46 evaluation points). Once identified on validation sequences, thresholds are permanently frozen prior to test split evaluation.
-- **Sequence-Level Bootstrapping:**  
-  Because sequential video frames exhibit temporal correlation, standard parametric normality assumptions fail. We resample the 12 held-out test clips with replacement across $B = 1000$ bootstrap iterations, computing empirical two-sided 95% percentile confidence intervals ($2.5\text{th}$ and $97.5\text{th}$ percentiles) for F1-score.
+#### Threshold Optimization ($\tau_m^*$)
+Enforcing a uniform threshold across filters with distinct transfer functions penalizes performance. For each method $m$, the optimal decision threshold $\tau_m^*$ is optimized exclusively on the disjoint validation partition $\mathcal{D}_{\text{val}}$:
+
+$$
+\tau_m^* = \arg\max_{\tau \in [0.05, 0.95]} F_1\big(\tau; \, \mathcal{D}_{\text{val}}, \, \mathcal{M}_m\big)
+$$
+
+The sweep evaluates candidate thresholds with step $\Delta \tau = 0.02$ across 46 evaluation points. Once identified on validation sequences, thresholds are permanently frozen before evaluating on the held-out test split.
+
+#### Sequence-Level Bootstrapping
+Because sequential video frames exhibit temporal correlation, standard parametric normality assumptions fail. We resample the 24 held-out test clips with replacement across $B = 1000$ bootstrap iterations, computing empirical two-sided 95% percentile confidence intervals (2.5th and 97.5th percentiles) for F1-score.
 
 ---
 
 ### Downstream Operational Resource Impact
 
-In autonomous aerial SAR, false alarms incur mission-critical overhead:
-- **False Alarm Suppression Ratio (FASR):**
-  $$\text{FASR} = 1 - \frac{\sum_n \mathbb{I}(y_{\text{method}}[n] = 1 \wedge y_{\text{true}}[n] = 0)}{\sum_n \mathbb{I}(y_{\text{baseline}}[n] = 1 \wedge y_{\text{true}}[n] = 0)}$$
-- **Uplink Telemetry Bandwidth Preserved:**  
-  Confirmed alarms transmit packets over low-bandwidth satellite/cellular links ($S_{\text{pkt}} = 1.2\text{ kB}$ standard telemetry, $45\text{ kB}$ with thumbnail):
-  $$\Delta \Omega_m = \Delta \text{FP}_m \cdot S_{\text{pkt}}$$
-- **UAV Battery Reserves Conserved:**  
-  Each alarm triggers a $T_{\text{loiter}} \in [15, 30]\text{ s}$ confirmation maneuver at hover power $P_{\text{hover}} \approx 280\text{ W}$ ($4.2 - 8.4\text{ kJ}$ per event):
-  $$\Delta E_m = \Delta \text{FP}_m \cdot P_{\text{hover}} \cdot T_{\text{loiter}}$$
-- **Added Search Flight Time:**
-  $$\Delta t_{\text{flight}} = \frac{\Delta E_m}{P_{\text{hover}}} = \Delta \text{FP}_m \cdot T_{\text{loiter}}$$
+In autonomous aerial SAR missions, false alarms incur mission-critical overhead. We quantify operational resource savings across three key metrics:
+
+#### False Alarm Suppression Ratio (FASR)
+Relative reduction in false positive events compared to the raw thresholding baseline:
+
+$$
+\text{FASR} = 1 - \frac{\sum_n \mathbb{I}(y_{\text{method}}[n] = 1 \wedge y_{\text{true}}[n] = 0)}{\sum_n \mathbb{I}(y_{\text{baseline}}[n] = 1 \wedge y_{\text{true}}[n] = 0)}
+$$
+
+#### Uplink Telemetry Bandwidth Preserved
+Confirmed alarms transmit telemetry packets over bandwidth-limited satellite or cellular links ($S_{\text{pkt}} = 1.2\text{ kB}$ standard telemetry, $45\text{ kB}$ with compressed image thumbnail):
+
+$$
+\Delta \Omega_m = \Delta \text{FP}_m \cdot S_{\text{pkt}}
+$$
+
+#### UAV Battery Reserves Conserved & Search Flight Endurance
+Each confirmed alert triggers an aerial confirmation loiter maneuver for $T_{\text{loiter}} \in [15, 30]\text{ s}$ at hover electrical power $P_{\text{hover}} \approx 280\text{ W}$ ($4.2\text{ to }8.4\text{ kJ}$ per event):
+
+$$
+\Delta E_m = \Delta \text{FP}_m \cdot P_{\text{hover}} \cdot T_{\text{loiter}}, \qquad \Delta t_{\text{flight}} = \frac{\Delta E_m}{P_{\text{hover}}} = \Delta \text{FP}_m \cdot T_{\text{loiter}}
+$$
 
 ---
 
 ## Dataset Corpus & Harvesting
 
-### Controlled 2×2 Experimental Design
+### Controlled 3×2 Experimental Design
 
-The study is frozen around two wilderness environments and two visual modalities:
+The study is frozen around three wilderness environments and two visual modalities:
 1. **Arid Desert:** High ambient temperature, rocky terrain, sparse shrubs, and midday thermal crossover where ground rock temperatures equilibrate with human skin radiation.
 2. **Temperate Forest:** Dense tree canopies, dappled ground shadows, intermittent foliage occlusions, and wildlife distractors.
+3. **Snow-Covered Alpine:** High-albedo snow cover, sub-zero ambient backgrounds, thermal contrast for exposed skin, and thermal camouflage from insulated cold-weather clothing.
 
-Each biome contains three scenario types:
-- **Positive Scenarios:** Human targets (walking, crawling, partially occluded).
-- **Hard-Negative Scenarios:** Challenging non-target distractors (sun-heated boulders, moving canopy shadows, thermal clutter).
-- **Clear-Negative Scenarios:** Empty wilderness terrain without human or distractor targets.
+Each biome contains two scenario types:
+- **Positive Scenarios:** Human targets (walking, crawling, stopping, partially occluded).
+- **Negative Scenarios:** Challenging non-target distractors (sun-heated boulders, moving canopy shadows, thermal clutter, tree stumps) and natural unpopulated wilderness terrain.
 
 <div align="center">
 
-| Modality / Architecture | Arid Desert | Temperate Forest | Total Harvested Clips | Total Decimated Frames |
-| :--- | :---: | :---: | :---: | :---: |
-| **Visible RGB (YOLO11n-RGB)** | 30 clips (10/10/10) | 30 clips (10/10/10) | 60 clips | 4,800 frames |
-| **Thermal TIR (YOLO11n-Thermal)** | 30 clips (10/10/10) | 30 clips (10/10/10) | 60 clips | 4,800 frames |
-| **Total (Aligned Pairs)** | **60 clips** | **60 clips** | **120 streams** | **9,600 frames** |
+| Modality / Architecture | Arid Desert | Temperate Forest | Snow/Alpine | Total Clips | Total Frames (24 Hz) |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Visible RGB (YOLO11n-RGB)** | 30 clips (20 pos / 10 neg) | 30 clips (20 pos / 10 neg) | 30 clips (28 pos / 2 neg) | 90 clips | 20,364 frames |
+| **Thermal TIR (YOLO11n-Thermal)** | 30 clips (20 pos / 10 neg) | 30 clips (20 pos / 10 neg) | 30 clips (28 pos / 2 neg) | 90 clips | 20,364 frames |
+| **Total (Aligned Streams)** | **60 streams** | **60 streams** | **60 streams** | **180 streams** | **40,728 frames** |
 
 </div>
 
-*(10/10/10 = 10 Positive / 10 Hard-Negative / 10 Clear-Negative clips per biome).*
+*(Positive flights depict human targets; negative flights contain acute distractors and unpopulated terrain).*
 
 ---
 
 ### Dual-Crop Harvesting Procedure
 
-Raw video sequences are captured in $1280 \times 720$ resolution at 24 FPS (10.0 s duration, 240 frames). To preserve optical ground sampling distance (GSD) without downscaling distortion:
+Raw video sequences are captured in $1280 \times 720$ resolution at 24 FPS. To preserve optical ground sampling distance (GSD) without downscaling distortion:
 - Two disjoint square snippets of $640 \times 640$ pixels are harvested from each video:
   - **Left Tile:** $x \in [0, 640]$, centered vertically at $y = 40$ px.
   - **Right Tile:** $x \in [640, 1280]$, centered vertically at $y = 40$ px.
 - Automated via FFmpeg with `-movflags +faststart` to relocate the `moov` atom to offset 36 for rapid web-based scrubbing in Label Studio.
-- Ground-truth keyframe bounding boxes were placed at target inflection points with linear track interpolation. Hard-negative and clear-negative frames are explicitly recorded with empty 0-byte label files.
+- Ground-truth keyframe bounding boxes were placed at target inflection points with linear track interpolation. Negative frames are explicitly recorded with empty 0-byte label files.
 
 ---
 
 ### Full-Rate Stream & Option B Episodic Splitting
 
-Videos are processed at full frame rate $f_s = 24\text{ Hz}$ ($T_s \approx 41.7\text{ ms}$, 240 frames per snippet, 10.0~s duration). To prevent temporal data leakage and cross-tile circumvention, partitioning follows **Option B (Parent-Video Grouped Episodic Partitioning)**:
+Videos are processed at full frame rate $f_s = 24\text{ Hz}$ ($T_s \approx 41.7\text{ ms}$). To prevent temporal data leakage and cross-tile circumvention, partitioning follows **Option B (Parent-Video Grouped Episodic Partitioning)**:
 
-1. **Parent-Video Grouped Split [TBD]:** Left and right harvested snippets derived from the same parent video are strictly co-located in the identical partition (both in Train, both in Val, or both in Test). Cross-split parent leakage is identically zero.
-2. **240-Frame Atomic Bundles:** Frames within each snippet remain in exact chronological sequence ($0 \to 239$) to preserve causal dynamics for temporal decision filters.
+1. **Parent-Video Grouped Split:** Left and right harvested snippets derived from the same parent video are strictly co-located in the identical partition (both in Train, both in Val, or both in Test). Cross-split parent leakage is identically zero.
+2. **Sequential Atomic Bundles:** Frames within each snippet remain in exact chronological sequence ($0 \to N-1$) to preserve causal dynamics for temporal decision filters.
 3. **Seeded Snippet Shuffling (Seed 0) with Anti-Adjacency:** Snippets within each partition are shuffled using seed 0 under an anti-adjacency constraint ($d_{\min} \ge 2$), guaranteeing that derived sibling tiles are never adjacent in the feed queue.
-4. **Episodic State Flush:** At snippet boundaries ($n = 239 \to n = 0$), temporal filter memory is completely reset ($h_0 \leftarrow \mathbf{0}$, window $\mathcal{W}$ cleared), ensuring independent episodic evaluation.
+4. **Episodic State Flush:** At snippet boundaries ($n = N-1 \to n = 0$), temporal filter memory is completely reset ($h_0 \leftarrow \mathbf{0}$, window $\mathcal{W}$ cleared), ensuring independent episodic evaluation.
 
 Downstream temporal decision methods are benchmarked across four core dimensions:
 - **Positive Event Detection:** Target confirmation recall, precision, and $F_1$ score.
@@ -314,12 +352,12 @@ Downstream temporal decision methods are benchmarked across four core dimensions
 
 <div align="center">
 
-| Partition | Proportion | Clips per Scenario Bin | Clips per Biome | Total Video Clips | Frames per Modality (24 Hz) |
+| Partition | Proportion | Clips per Modality | Frames per Modality (24 Hz) | Positive Frames | Negative Frames |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Train Split** | 60% | 6 clips | 18 clips | 36 clips | 8,640 frames |
-| **Validation Split** | 20% | 2 clips | 6 clips | 12 clips | 2,880 frames |
-| **Test Split (Held-Out)** | 20% | 2 clips | 6 clips | 12 clips | 2,880 frames |
-| **Total Corpus** | **100%** | **10 clips** | **30 clips** | **60 clips** | **14,400 frames** |
+| **Train Split** | 60% | 44 clips | 9,800 frames | — | — |
+| **Validation Split** | 20% | 22 clips | 4,994 frames | — | — |
+| **Test Split (Held-Out)** | 20% | 24 clips | 5,570 frames | — | — |
+| **Total Corpus** | **100%** | **90 clips** | **20,364 frames** | **11,240 (55.2%)** | **9,124 (44.8%)** |
 
 </div>
 
@@ -329,15 +367,15 @@ Downstream temporal decision methods are benchmarked across four core dimensions
 
 <div align="center">
 
-| Biome Condition | Scenario Type | RGB Video Clips | Thermal Video Clips | Frames per Modality (24 Hz) | Sequence Split (Train / Val / Test) |
-| :--- | :--- | :---: | :---: | :---: | :---: |
-| **Arid Desert** | Positive Target | 10 | 10 | 2,400 | 6 / 2 / 2 clips |
-| **Arid Desert** | Hard-Negative Distractor | 10 | 10 | 2,400 | 6 / 2 / 2 clips |
-| **Arid Desert** | Clear-Negative Background | 10 | 10 | 2,400 | 6 / 2 / 2 clips |
-| **Temperate Forest** | Positive Target | 10 | 10 | 2,400 | 6 / 2 / 2 clips |
-| **Temperate Forest** | Hard-Negative Distractor | 10 | 10 | 2,400 | 6 / 2 / 2 clips |
-| **Temperate Forest** | Clear-Negative Background | 10 | 10 | 2,400 | 6 / 2 / 2 clips |
-| **Corpus Total** | **All 6 Scenario Bins** | **60** | **60** | **14,400** | **36 / 12 / 12 clips** |
+| Biome Condition | Scenario Type | RGB Video Clips | Thermal Video Clips | Frames per Modality (24 Hz) |
+| :--- | :--- | :---: | :---: | :---: |
+| **Arid Desert** | Positive Target | 20 | 20 | 4,800 |
+| **Arid Desert** | Negative Distractor | 10 | 10 | 2,400 |
+| **Temperate Forest** | Positive Target | 20 | 20 | 3,830 |
+| **Temperate Forest** | Negative Distractor | 10 | 10 | 1,750 |
+| **Snow/Alpine** | Positive Target | 28 | 28 | 7,104 |
+| **Snow/Alpine** | Negative Distractor | 2 | 2 | 480 |
+| **Corpus Total** | **All Scenarios** | **90** | **90** | **20,364** |
 
 </div>
 
@@ -345,11 +383,13 @@ Downstream temporal decision methods are benchmarked across four core dimensions
 
 ## Results & Benchmarks
 
+### Results
+
 > [!NOTE]
 > In accordance with research reproducibility standards, empirical detector benchmark values pending experimental hardware runs are preserved as `[TBD]`. No values are fabricated or filled with synthetic guesses.
 
 ### Table 1: Upstream Frame-Level Detection Performance
-*Evaluated frame-by-frame on held-out test sequences ($N = 960$ frames per stream) at $\tau = 0.50$ prior to temporal post-processing:*
+*Evaluated frame-by-frame on held-out test sequences ($N = 2,520$ frames across 12 clips) at $\tau = 0.50$ prior to temporal post-processing:*
 
 <div align="center">
 
@@ -359,6 +399,10 @@ Downstream temporal decision methods are benchmarked across four core dimensions
 | **YOLO11n-RGB** | Visible RGB | Temperate Forest | [TBD] | [TBD] | [TBD] |
 | **YOLO11n-Thermal** | Thermal TIR | Arid Desert | [TBD] | [TBD] | [TBD] |
 | **YOLO11n-Thermal** | Thermal TIR | Temperate Forest | [TBD] | [TBD] | [TBD] |
+| **YOLO26n-RGB (Optional)** | Visible RGB | Arid Desert | [TBD] | [TBD] | [TBD] |
+| **YOLO26n-RGB (Optional)** | Visible RGB | Temperate Forest | [TBD] | [TBD] | [TBD] |
+| **YOLO26n-Thermal (Optional)** | Thermal TIR | Arid Desert | [TBD] | [TBD] | [TBD] |
+| **YOLO26n-Thermal (Optional)** | Thermal TIR | Temperate Forest | [TBD] | [TBD] | [TBD] |
 | **Late Fusion Gate ($s[n] = \max$)** | Multimodal | Arid Desert | [TBD] | [TBD] | [TBD] |
 | **Late Fusion Gate ($s[n] = \max$)** | Multimodal | Temperate Forest | [TBD] | [TBD] | [TBD] |
 
@@ -367,17 +411,17 @@ Downstream temporal decision methods are benchmarked across four core dimensions
 ---
 
 ### Table 2: Comparative Benchmark of Causal Post-Processing
-*Comparative evaluation across causal post-processing methods ($W = 5$ frames / 625 ms latency budget) evaluated under validation-optimized thresholds $\tau_m^*$ on held-out test sequences ($N = 960$ frames, 12 clips):*
+*Comparative evaluation across causal post-processing methods ($W = 5$ frames / 208 ms latency bound at 24 Hz) evaluated under validation-optimized thresholds $\tau_m^*$ on held-out test sequences ($N = 2,520$ frames, 12 clips):*
 
 <div align="center">
 
-| Method | Val $\tau^*$ | Precision | Recall | F1-Score | F1 (95% CI)$^*$ | Pos. Recall (%) | Hard-Neg FP | Clear-Neg FP | FASR (%) | Latency / Frame |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **M1: Baseline Raw Thresholding** | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M2: Five-Frame Moving Average** | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M3: Five-Frame Median Filter** | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M4: Five-Frame History Consensus**| [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
-| **M5: Learned Mamba-SSSM** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** |
+| Method | Val $\tau^*$ | Precision | Recall | F1-Score | F1 (95% CI)$^*$ | Pos. Recall (%) | Negative FP | FASR (%) | Latency / Frame |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **M1: Baseline Raw Thresholding** | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
+| **M2: Five-Frame Moving Average** | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
+| **M3: Five-Frame Median Filter** | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
+| **M4: Five-Frame History Consensus**| [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] | [TBD] |
+| **M5: Learned Mamba-SSSM** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** | **[TBD]** |
 
 </div>
 
@@ -386,7 +430,7 @@ $^*$*Two-sided 95% percentile confidence intervals computed via sequence-level b
 ---
 
 ### Table 3: Environment-Stratified Operational Resource Impact
-*Projected mission-level resource savings across held-out test sequences relative to baseline raw thresholding (M1):*
+*Projected mission-level resource savings across held-out test sequences ($N = 2,520$ frames, 12 clips) relative to baseline raw thresholding (M1):*
 
 <div align="center">
 
@@ -403,8 +447,8 @@ $^*$*Two-sided 95% percentile confidence intervals computed via sequence-level b
 
 </div>
 
-$^\dagger$*Evaluated at $S_{\text{pkt}} = 1.2\text{ kB}$ standard telemetry ($45\text{ kB}$ for visual thumbnail).*  
-$^\ddagger$*Evaluated at $P_{\text{hover}} \approx 280\text{ W}$, $T_{\text{loiter}} = 20\text{ s}$ average.*
+<sup>†</sup> *Evaluated at $S_{\text{pkt}} = 1.2\text{ kB}$ standard telemetry ($45\text{ kB}$ for visual thumbnail).*  
+<sup>‡</sup> *Evaluated at $P_{\text{hover}} \approx 280\text{ W}$, $T_{\text{loiter}} = 20\text{ s}$ average.*
 
 ---
 
@@ -446,11 +490,8 @@ mmsar train --hyperparams configs/hyperparams.yaml --include-optional
 ### 4. Validation Threshold Sweep & Post-Processing Benchmark
 Run the validation threshold optimization sweep ($\tau \in [0.05, 0.95], \Delta \tau = 0.02$) and evaluate post-processing filters on the held-out test split:
 ```bash
-# Farm optimal thresholds tau_m* on validation set
-python scripts/optimize_thresholds.py --val-manifest data/val_manifest.json
-
-# Run comparative benchmark with B=1000 sequence bootstrapping
-python scripts/evaluate_benchmark.py --test-manifest data/test_manifest.json --bootstrap 1000
+# Run multi-seed benchmark execution, threshold optimization, and reporting
+python scripts/finish_and_report_benchmarks.py --help
 ```
 
 ---
@@ -467,8 +508,9 @@ multi-modal-detection/
 │   └── hyperparams.yaml                  # Model training hyperparameters
 ├── data/                                 # MMSAR multimodal benchmark corpus
 │   ├── raw/                              # Harvested dual-crop video snippets (640x640)
-│   │   ├── desert/                       # Arid Desert biome (pos, hard_neg, clear_neg)
-│   │   └── forest/                       # Temperate Forest biome (pos, hard_neg, clear_neg)
+│   │   ├── desert/                       # Arid Desert biome (positive, negative)
+│   │   └── forest/                       # Temperate Forest biome (positive, negative)
+│   ├── splits/                           # Episodic train/val/test split definitions
 │   └── manifest.json                     # Sequence-level dataset split manifest
 ├── docs/manuscript/                      # IEEE conference manuscript source and figures
 │   ├── figures/                          # System architecture, video snippets, and benchmark plots
@@ -478,9 +520,14 @@ multi-modal-detection/
 │   ├── references.bib                    # BibTeX references
 │   └── main.tex                          # Primary IEEE conference LaTeX manuscript
 ├── scripts/                              # Dataset harvesting and evaluation scripts
-│   ├── harvest_dual_crop_snippets.py     # Dual-crop FFmpeg extraction script (640x640)
+│   ├── clean_and_rename_dataset.py       # Dataset migration from 3-class to 2-class scheme
 │   ├── export_and_process_desert_positive.py # Video decimation and label export pipeline
-│   └── process_negatives.py              # Zero-byte empty annotation generator for negatives
+│   ├── finish_and_report_benchmarks.py   # Multi-seed benchmark runner and report generator
+│   ├── harvest_dual_crop_snippets.py     # Dual-crop FFmpeg extraction script (640x640)
+│   ├── harvest_forest_snippets.py        # Forest biome video snippet harvester
+│   ├── process_negatives.py              # Zero-byte empty annotation generator for negatives
+│   ├── split_dataset_episodes.py         # Episodic dataset splitter with stratified allocation
+│   └── upload_to_label_studio.py         # Label Studio project upload automation
 ├── tools/                                # Operational and automation tooling
 │   └── generate_architecture_figure.py   # Vector-to-raster compilation tooling
 ├── CHANGELOG.md                          # Itemized audit and manuscript enhancement changelog
@@ -494,9 +541,9 @@ multi-modal-detection/
 
 ## Authors & Citation
 
-- **Oumar Mamoun Ibrahim** — Department of Computer Engineering, University of Sharjah, UAE  
+- **Oumar Mamoun Ibrahim** - Department of Computer Engineering, University of Sharjah, UAE  
   [U22200741@sharjah.ac.ae](mailto:U22200741@sharjah.ac.ae) · [ORCID: 0009-0008-0312-1605](https://orcid.org/0009-0008-0312-1605)
-- **Dr. Mohamad Khairi bin Ishak** — Department of Computer Engineering, University of Sharjah, UAE  
+- **Dr. Mohamad Khairi bin Ishak** - Department of Computer Engineering, University of Sharjah, UAE  
   [mishak@sharjah.ac.ae](mailto:mishak@sharjah.ac.ae) · [ORCID: 0000-0002-3554-0061](https://orcid.org/0000-0002-3554-0061)
 
 If you use this work, codebase, or dataset in your research, please cite:
@@ -505,10 +552,10 @@ If you use this work, codebase, or dataset in your research, please cite:
 @inproceedings{ibrahim2026lightweight,
   title     = {Lightweight Multimodal Person Detection and Temporal Post-Processing for Aerial Search and Rescue},
   author    = {Ibrahim, Oumar Mamoun and bin Ishak, Mohamad Khairi},
-  booktitle = {Proceedings of the 10th International Conference on Signal Processing and Integrated Networks (ICSPIS)},
+  booktitle = {Proceedings of the 9th International Conference on Signal Processing and Information Security (ICSPIS)},
   year      = {2026},
-  address   = {Sharjah, United Arab Emirates},
-  month     = {September}
+  address   = {Dubai, United Arab Emirates},
+  month     = {November}
 }
 ```
 

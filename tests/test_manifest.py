@@ -12,19 +12,19 @@ def test_real_manifest_seeded_counts() -> None:
 
     manifest = load_manifest(manifest_path)
 
-    # Assert desert.positive.count == 5 and desert.hard_negative.count == 3
+    # Assert desert.positive.count == 5 and desert.negative.count == 3
     assert manifest.get_bin("desert", "positive").count == 5
-    assert manifest.get_bin("desert", "hard_negative").count == 3
+    assert manifest.get_bin("desert", "negative").count == 3
 
     # Assert every other bin == 0
     for cond, scenarios in manifest.bins.items():
         for scen, b in scenarios.items():
-            if (cond, scen) not in [("desert", "positive"), ("desert", "hard_negative")]:
+            if (cond, scen) not in [("desert", "positive"), ("desert", "negative")]:
                 assert b.count == 0, f"Expected bin {cond}/{scen} to have count 0, got {b.count}"
 
     # Check totals
     assert manifest.total_count == 8
-    assert manifest.total_target == 45
+    assert manifest.total_target == 30
 
 
 def test_manifest_roundtrip_save_load(tmp_path: Path) -> None:
@@ -36,5 +36,5 @@ def test_manifest_roundtrip_save_load(tmp_path: Path) -> None:
 
     loaded = load_manifest(temp_file)
     assert loaded.get_bin("forest", "positive").count == 2
-    assert loaded.get_bin("altitude", "clear_negative").count == 0
+    assert loaded.get_bin("altitude", "negative").count == 0
     assert loaded.total_count == 2

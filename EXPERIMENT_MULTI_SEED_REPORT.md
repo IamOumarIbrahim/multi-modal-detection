@@ -13,7 +13,7 @@ To establish rigorous empirical claims suitable for peer-reviewed publication, *
 | Benchmark Split | Precision ($P$) | Recall ($R$) | $\text{mAP}_{50}$ | $\text{mAP}_{50-95}$ | Mean Training Time | Peak VRAM Footprint |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Validation Split (6 eps, 1,440 f)** | 0.8913 +/- 0.0419 | 0.8291 +/- 0.0371 | **0.8976 +/- 0.0208** | 0.4952 +/- 0.0229 | 1085.4 s (~18 min) | 4.10 GB |
-| **Held-Out Test Split (8 eps, 1,920 f)** | 0.9773 +/- 0.0083 | 0.9325 +/- 0.0418 | **0.9851 +/- 0.0075** | 0.5182 +/- 0.0174 | — | — |
+| **Held-Out Test Split (8 eps, 1,920 f)** | 0.9773 +/- 0.0083 | 0.9325 +/- 0.0418 | **0.9851 +/- 0.0075** | 0.5182 +/- 0.0174 | - | - |
 
 > **Statistical Confidence on Test vs. Val Gap (Bootstrap 95% CI, $B=1000$):** $\Delta\text{mAP}_{50} = +0.0874$ (95% CI: $[+0.0610, \, +0.1120]$).
 
@@ -98,7 +98,7 @@ The disparity between high $\text{mAP}_{50}$ (> 0.98) and moderate $\text{mAP}_{
    $$\text{IoU} = \frac{7,980}{11,388} \approx 0.7007 \quad (70.1\%)$$
 
 4. **Physical & Metric Conclusion:**
-   Minor perimeter ambiguities—such as distinguishing loose jacket fabric or cast limb shadows from gravel—impose severe IoU penalties on distant small targets while barely impacting mid-range targets. At $\text{IoU} = 0.50$, the detector scores 100% precision and recall; however, as the evaluation threshold increments toward $\text{IoU} = 0.75\text{--}0.95$, small-box boundary jitter drops predictions below threshold, driving the aggregate $\text{mAP}_{50-95}$ down to $0.5182$.
+   Minor perimeter ambiguities (such as distinguishing loose jacket fabric or cast limb shadows from gravel) impose severe IoU penalties on distant small targets while barely impacting mid-range targets. At $\text{IoU} = 0.50$, the detector scores 100% precision and recall; however, as the evaluation threshold increments toward $\text{IoU} = 0.75\text{--}0.95$, small-box boundary jitter drops predictions below threshold, driving the aggregate $\text{mAP}_{50-95}$ down to $0.5182$.
 
 ---
 

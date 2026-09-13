@@ -71,7 +71,7 @@ def test_cli_status_command() -> None:
     result = runner.invoke(app, ["status"])
     assert result.exit_code == 0
     assert "desert/positive: 5/5" in result.stdout
-    assert "desert/hard_negative: 3/5" in result.stdout
+    assert "desert/negative: 3/5" in result.stdout
 
 
 def test_synthetic_end_to_end_pipeline(tmp_path: Path) -> None:
@@ -106,18 +106,19 @@ def test_synthetic_end_to_end_pipeline(tmp_path: Path) -> None:
     tau = 0.5
     gt = [0, 0, 1, 1, 1, 1, 0, 0, 1, 1]
 
+    # Processor names match README Table 2 method labels for fill_readme_tables
     processors = {
-        "Baseline": BaselinePostProcessor(),
-        "5-Frame History Tracking": HistoryTrackingPostProcessor(window_size=5, required_hits=3),
-        "5-Frame Moving Average": MovingAveragePostProcessor(window_size=5),
-        "5-Frame Median Filter": MedianFilterPostProcessor(window_size=5),
+        "Baseline Raw Thresholding": BaselinePostProcessor(),
+        "Five-Frame History Consensus": HistoryTrackingPostProcessor(window_size=5, required_hits=3),
+        "Five-Frame Moving Average": MovingAveragePostProcessor(window_size=5),
+        "Five-Frame Median Filter": MedianFilterPostProcessor(window_size=5),
     }
 
     # PyTorch Mamba-SSSM
     mamba = MambaSSSMPostProcessor(d_model=16, d_state=8)
     # Quick fit on synthetic pattern
     mamba.fit([[0.1, 0.2, 0.8, 0.9, 0.85, 0.9, 0.1, 0.05, 0.7, 0.8]], [gt], epochs=10, lr=0.01)
-    processors["Mamba-SSSM"] = mamba
+    processors["Learned Mamba-SSSM"] = mamba
 
     table_rows = []
     fill_metrics: dict[str, str] = {}
@@ -151,8 +152,9 @@ def test_synthetic_end_to_end_pipeline(tmp_path: Path) -> None:
             f"{ar:.3f}",
         ])
 
-        fill_metrics[f"{name}::frame precision"] = f"{fp:.3f}"
-        fill_metrics[f"{name}::frame recall"] = f"{fr:.3f}"
+        # Keys use README Table 2 column names for fill_readme_tables matching
+        fill_metrics[f"{name}::Precision"] = f"{fp:.3f}"
+        fill_metrics[f"{name}::Recall"] = f"{fr:.3f}"
 
     # Step 6: Render markdown results table
     markdown_table = to_markdown_table(rows=table_rows, columns=TABLE_1B_COLUMNS)

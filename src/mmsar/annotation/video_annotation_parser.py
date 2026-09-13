@@ -45,12 +45,25 @@ def interpolate_video_sequence(
             else:
                 frame_boxes[f] = None
             continue
+        # Check exact keyframe match first
+        exact_kf = next((k for k in sorted_kf if k.get("frame") == f), None)
+        if exact_kf is not None:
+            if exact_kf.get("enabled", True):
+                frame_boxes[f] = {
+                    "x": float(exact_kf["x"]),
+                    "y": float(exact_kf["y"]),
+                    "width": float(exact_kf["width"]),
+                    "height": float(exact_kf["height"]),
+                }
+            else:
+                frame_boxes[f] = None
+            continue
 
-        # Find enclosing keyframes
+        # Find enclosing keyframes strictly surrounding f
         prev_kf = sorted_kf[0]
         next_kf = sorted_kf[-1]
         for i in range(len(sorted_kf) - 1):
-            if sorted_kf[i]["frame"] <= f <= sorted_kf[i + 1]["frame"]:
+            if sorted_kf[i]["frame"] < f < sorted_kf[i + 1]["frame"]:
                 prev_kf = sorted_kf[i]
                 next_kf = sorted_kf[i + 1]
                 break

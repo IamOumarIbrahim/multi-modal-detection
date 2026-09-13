@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  12 SEP 2026 12:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  13 SEP 2026 05:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -116,7 +116,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <24> not available
 \c@IEEEbiography=\count289
 \@IEEEtranrubishbin=\box54
 )
-** ATTENTION: Overriding command lockouts (line 2).
+** ATTENTION: Overriding command lockouts (line 21).
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/cite\cite.sty
 LaTeX Info: Redefining \cite on input line 302.
 LaTeX Info: Redefining \nocite on input line 332.
@@ -655,20 +655,20 @@ File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 ) (main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
-LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
 
 -- Lines per column: 56 (exact).
 
@@ -697,12 +697,20 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 fg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-LaTeX Font Info:    Trying to load font information for U+msa on input line 39.
+LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 4
+3.
+ (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 43.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 47.
 
- (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 39.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 47.
 
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -720,156 +728,181 @@ File: figures/icon_lorem_ipsum.png Graphic file (type png)
 <use figures/icon_lorem_ipsum.png>
 Package pdftex.def Info: figures/icon_lorem_ipsum.png  used on input line 31.
 (pdftex.def)             Requested size: 17.29846pt x 21.62393pt.
-<figures/gemini_logo.png, id=6, 501.875pt x 501.875pt>
+<figures/grok_logo.png, id=6, 564.1075pt x 547.04375pt>
+File: figures/grok_logo.png Graphic file (type png)
+<use figures/grok_logo.png>
+Package pdftex.def Info: figures/grok_logo.png  used on input line 38.
+(pdftex.def)             Requested size: 21.12299pt x 20.48601pt.
+<figures/gemini_logo.png, id=7, 501.875pt x 501.875pt>
 File: figures/gemini_logo.png Graphic file (type png)
 <use figures/gemini_logo.png>
-Package pdftex.def Info: figures/gemini_logo.png  used on input line 38.
-(pdftex.def)             Requested size: 21.61848pt x 21.62393pt.
-<figures/desert_rgb_video.png, id=7, 1284.8pt x 722.7pt>
-File: figures/desert_rgb_video.png Graphic file (type png)
-<use figures/desert_rgb_video.png>
-Package pdftex.def Info: figures/desert_rgb_video.png  used on input line 48.
-(pdftex.def)             Requested size: 31.86694pt x 17.91968pt.
-<figures/forest_rgb_video.png, id=8, 642.4pt x 361.35pt>
-File: figures/forest_rgb_video.png Graphic file (type png)
-<use figures/forest_rgb_video.png>
-Package pdftex.def Info: figures/forest_rgb_video.png  used on input line 49.
-(pdftex.def)             Requested size: 31.86694pt x 17.91968pt.
-LaTeX Font Info:    Calculating math sizes for size <5.3> on input line 54.
+Package pdftex.def Info: figures/gemini_logo.png  used on input line 44.
+(pdftex.def)             Requested size: 20.4851pt x 20.48601pt.
+<figures/grok_desert_video.png, id=8, 754.82pt x 417.56pt>
+File: figures/grok_desert_video.png Graphic file (type png)
+<use figures/grok_desert_video.png>
+Package pdftex.def Info: figures/grok_desert_video.png  used on input line 54.
+(pdftex.def)             Requested size: 31.86694pt x 17.62341pt.
+<figures/grok_forest_video.png, id=9, 754.82pt x 417.56pt>
+File: figures/grok_forest_video.png Graphic file (type png)
+<use figures/grok_forest_video.png>
+Package pdftex.def Info: figures/grok_forest_video.png  used on input line 55.
+(pdftex.def)             Requested size: 31.86694pt x 17.62341pt.
+LaTeX Font Info:    Calculating math sizes for size <5.3> on input line 60.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.65> not available
-(Font)              size <5> substituted on input line 54.
+(Font)              size <5> substituted on input line 60.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.65> not available
-(Font)              size <5> substituted on input line 54.
+(Font)              size <5> substituted on input line 60.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.65> not available
-(Font)              size <5> substituted on input line 54.
+(Font)              size <5> substituted on input line 60.
 
-File: figures/icon_lorem_ipsum.png Graphic file (type png)
-<use figures/icon_lorem_ipsum.png>
-Package pdftex.def Info: figures/icon_lorem_ipsum.png  used on input line 60.
-(pdftex.def)             Requested size: 17.29846pt x 21.62393pt.
-File: figures/gemini_logo.png Graphic file (type png)
-<use figures/gemini_logo.png>
-Package pdftex.def Info: figures/gemini_logo.png  used on input line 69.
-(pdftex.def)             Requested size: 21.61848pt x 21.62393pt.
-<figures/desert_th_video.png, id=9, 1284.8pt x 722.7pt>
+<figures/desert_rgb_video.png, id=10, 1284.8pt x 722.7pt>
+File: figures/desert_rgb_video.png Graphic file (type png)
+<use figures/desert_rgb_video.png>
+Package pdftex.def Info: figures/desert_rgb_video.png  used on input line 66.
+(pdftex.def)             Requested size: 31.86694pt x 17.91968pt.
+<figures/forest_rgb_video.png, id=11, 1284.8pt x 722.7pt>
+File: figures/forest_rgb_video.png Graphic file (type png)
+<use figures/forest_rgb_video.png>
+Package pdftex.def Info: figures/forest_rgb_video.png  used on input line 67.
+(pdftex.def)             Requested size: 31.86694pt x 17.91968pt.
+LaTeX Font Info:    Calculating math sizes for size <5.6> on input line 79.
+
+LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.8> not available
+(Font)              size <5> substituted on input line 79.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.8> not available
+(Font)              size <5> substituted on input line 79.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.8> not available
+(Font)              size <5> substituted on input line 79.
+
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 9
+3.
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+<figures/desert_th_video.png, id=12, 1284.8pt x 722.7pt>
 File: figures/desert_th_video.png Graphic file (type png)
 <use figures/desert_th_video.png>
-Package pdftex.def Info: figures/desert_th_video.png  used on input line 79.
+Package pdftex.def Info: figures/desert_th_video.png  used on input line 101.
 (pdftex.def)             Requested size: 31.86694pt x 17.91968pt.
-<figures/forest_th_video.png, id=10, 642.4pt x 361.35pt>
+<figures/forest_th_video.png, id=13, 1284.8pt x 722.7pt>
 File: figures/forest_th_video.png Graphic file (type png)
 <use figures/forest_th_video.png>
-Package pdftex.def Info: figures/forest_th_video.png  used on input line 80.
+Package pdftex.def Info: figures/forest_th_video.png  used on input line 102.
 (pdftex.def)             Requested size: 31.86694pt x 17.91968pt.
-<figures/crop_640_left_video.png, id=11, 642.4pt x 642.4pt>
+<figures/crop_640_left_video.png, id=14, 642.4pt x 642.4pt>
 File: figures/crop_640_left_video.png Graphic file (type png)
 <use figures/crop_640_left_video.png>
-Package pdftex.def Info: figures/crop_640_left_video.png  used on input line 92
-.
+Package pdftex.def Info: figures/crop_640_left_video.png  used on input line 11
+4.
 (pdftex.def)             Requested size: 23.61583pt x 23.61354pt.
-<figures/crop_640_right_video.png, id=12, 642.4pt x 642.4pt>
+<figures/crop_640_right_video.png, id=15, 642.4pt x 642.4pt>
 File: figures/crop_640_right_video.png Graphic file (type png)
 <use figures/crop_640_right_video.png>
-Package pdftex.def Info: figures/crop_640_right_video.png  used on input line 9
-3.
+Package pdftex.def Info: figures/crop_640_right_video.png  used on input line 1
+15.
 (pdftex.def)             Requested size: 23.61583pt x 23.61354pt.
-LaTeX Font Info:    Calculating math sizes for size <6.2> on input line 97.
+LaTeX Font Info:    Calculating math sizes for size <6.2> on input line 119.
+
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.09999> not available
-(Font)              size <5> substituted on input line 97.
+(Font)              size <5> substituted on input line 119.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.09999> not available
-(Font)              size <5> substituted on input line 97.
+(Font)              size <5> substituted on input line 119.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.09999> not available
-(Font)              size <5> substituted on input line 97.
+(Font)              size <5> substituted on input line 119.
 
-<figures/icon_label_studio.png, id=13, 289.08pt x 289.08pt>
+<figures/icon_label_studio.png, id=16, 289.08pt x 289.08pt>
 File: figures/icon_label_studio.png Graphic file (type png)
 <use figures/icon_label_studio.png>
-Package pdftex.def Info: figures/icon_label_studio.png  used on input line 104.
+Package pdftex.def Info: figures/icon_label_studio.png  used on input line 126.
 
 (pdftex.def)             Requested size: 21.62271pt x 21.62393pt.
-<figures/desert_rgb_annotated.png, id=14, 1284.8pt x 722.7pt>
+<figures/desert_rgb_annotated.png, id=17, 642.4pt x 642.4pt>
 File: figures/desert_rgb_annotated.png Graphic file (type png)
 <use figures/desert_rgb_annotated.png>
 Package pdftex.def Info: figures/desert_rgb_annotated.png  used on input line 1
-24.
-(pdftex.def)             Requested size: 26.17648pt x 14.72171pt.
-<figures/desert_th_annotated.png, id=15, 1284.8pt x 722.7pt>
+46.
+(pdftex.def)             Requested size: 23.33147pt x 23.32928pt.
+<figures/desert_th_annotated.png, id=18, 642.4pt x 642.4pt>
 File: figures/desert_th_annotated.png Graphic file (type png)
 <use figures/desert_th_annotated.png>
-Package pdftex.def Info: figures/desert_th_annotated.png  used on input line 12
-5.
-(pdftex.def)             Requested size: 26.17648pt x 14.72171pt.
-LaTeX Font Info:    Calculating math sizes for size <5.8> on input line 141.
+Package pdftex.def Info: figures/desert_th_annotated.png  used on input line 14
+7.
+(pdftex.def)             Requested size: 23.33147pt x 23.32928pt.
+LaTeX Font Info:    Calculating math sizes for size <5.8> on input line 163.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.9> not available
-(Font)              size <5> substituted on input line 141.
+(Font)              size <5> substituted on input line 163.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.9> not available
-(Font)              size <5> substituted on input line 141.
+(Font)              size <5> substituted on input line 163.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.9> not available
-(Font)              size <5> substituted on input line 141.
+(Font)              size <5> substituted on input line 163.
 
 ) [1{C:/Users/omarb/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/
 omarb/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
 
 
 ]
-Underfull \vbox (badness 1365) has occurred while \output is active []
-
- [2 <./figures/icon_lorem_ipsum.png> <./figures/gemini_logo.png> <./figures/des
-ert_rgb_video.png (PNG copy)> <./figures/forest_rgb_video.png (PNG copy)> <./fi
-gures/desert_th_video.png (PNG copy)> <./figures/forest_th_video.png (PNG copy)
-> <./figures/crop_640_left_video.png (PNG copy)> <./figures/crop_640_right_vide
-o.png (PNG copy)> <./figures/icon_label_studio.png> <./figures/desert_rgb_annot
-ated.png (PNG copy)> <./figures/desert_th_annotated.png (PNG copy)>]
-Underfull \hbox (badness 4634) in paragraph at lines 88--89
+Underfull \hbox (badness 4634) in paragraph at lines 96--97
 []\OT1/ptm/m/n/10 Per-frame de-tec-tors ap-plied to video pro-duce high-
  []
 
 
-Underfull \hbox (badness 5726) in paragraph at lines 127--128
-\OT1/ptm/m/n/10 frame-work pro-vides an end-to-end pipeline com-bin-ing
+Underfull \hbox (badness 1365) in paragraph at lines 104--105
+\OT1/ptm/m/n/10 ther-mal frames $\OML/cmm/m/it/10 I[]\OT1/cmr/m/n/10 [\OML/cmm/
+m/it/10 n\OT1/cmr/m/n/10 ]$ \OT1/ptm/m/n/10 pro-duce per-frame con-fi-dences
  []
 
-LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 1
-57.
-(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsptm.fd
-File: omsptm.fd 
-)
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 157.
-
-[3] (figure_temporal_postprocessing.tex) [4]
-Underfull \hbox (badness 1448) in paragraph at lines 332--333
-[]\OT1/ptm/m/n/10 We eval-u-ate across two wilder-ness biomes: (1) \OT1/ptm/b/n
-/10 Arid
+[2 <./figures/icon_lorem_ipsum.png> <./figures/grok_logo.png> <./figures/gemini
+_logo.png> <./figures/grok_desert_video.png (PNG copy)> <./figures/grok_forest_
+video.png (PNG copy)> <./figures/desert_rgb_video.png (PNG copy)> <./figures/fo
+rest_rgb_video.png (PNG copy)> <./figures/desert_th_video.png (PNG copy)> <./fi
+gures/forest_th_video.png (PNG copy)> <./figures/crop_640_left_video.png (PNG c
+opy)> <./figures/crop_640_right_video.png (PNG copy)> <./figures/icon_label_stu
+dio.png> <./figures/desert_rgb_annotated.png (PNG copy)> <./figures/desert_th_a
+nnotated.png (PNG copy)>]
+Underfull \hbox (badness 6141) in paragraph at lines 115--116
+[]\OT1/ptm/m/n/10 To pre-vent single-modality oc-clu-sions from caus-ing
  []
 
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 3
-34.
-(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)
-[5] [6]
-Underfull \hbox (badness 1377) in paragraph at lines 408--409
-\OT1/ptm/m/n/10 and pure-PyTorch causal post-processing im-ple-men-ta-tions
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <8> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 131.
+(figure_temporal_postprocessing.tex)
+Underfull \hbox (badness 3612) in paragraph at lines 177--183
+\OT1/ptm/b/n/10 (Base-line Raw): \OT1/ptm/m/n/10 In-stan-ta-neous thresh-old-in
+g $\OML/cmm/m/it/10 y[]\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n\OT1/cmr/m/n/10 ] =
  []
 
-(main.bbl)
+[3]
+<figures/overlay_desert_RGB_positive_8_right_f000000.png, id=61, 1284.8pt x 642
+.4pt>
+File: figures/overlay_desert_RGB_positive_8_right_f000000.png Graphic file (typ
+e png)
+<use figures/overlay_desert_RGB_positive_8_right_f000000.png>
+Package pdftex.def Info: figures/overlay_desert_RGB_positive_8_right_f000000.pn
+g  used on input line 207.
+(pdftex.def)             Requested size: 252.0pt x 125.99776pt.
+ [4 <./figures/overlay_desert_RGB_positive_8_right_f000000.png (PNG copy)>]
+(main.bbl [5])
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -881,7 +914,7 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[7] (main.aux)
+[6] (main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
@@ -893,13 +926,13 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 16785 strings out of 467871
- 351670 string characters out of 5418376
- 776388 words of memory out of 5000000
- 45337 multiletter control sequences out of 15000+600000
- 702236 words of font info for 184 fonts, out of 8000000 for 9000
+ 16860 strings out of 467871
+ 353553 string characters out of 5418376
+ 782600 words of memory out of 5000000
+ 45408 multiletter control sequences out of 15000+600000
+ 707926 words of font info for 199 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,17n,94p,1697b,964s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,17n,94p,1668b,966s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmex10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmmi10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -923,16 +956,17 @@ a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Users/omar
 b/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam7.pfb><
 C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbol
 s/msbm10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/cour
-ier/ucrr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/he
-lvetic/uhvb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw
-/helvetic/uhvr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/
-urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/
-urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
-/urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
-/urw/times/utmri8a.pfb>
-Output written on main.pdf (7 pages, 5445047 bytes).
+ier/ucrb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/co
+urier/ucrr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/
+helvetic/uhvb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/u
+rw/helvetic/uhvr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type
+1/urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type
+1/urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/typ
+e1/urw/times/utmri8a.pfb>
+Output written on main.pdf (6 pages, 11515189 bytes).
 PDF statistics:
- 180 PDF objects out of 1000 (max. 8388607)
+ 185 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 68 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 88 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -22,7 +22,7 @@ from mmsar.reporting.fill_readme_tables import fill_readme_tables
 
 app = typer.Typer(
     name="mmsar",
-    help="MMSAR — Multi-Modal Search-And-Rescue Detection Pipeline CLI",
+    help="MMSAR - Multi-Modal Search-And-Rescue Detection Pipeline CLI",
     add_completion=False,
 )
 

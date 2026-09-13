@@ -1,0 +1,6 @@
+path: C:/Dev/repos/Public repos/research/multi-modal-detection
+train: data/splits/train_rgb.txt
+val: data/splits/val_rgb.txt
+test: data/splits/test_rgb.txt
+names:
+  0: Person_Detected

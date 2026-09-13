@@ -43,7 +43,7 @@ The footage should look slightly imperfect and ordinary, like real operational f
 
 ---
 
-# Desert — Positive
+# Desert - Positive
 
 ```text
 Create approximately 10 seconds of photorealistic operational field footage showing a remote desert search area.
@@ -82,7 +82,7 @@ No watermarks.
 
 ---
 
-# Desert — Hard Negative
+# Desert - Hard Negative
 
 ```text
 Create approximately 10 seconds of photorealistic operational field footage showing an empty remote desert.
@@ -125,7 +125,7 @@ No watermarks.
 
 ---
 
-# Desert — Clear Negative
+# Desert - Clear Negative
 
 ```text
 Create approximately 10 seconds of photorealistic operational field footage over a completely empty desert search area.
@@ -161,7 +161,7 @@ No watermarks.
 
 ---
 
-# Forest — Positive
+# Forest - Positive
 
 ```text
 Create approximately 10 seconds of photorealistic operational field footage showing a remote forest search area.
@@ -203,7 +203,7 @@ No watermark.
 
 ---
 
-# Forest — Hard Negative
+# Forest - Hard Negative
 
 ```text
 Create approximately 10 seconds of photorealistic operational field footage over dense forest.
@@ -425,7 +425,7 @@ No watermark.
 
 ---
 
-# Forest — Clear Negative
+# Forest - Clear Negative
 
 ```text
 Create approximately 10 seconds of photorealistic operational field footage over an empty forest.
@@ -1188,3 +1188,173 @@ It must NOT look like an RGB forest video with a grayscale filter applied.
 Preserve the exact source video while replacing its RGB appearance with plausible thermal infrared sensor appearance.
 
 
+## SNOW
+
+Create approximately 10 seconds of photorealistic operational search-and-rescue UAV footage over a remote, high-altitude snowy mountain environment.
+The camera is positioned approximately 40–80 meters above the terrain, looking downward at roughly 35–50 degrees. It moves slowly forward and slightly sideways as part of a broad aerial search sweep. The view should cover a relatively large area of snow-covered terrain rather than focusing on a single location.
+A SINGLE real adult person is already present somewhere on the ground, approximately 30–70 meters from the camera. The person is NOT walking and should be difficult to detect.
+
+SUBJECT POSITION AND OCCLUSION
+Place the person naturally in an off-center region of the frame: left third, right third, upper-left, upper-right, lower-left, or lower-right.
+The person should be heavily occluded by the terrain and snow.
+Use ONE natural scenario such as:
+
+partially sheltered underneath a large rock overhang, with only the upper torso or head visible
+lying partially buried in soft snow, with only the upper body visible
+sitting beside a large snow-covered rock, with most of the body concealed
+lying in a shallow snow depression, with the torso visible while the legs disappear into the surrounding snow
+resting or apparently sleeping beside rocks, with only part of the body exposed
+partially covered by wind-drifted snow, leaving only the upper portion of the body and possibly one leg visible
+The person's body should be naturally integrated with the terrain. Do NOT fully expose the person.
+The person should occupy only approximately 0.5–3% of the image area.
+The person must NOT be centered, isolated, brightly lit, or visually emphasized. The surrounding snow, rocks, ridges, and terrain should dominate the image.
+
+SNOW AND MOUNTAIN ENVIRONMENT
+Create a remote, rugged, high-altitude alpine environment with:
+
+expansive snow-covered slopes
+irregular rocky outcrops
+large partially snow-covered boulders
+shallow snow depressions
+wind-shaped snow drifts
+exposed dark rock
+uneven mountain terrain
+small ridges and natural elevation changes
+patches of compacted and loose snow
+subtle footprints or disturbed snow near some areas
+distant mountain slopes and ridgelines
+occasional sparse alpine vegetation partially buried under snow
+Avoid a perfectly smooth white landscape. The terrain should be irregular, textured, and difficult to visually interpret.
+The person's location should naturally blend into shadows, rocks, snow depressions, or uneven terrain.
+
+CAMERA BEHAVIOR
+The UAV performs a broad search sweep independently of the person.
+The camera should:
+
+maintain a continuous forward trajectory
+slowly scan across the mountainous terrain
+maintain a relatively high-altitude perspective
+reveal large portions of the terrain
+NOT descend toward the person
+NOT pan or yaw to reacquire the person
+NOT track the person
+NOT center the person
+NOT create a cinematic reveal
+NOT orbit the person
+The camera trajectory must remain completely independent of the person's location.
+
+PERSON APPEARANCE
+Use ordinary realistic cold-weather clothing in muted, low-contrast colors such as dark gray, brown, faded blue, or subdued winter clothing.
+No bright rescue clothing, reflective equipment, high-visibility colors, or artificial markers.
+The person's posture should look completely natural for someone resting, sleeping, injured, sheltering, or stranded in the terrain. They should show little or no movement during the shot.
+
+REALISTIC RECORDING CHARACTERISTICS
+The footage should resemble genuine UAV operational search footage rather than cinematic drone footage.
+Include subtle:
+
+stabilization imperfections
+micro-jitter and vibration
+realistic motion blur
+atmospheric haze
+sensor noise
+compression artifacts
+slight exposure adaptation
+changing snow brightness
+occasional loss of fine terrain detail
+Use natural cold-weather lighting with realistic shadows from rocks and terrain. Snow should contain subtle variations in brightness and texture rather than appearing as a perfectly white surface.
+The elevated viewpoint should make the person genuinely difficult to distinguish from the surrounding terrain.
+
+OVERALL APPEARANCE
+The primary visual content is the expansive high-altitude snowy terrain.
+The person is a small, incidental, partially occluded search target hidden within that environment.
+The footage should feel like an actual UAV search operation where the target has NOT been deliberately identified by the camera operator.
+No dramatic camera movement.
+No deliberate tracking.
+No centered subject.
+No cinematic composition.
+No artificial depth of field.
+No exaggerated drone perspective.
+No text.
+No HUD.
+No bounding boxes.
+No watermark.
+
+# SNOW HARD NEGATIVES
+
+Create approximately 10 seconds of photorealistic operational search-and-rescue aerial footage over a remote, high-altitude snowy mountain environment.
+The camera is positioned approximately 100–180 meters above the terrain, looking downward at roughly 40–55 degrees. It moves slowly and continuously forward with a subtle lateral drift as part of a broad-area aerial search sweep. The camera should cover a large expanse of mountainous terrain.
+There is no person present anywhere in the scene. The landscape contains multiple natural features that could be easily mistaken for a small, partially occluded human figure by a weak or poorly trained detection model: irregular rock outcrops with torso-like proportions, snow-covered boulders with protruding upper sections, wind-sculpted snow drifts that form head-and-shoulder silhouettes, shallow depressions containing darker compacted snow or shadow that resemble a prone body, and partially exposed dark rock faces that create the visual impression of clothing or limbs from altitude.
+These ambiguous natural elements should appear in off-center regions of the frame (left third, right third, upper-left, upper-right, lower-left, or lower-right) and occupy roughly the same small scale (0.2–1.5% of the image area) that a real distant person would occupy. They must remain strongly integrated with the terrain and never centered, isolated, or emphasized.
+
+SNOW AND MOUNTAIN ENVIRONMENT
+Create a remote, rugged, high-altitude alpine environment with:
+
+expansive snow-covered mountain slopes
+broad valleys and ridgelines
+irregular rocky outcrops
+large partially snow-covered boulders
+shallow snow depressions
+wind-shaped snow drifts
+exposed dark rock
+steep and uneven terrain
+natural elevation changes
+patches of compacted and loose snow
+subtle footprints or disturbed snow (natural, not human)
+distant mountain ridges
+smaller mountain formations extending into the background
+occasional sparse alpine vegetation partially buried under snow
+The landscape should extend far beyond any single ambiguous feature. Avoid a perfectly smooth white landscape. Snow should contain natural variations in depth, texture, wind patterns, shadows, and compaction. Use terrain elevation, rock formations, snow banks, and shallow depressions so that several areas look plausibly like they could contain a partially buried or sheltered figure when viewed from altitude.
+
+CAMERA BEHAVIOR
+The camera performs a broad, high-altitude search sweep.
+
+maintain a continuous forward trajectory
+move slowly and steadily
+remain at a high altitude throughout the shot
+survey a wide area of terrain
+reveal large portions of the mountain landscape
+maintain a downward-looking perspective
+do not descend, pan, yaw, track, center, zoom, or orbit any particular feature
+trajectory remains completely independent of any ambiguous rock or snow formation
+REALISTIC RECORDING CHARACTERISTICS
+The footage should resemble genuine operational aerial search footage rather than cinematic drone footage.
+Include subtle:
+stabilization imperfections
+micro-jitter and vibration
+realistic motion blur
+atmospheric haze
+distance-related loss of detail
+sensor noise
+compression artifacts
+slight exposure adaptation
+changing snow brightness
+reduced fine detail at greater distances
+Use realistic atmospheric perspective so distant terrain becomes slightly hazier and less detailed. Snow should contain subtle variations in brightness, texture, compaction, and depth. Avoid excessive sunlight, dramatic lighting, cinematic color grading, or any artificial enhancement of the ambiguous features.
+
+OVERALL APPEARANCE
+The primary visual content must be the large-scale high-altitude mountain landscape. Any rock, snowdrift, or shadow that might be mistaken for a person is purely incidental and natural. The footage should feel like an actual broad-area search with no human subject present. The high viewpoint should make certain terrain features genuinely difficult to distinguish from a real distant, partially occluded person.
+No dramatic camera movement.
+
+No deliberate tracking.
+
+No centered subject.
+
+No zooming.
+
+No cinematic reveal.
+
+No cinematic composition.
+
+No artificial depth of field.
+
+No exaggerated perspective.
+
+No perfectly smooth camera motion.
+
+No text.
+
+No HUD.
+
+No bounding boxes.
+
+No watermark.

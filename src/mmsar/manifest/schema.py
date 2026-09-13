@@ -45,17 +45,17 @@ class Manifest:
         default_factory=lambda: ["desert", "forest", "altitude"], init=False
     )
     SCENARIOS: list[str] = field(
-        default_factory=lambda: ["positive", "hard_negative", "clear_negative"],
+        default_factory=lambda: ["positive", "negative"],
         init=False,
     )
 
     @classmethod
     def create_empty(cls) -> "Manifest":
-        """Create an empty manifest with target=5 for all 9 bins."""
+        """Create an empty manifest with target=5 for all 6 bins."""
         manifest = cls()
         for cond in ["desert", "forest", "altitude"]:
             manifest.bins[cond] = {}
-            for scen in ["positive", "hard_negative", "clear_negative"]:
+            for scen in ["positive", "negative"]:
                 manifest.bins[cond][scen] = Bin(
                     condition=cond,
                     scenario=scen,

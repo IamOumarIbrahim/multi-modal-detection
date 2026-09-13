@@ -3,11 +3,11 @@
 Processes:
 - Positives: forest_RGB_positive_1 to 6 (1280x720 -> 2x 640x640, 240 frames)
              forest_RGB_positive_7 (752x416 -> scaled to 1280x720 -> 2x 640x640, 145 frames)
-- Hard negatives: forest_RGB_hard_negative_1 to 5 (752x416 -> scaled to 1280x720 -> 2x 640x640, 145 frames)
+- Negatives: forest_RGB_hard_negative_1 to 5 (752x416 -> scaled to 1280x720 -> 2x 640x640, 145 frames)
 
 Outputs to:
 - data/raw/forest/positive/rgb/
-- data/raw/forest/hard_negative/rgb/
+- data/raw/forest/negative/rgb/
 """
 
 import subprocess
@@ -42,7 +42,7 @@ def harvest_forest_snippets(
 
     tasks = [
         ("positive", [f"forest_RGB_positive_{i}.mp4" for i in range(1, 8)]),
-        ("hard_negative", [f"forest_RGB_hard_negative_{i}.mp4" for i in range(1, 6)]),
+        ("negative", [f"forest_RGB_hard_negative_{i}.mp4" for i in range(1, 6)]),
     ]
 
     for scenario, file_names in tasks:

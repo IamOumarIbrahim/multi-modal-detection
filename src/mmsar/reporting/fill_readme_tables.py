@@ -69,12 +69,11 @@ def fill_readme_tables(
 
     new_lines: list[str] = []
     in_results = False
-    current_model = ""
     table_headers: list[str] = []
 
     for line in lines:
         stripped = line.strip()
-        if stripped.startswith("### Results"):
+        if stripped.startswith("## Results") or stripped.startswith("### Results"):
             in_results = True
             new_lines.append(line)
             continue
@@ -87,7 +86,8 @@ def fill_readme_tables(
             cells = [c.strip() for c in stripped.strip("|").split("|")]
 
             # Check if this line is a header
-            if any("model" in c.lower() or "post-processing" in c.lower() for c in cells):
+            header_keywords = ("configuration", "method", "model", "modality", "post-processing")
+            if any(any(k in cell.lower() for k in header_keywords) for cell in cells):
                 table_headers = cells
                 new_lines.append(line)
                 continue
@@ -97,12 +97,42 @@ def fill_readme_tables(
                 new_lines.append(line)
                 continue
 
-            # It's a data row. Track current model if present
+            # It's a data row
             row_header = cells[0].replace("**", "").strip()
-            if row_header in ("YOLO11n", "YOLO26n"):
-                current_model = row_header
+            clean_row = re.sub(r"\(.*?\)", "", row_header).strip()
 
-            sub_header = cells[1].replace("**", "").strip() if len(cells) > 1 else ""
+            model_prefix = ""
+            if "yolo11" in clean_row.lower():
+                model_prefix = "yolo11n"
+            elif "yolo26" in clean_row.lower():
+                model_prefix = "yolo26n"
+
+            modality_str = ""
+            if "rgb" in clean_row.lower() or (len(cells) > 1 and "rgb" in cells[1].lower()):
+                modality_str = "rgb stream"
+            elif "thermal" in clean_row.lower() or (len(cells) > 1 and "thermal" in cells[1].lower()):
+                modality_str = "thermal stream"
+            elif "fusion" in clean_row.lower():
+                modality_str = "late fusion gate"
+
+            env_str = ""
+            for c in cells:
+                c_low = c.lower()
+                if "desert" in c_low:
+                    env_str = "desert"
+                    break
+                elif "forest" in c_low:
+                    env_str = "forest"
+                    break
+
+            method_name = ""
+            method_prefix = ""
+            if ":" in clean_row:
+                parts = clean_row.split(":", 1)
+                method_prefix = parts[0].strip()
+                method_name = parts[1].strip()
+            elif any(k in clean_row.lower() for k in ("baseline", "moving average", "median", "consensus", "mamba")):
+                method_name = clean_row
 
             # Try to match cells with TBD
             new_cells = list(cells)
@@ -111,15 +141,75 @@ def fill_readme_tables(
             for col_idx, cell in enumerate(cells):
                 if "TBD" in cell:
                     col_name = table_headers[col_idx] if col_idx < len(table_headers) else f"col_{col_idx}"
+                    clean_col = re.sub(r"\(.*?\)", "", col_name).replace("$", "").replace("\\", "").strip()
+
                     raw_candidates = [
-                        f"{current_model}::{sub_header}::{col_name}",
-                        f"{sub_header}::{col_name}",
                         f"{row_header}::{col_name}",
-                        f"{current_model}::{col_name}",
+                        f"{clean_row}::{clean_col}",
+                        f"{clean_row}::{col_name}",
                     ]
 
-                    replacement = None
+                    if model_prefix:
+                        raw_candidates.extend([
+                            f"{model_prefix}::{col_name}",
+                            f"{model_prefix}::{clean_col}",
+                        ])
+                        if modality_str:
+                            raw_candidates.extend([
+                                f"{model_prefix}::{modality_str}::{col_name}",
+                                f"{model_prefix}::{modality_str}::{clean_col}",
+                                f"{model_prefix}::{modality_str} ($c_{{\\text{{{modality_str[:3]}}}}})::{col_name}",
+                                f"{model_prefix}::{modality_str} ($c_{{\\text{{{modality_str[:3]}}}}})::{clean_col}",
+                            ])
+                        if env_str:
+                            raw_candidates.extend([
+                                f"{model_prefix}::{env_str}::{col_name}",
+                                f"{model_prefix}::{env_str}::{clean_col}",
+                            ])
+                            if modality_str:
+                                raw_candidates.extend([
+                                    f"{model_prefix}::{modality_str}::{env_str}::{col_name}",
+                                    f"{model_prefix}::{modality_str}::{env_str}::{clean_col}",
+                                ])
+
+                    if method_name:
+                        raw_candidates.extend([
+                            f"{method_name}::{col_name}",
+                            f"{method_name}::{clean_col}",
+                            f"{method_name.split()[0]}::{col_name}",
+                            f"{method_name.split()[0]}::{clean_col}",
+                            f"yolo11n::{method_name.lower()}::{col_name}",
+                            f"yolo11n::{method_name.lower()}::{clean_col}",
+                            f"yolo11n::{method_name.split()[0].lower()}::{col_name}",
+                            f"yolo11n::{method_name.split()[0].lower()}::{clean_col}",
+                        ])
+                        if "baseline" in method_name.lower():
+                            raw_candidates.extend([
+                                f"baseline::{col_name}",
+                                f"baseline::{clean_col}",
+                                f"baseline::desert false alarms",
+                                f"yolo11n::baseline::{col_name}",
+                                f"yolo11n::baseline::{clean_col}",
+                            ])
+
+                    if method_prefix:
+                        raw_candidates.extend([
+                            f"{method_prefix}::{col_name}",
+                            f"{method_prefix}::{clean_col}",
+                        ])
+
+                    # Expand for precision / recall aliases
+                    expanded = []
                     for cand in raw_candidates:
+                        expanded.append(cand)
+                        cand_l = cand.lower()
+                        if "precision" in cand_l and "frame precision" not in cand_l:
+                            expanded.append(re.sub(r"::precision", "::frame precision", cand, flags=re.IGNORECASE))
+                        elif "recall" in cand_l and "frame recall" not in cand_l:
+                            expanded.append(re.sub(r"::recall", "::frame recall", cand, flags=re.IGNORECASE))
+
+                    replacement = None
+                    for cand in expanded:
                         cand_low = cand.lower()
                         cand_norm = _normalize_key(cand)
                         cand_clean = _strip_math(cand)
@@ -142,7 +232,9 @@ def fill_readme_tables(
                         row_modified = True
 
             if row_modified:
-                new_line = "| " + " | ".join(new_cells) + " |\n"
+                # Maintain original line ending (CRLF or LF)
+                line_ending = "\r\n" if line.endswith("\r\n") else "\n"
+                new_line = "| " + " | ".join(new_cells) + " |" + line_ending
                 new_lines.append(new_line)
             else:
                 new_lines.append(line)

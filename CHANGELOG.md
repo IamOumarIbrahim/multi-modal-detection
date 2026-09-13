@@ -1,4 +1,24 @@
-# MMSAR Manuscript Enhancement Pass — Changelog
+# MMSAR Dataset Reorganization & Multi-Biome Expansion - Changelog
+
+- **[T-D01] Elimination of Redundant Clear-Negative Flights & Unified Two-Class Scheme**:
+  - Deprecated dedicated artificial clear-negative flights across the corpus to prevent negative gradient bloat during detector training.
+  - Formally restructured all biomes into two operational scenario categories: `positive` (confirmed human targets) and `negative` (acute distractors such as boulders, canopy shadows, stumps, and empty wilderness passes). Natural clear-negative context is intrinsically provided by negative passes and unpopulated sibling tiles from positive passes.
+  - Renamed all `hard_negative` directories, subdirectories, and video files to `negative` across `videos/`, `data/raw/`, and `data/processed/`.
+  - Updated [`data/manifest.json`](file:///c:/Dev/repos/Public%20repos/research/multi-modal-detection/data/manifest.json) to only track `positive` and `negative` scenarios.
+- **[T-D02] Temperate Forest Dual-Crop Harvesting**:
+  - Harvested 7 parent positive videos (14 snippets: 13 positive target tiles, 1 negative sibling tile) and 5 parent negative videos (10 snippets).
+  - Outputted 24 square snippets ($640 \times 640$ at 24 FPS, 4,620 frames) into [`data/raw/forest/positive/rgb/`](file:///c:/Dev/repos/Public%20repos/research/multi-modal-detection/data/raw/forest/positive/rgb) and [`data/raw/forest/negative/rgb/`](file:///c:/Dev/repos/Public%20repos/research/multi-modal-detection/data/raw/forest/negative/rgb).
+- **[T-D03] Corpus Rebalancing & Option B Episodic Partitioning**:
+  - Reunited 4 empty sibling tiles from desert positive flights into [`data/raw/desert/positive/rgb/`](file:///c:/Dev/repos/Public%20repos/research/multi-modal-detection/data/raw/desert/positive/rgb) and updated desert labels.
+  - Rebalanced combined corpus to 44 episodes (20 desert, 24 forest) totaling 9,420 frames at 24 Hz.
+  - Achieved an optimal combined frame ratio of 1 : 1.29 (4,108 positive frames [43.6%] : 5,312 negative frames [56.4%]).
+  - Updated Option B parent-video grouped episodic partitioning ([`data/splits/dataset_episodes_split.json`](file:///c:/Dev/repos/Public%20repos/research/multi-modal-detection/data/splits/dataset_episodes_split.json)) into 24 Train episodes (60%), 8 Validation episodes (20%), and 12 Held-Out Test episodes (20%).
+- **[T-D04] Manuscript & Documentation Synchronization**:
+  - Synchronized [`docs/manuscript/main.tex`](file:///c:/Dev/repos/Public%20repos/research/multi-modal-detection/docs/manuscript/main.tex) and [`README.md`](file:///c:/Dev/repos/Public%20repos/research/multi-modal-detection/README.md) tables, narratives, and split matrices with the updated two-class structure and 44-episode corpus.
+
+---
+
+# MMSAR Manuscript Enhancement Pass - Changelog
 
 Every change made during the zero-new-experiment enhancement pass is recorded below, tagged by Task ID, specifying what changed, where, and why.
 
@@ -48,3 +68,20 @@ Every modification aligning the training configuration, pipeline code, and docum
   - Updated Detector Training Configuration table with early stopping (`patience=20` on `val/loss`), 100-epoch maximum horizon, learning rate schedule, data augmentations, and multi-seed protocol.
   - Added documentation for the four publication-track benchmark arms, reporting safeguards, and extended diagnostic protocols.
   - Updated quick reproduction commands to reflect CLI usage with the benchmark configuration.
+
+- **[T-C05] Runtime Floor Derivation & Policy Update (`configs/hyperparams.yaml`)**:
+  - Replaced static literal `min_positive_floor_per_split: 2` with dynamic derivation policy (`floor_policy: "runtime_derived"`, `floor_derivation_rule: "max(2, floor(total_positive_episodes * val_ratio))"`).
+
+- **[T-C06] Dynamic Difficulty-Balanced Split Allocator (`scripts/split_dataset_episodes.py`)**:
+  - Implemented dynamic dataset inventory and automated target-presence calculation (`target_presence_rate`, `mean_bbox_area_px`, and occlusion difficulty flag) directly from label files.
+  - Implemented dynamic positive split floor derivation scaling with available pool size.
+  - Implemented balanced parent allocation minimizing val vs test target presence disparity while strictly enforcing Option B grouping and anti-adjacency shuffling (d >= 2).
+  - Added export of versioned audit manifest `data/splits/dataset_episodes_split_manifest.json`.
+
+- **[T-C07] Publication Reporting Pipeline & Automated Safeguards (`scripts/finish_and_report_benchmarks.py`)**:
+  - Created reporting pipeline parsing live `model.val()` results with zero static placeholder dictionaries.
+  - Implemented pre-publish automated duplicate-metric diff check against historical markdown reports (`YOLO_11n_DESERT_ALL.md`, `EXPERIMENT_MULTI_SEED_REPORT.md`, `YOLO11n_TAU_TEST.md`) with `DuplicateMetricError` halting.
+  - Implemented dynamic conditioned verdict generation, empirical IoU jitter analysis, confidence calibration with ECE, and multiseed statistical aggregation with B=1000 bootstrap CI.
+
+- **[T-C08] Behavioral Unit Test Suite (`tests/test_split_allocation.py`, `tests/test_benchmark_safeguards.py`)**:
+  - Added 11 behavioral unit tests covering dynamic floor scaling, difficulty-balanced parent allocation, Option B zero cross-split leakage, duplicate-metric diff check enforcement, non-templated verdict generation, empirical IoU jitter curve, and calibration computation. All 16 suite tests pass cleanly.

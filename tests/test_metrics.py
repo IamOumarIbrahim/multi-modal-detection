@@ -7,10 +7,11 @@ from mmsar.metrics.frame_metrics import calculate_frame_metrics, count_false_ala
 from mmsar.metrics.alarm_metrics import calculate_alarm_metrics, count_alarm_false_triggers
 from mmsar.metrics.report import (
     to_markdown_table,
-    TABLE_1A_COLUMNS,
-    TABLE_1B_COLUMNS,
+    TABLE_1_COLUMNS,
     TABLE_2_COLUMNS,
     TABLE_3_COLUMNS,
+    TABLE_1A_COLUMNS,
+    TABLE_1B_COLUMNS,
     RESULTS_TABLE_COLUMNS,
 )
 
@@ -78,16 +79,16 @@ def test_readme_results_tables_header_equality() -> None:
     assert readme_path.exists(), f"README.md not found at {readme_path}"
 
     content = readme_path.read_text(encoding="utf-8")
-    assert "### Results" in content, "README.md missing '### Results' section"
+    assert "### Results" in content or "## Results" in content, "README.md missing Results section"
 
-    results_section = content.split("### Results")[1].split("## Quick Reproduction")[0]
+    results_section = re.split(r"## Results & Benchmarks|### Results", content)[-1].split("## Quick Reproduction")[0]
 
-    # Regex matching Markdown table headers followed by a separator row
-    pattern = r"\|([^\n]+)\|\n\|(?:\s*[:-]+[-| :]*)\|"
+    # Regex matching Markdown table headers followed by a separator row (supporting CRLF)
+    pattern = r"\|([^\r\n]+)\|\r?\n\|(?:\s*[:-]+[-| :]*)\|"
     matches = re.findall(pattern, results_section)
 
-    assert len(matches) == 4, (
-        f"Expected 4 results tables in README.md, found {len(matches)}"
+    assert len(matches) == 3, (
+        f"Expected 3 results tables in README.md, found {len(matches)}"
     )
 
     extracted_headers: list[list[str]] = []
@@ -96,18 +97,32 @@ def test_readme_results_tables_header_equality() -> None:
         extracted_headers.append(cols)
 
     # Check each table matches the corresponding constant
-    assert extracted_headers[0] == TABLE_1A_COLUMNS, (
-        f"Table 1a header mismatch:\nExpected: {TABLE_1A_COLUMNS}\nFound: {extracted_headers[0]}"
+    assert extracted_headers[0] == TABLE_1_COLUMNS, (
+        f"Table 1 header mismatch:\nExpected: {TABLE_1_COLUMNS}\nFound: {extracted_headers[0]}"
     )
-    assert extracted_headers[1] == TABLE_1B_COLUMNS, (
-        f"Table 1b header mismatch:\nExpected: {TABLE_1B_COLUMNS}\nFound: {extracted_headers[1]}"
+    assert extracted_headers[1] == TABLE_2_COLUMNS, (
+        f"Table 2 header mismatch:\nExpected: {TABLE_2_COLUMNS}\nFound: {extracted_headers[1]}"
     )
-    assert extracted_headers[2] == TABLE_2_COLUMNS, (
-        f"Table 2 header mismatch:\nExpected: {TABLE_2_COLUMNS}\nFound: {extracted_headers[2]}"
-    )
-    assert extracted_headers[3] == TABLE_3_COLUMNS, (
-        f"Table 3 header mismatch:\nExpected: {TABLE_3_COLUMNS}\nFound: {extracted_headers[3]}"
+    assert extracted_headers[2] == TABLE_3_COLUMNS, (
+        f"Table 3 header mismatch:\nExpected: {TABLE_3_COLUMNS}\nFound: {extracted_headers[2]}"
     )
 
     # Verify full list matches
     assert extracted_headers == RESULTS_TABLE_COLUMNS
+
+
+def test_calculate_time_to_alarm() -> None:
+    from mmsar.metrics.alarm_metrics import calculate_time_to_alarm
+
+    y_true = [0, 0, 1, 1, 1, 0, 0, 1, 1, 0]
+    # Event 1 starts at 2, predicted at 3 -> delay 1
+    # Event 2 starts at 7, predicted at 7 -> delay 0
+    y_pred = [0, 0, 0, 1, 1, 0, 0, 1, 0, 0]
+
+    res = calculate_time_to_alarm(y_true, y_pred, fps=24.0)
+    assert res["detected_events"] == 2
+    assert res["total_true_events"] == 2
+    assert res["delays_frames"] == [1, 0]
+    assert res["mean_delay_frames"] == 0.5
+    assert abs(res["mean_delay_seconds"] - (0.5 / 24.0)) < 1e-4
+

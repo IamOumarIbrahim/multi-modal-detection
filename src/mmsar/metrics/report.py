@@ -2,54 +2,56 @@
 
 from typing import Sequence, Any, Union
 
-TABLE_1A_COLUMNS: list[str] = [
-    "Model",
-    "Modality / Stream",
+TABLE_1_COLUMNS: list[str] = [
+    "Configuration / Condition",
+    "Modality",
+    "Test Environment",
     "Precision",
     "Recall",
     "F1-Score",
 ]
 
-TABLE_1B_COLUMNS: list[str] = [
-    "Model",
-    "Post-Processing Method",
-    "Frame Precision",
-    "Frame Recall",
-    "Alarm Precision",
-    "Alarm Recall",
-]
-
 TABLE_2_COLUMNS: list[str] = [
-    "Post-Processing Method",
-    "Clear-Negative False Alarms",
-    "Hard-Negative False Alarms",
-    "Spurious Alarm Triggers (IoT Impact)",
+    "Method",
+    r"Val $\tau^*$",
+    "Precision",
+    "Recall",
+    "F1-Score",
+    r"F1 (95% CI)$^*$",
+    "Pos. Recall (%)",
+    "Negative FP",
+    "FASR (%)",
+    "Latency / Frame",
 ]
 
 TABLE_3_COLUMNS: list[str] = [
-    "Post-Processing Method",
-    "Desert False Alarms",
-    "Forest False Alarms",
-    "Altitude (Snow) False Alarms",
+    "Method",
+    "Environment",
+    "FASR (%)",
+    "FP Avoided vs. M1",
+    r"Bandwidth Saved (kB)$^\dagger$",
+    r"Battery Saved (kJ)$^\ddagger$",
+    "Est. Added Flight Time (min)",
 ]
 
+# Aliases for backward compatibility
+TABLE_1A_COLUMNS: list[str] = TABLE_1_COLUMNS
+TABLE_1B_COLUMNS: list[str] = TABLE_2_COLUMNS
+
 RESULTS_TABLE_COLUMNS: list[list[str]] = [
-    TABLE_1A_COLUMNS,
-    TABLE_1B_COLUMNS,
+    TABLE_1_COLUMNS,
     TABLE_2_COLUMNS,
     TABLE_3_COLUMNS,
 ]
 
 DOCSTRING_TABLE_CONSTANTS = """
 README Results Table Column Sets:
-1. Upstream Detector & Fusion Performance:
-   ['Model', 'Modality / Stream', 'Precision', 'Recall', 'F1-Score']
-2. Post-Processing Evaluation:
-   ['Model', 'Post-Processing Method', 'Frame Precision', 'Frame Recall', 'Alarm Precision', 'Alarm Recall']
-3. Negative Scenario Rejection & Downstream Transmission Impact:
-   ['Post-Processing Method', 'Clear-Negative False Alarms', 'Hard-Negative False Alarms', 'Spurious Alarm Triggers (IoT Impact)']
-4. Environmental Breakdown (False Detections per Condition):
-   ['Post-Processing Method', 'Desert False Alarms', 'Forest False Alarms', 'Altitude (Snow) False Alarms']
+1. Upstream Frame-Level Detection Performance (Table 1):
+   ['Configuration / Condition', 'Modality', 'Test Environment', 'Precision', 'Recall', 'F1-Score']
+2. Comparative Benchmark of Causal Post-Processing (Table 2):
+   ['Method', 'Val tau*', 'Precision', 'Recall', 'F1-Score', 'F1 (95% CI)*', 'Pos. Recall (%)', 'Negative FP', 'FASR (%)', 'Latency / Frame']
+3. Environment-Stratified Operational Resource Impact (Table 3):
+   ['Method', 'Environment', 'FASR (%)', 'FP Avoided vs. M1', 'Bandwidth Saved (kB)', 'Battery Saved (kJ)', 'Est. Added Flight Time (min)']
 """
 
 

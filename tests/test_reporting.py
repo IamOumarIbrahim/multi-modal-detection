@@ -1,6 +1,7 @@
 """Tests for results table filler, human confirmation gate, and README immutability."""
 
 import hashlib
+import re
 import shutil
 from pathlib import Path
 import pytest
@@ -122,12 +123,9 @@ def test_partial_fill_with_yolo26n_skipped(tmp_path: Path) -> None:
     assert "0.895" in updated_text
 
     # YOLO26n rows still retain TBD
-    lines = updated_text.splitlines()
-    yolo26_table1_line = next(l for l in lines if "YOLO26n" in l and "RGB Stream" in l)
+    results_lines = re.split(r"## Results|### Results", updated_text)[-1].split("## Quick Reproduction")[0].splitlines()
+    yolo26_table1_line = next(l for l in results_lines if l.strip().startswith("|") and "YOLO26n" in l and "RGB" in l)
     assert "TBD" in yolo26_table1_line, "YOLO26n row should have remained TBD when skipped"
-
-    yolo26_table2_line = next(l for l in lines if "YOLO26n" in l and "Baseline" in l)
-    assert "TBD" in yolo26_table2_line, "YOLO26n baseline should have remained TBD when skipped"
 
 
 def test_full_fill_with_both_models(tmp_path: Path) -> None:
@@ -138,8 +136,7 @@ def test_full_fill_with_both_models(tmp_path: Path) -> None:
     metrics_both = {
         "yolo11n::rgb stream::precision": "0.910",
         "yolo26n::rgb stream::precision": "0.935",
-        "yolo11n::baseline::frame precision": "0.895",
-        "yolo26n::baseline::frame precision": "0.920",
+        "baseline::precision": "0.895",
     }
 
     diff = fill_readme_tables(
@@ -155,14 +152,13 @@ def test_full_fill_with_both_models(tmp_path: Path) -> None:
     assert "0.910" in updated_text
     assert "0.935" in updated_text
     assert "0.895" in updated_text
-    assert "0.920" in updated_text
 
     # Verify values are placed in respective lines
-    lines = updated_text.splitlines()
-    yolo11_line = next(l for l in lines if "YOLO11n" in l and "RGB Stream" in l)
+    results_lines = re.split(r"## Results|### Results", updated_text)[-1].split("## Quick Reproduction")[0].splitlines()
+    yolo11_line = next(l for l in results_lines if l.strip().startswith("|") and "YOLO11n" in l and "RGB" in l)
     assert "0.910" in yolo11_line
 
-    yolo26_line = next(l for l in lines if "YOLO26n" in l and "RGB Stream" in l)
+    yolo26_line = next(l for l in results_lines if l.strip().startswith("|") and "YOLO26n" in l and "RGB" in l)
     assert "0.935" in yolo26_line
 
 
