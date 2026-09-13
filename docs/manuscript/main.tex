@@ -35,7 +35,7 @@
 \endgroup
 
 \begin{abstract}
-Autonomous unmanned aerial vehicles (UAVs) in wilderness search and rescue (SAR) require reliable person detection under strict size, weight, power, and computing (SWaP-C) limits. Combining visible red-green-blue (RGB) and thermal infrared (TIR) cameras prevents sensor-specific dropouts caused by canopy shadows, darkness, or thermal crossover. However, per-frame object detectors often produce momentary false alarms from terrain clutter. During autonomous flight, each false alarm triggers unnecessary loiter maneuvers, depletes battery reserves, and wastes telemetry bandwidth over constrained links. This paper evaluates lightweight causal temporal decision methods to generate reliable search alerts from multimodal aerial detections. Using a controlled multimodal benchmark spanning three biomes (arid desert, temperate forest, and snow alpine) across synchronized RGB and pseudo-TIR streams, we deploy two upstream You Only Look Once (YOLO11n) detectors (2.6M parameters, 6.5 giga floating-point operations [GFLOPs]) held strictly fixed. Confidences are combined through soft disjunctive late fusion and filtered over a causal sliding window ($W = 5$ frames, 208~ms latency bound at 24~Hz). We compare five temporal decision strategies with validation-calibrated thresholds: raw thresholding, moving average, median filtering, history consensus, and a learned Mamba selective state-space model (SSSM). On alert-level metrics, a five-frame moving average achieves 100.0\% positive target recall and reduces false alerts from 12.0 to 4.0 false alerts per minute (FA/min)—an 87.0\% frame-level false alarm suppression ratio (FASR). It runs in 0.30~$\mu$s per frame with a 20-byte buffer, outperforming raw thresholding and learned state-space modeling in edge efficiency.
+Autonomous unmanned aerial vehicles (UAVs) in wilderness search and rescue (SAR) require reliable person detection under strict size, weight, power, and computing (SWaP-C) limits. Combining visible red-green-blue (RGB) and thermal infrared (TIR) cameras prevents sensor-specific dropouts caused by canopy shadows, darkness, or thermal crossover. However, per-frame object detectors often produce momentary false alarms from terrain clutter. During autonomous flight, each false alarm triggers unnecessary loiter maneuvers, depletes battery reserves, and wastes telemetry bandwidth over constrained links. This paper evaluates lightweight causal temporal decision methods to generate reliable search alerts from multimodal aerial detections. Using a controlled multimodal benchmark spanning three biomes (arid desert, temperate forest, and snow alpine) across synchronized RGB and pseudo-TIR streams, we deploy two upstream You Only Look Once (YOLO11n) detectors (2.6M parameters, 6.5 giga floating-point operations [GFLOPs]) held strictly fixed. Confidences are combined through a late fusion max gate and filtered over a causal sliding window ($W = 5$ frames, 208~ms latency bound at 24~Hz). We compare five temporal decision strategies with validation-calibrated thresholds: raw thresholding, moving average, median filtering, history consensus, and a learned Mamba selective state-space model (SSSM). On alert-level metrics, a five-frame moving average achieves 100.0\% positive target recall and reduces false alerts from 12.0 to 4.0 false alerts per minute (FA/min)—an 87.0\% frame-level false alarm suppression ratio (FASR). It runs in 0.30~$\mu$s per frame with a 20-byte buffer, outperforming raw thresholding and learned state-space modeling in edge efficiency.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -45,34 +45,34 @@ Multimodal fusion, search and rescue, unmanned aerial vehicles, state-space mode
 \begin{figure*}[!t]
 \centering
 \resizebox{1.0\textwidth}{!}{\input{figure_system_architecture.tex}}
-\caption{System architecture of the MMSAR evaluation framework. Visible RGB video streams are synthesized from scenario text prompts using multimodal large language models (Google Gemini 3.8 Flash and xAI Grok with spatial upscaling to $1280 \times 720$). A 256-level lookup table (\texttt{melo\_lut}) transfers pseudo-thermal styling to emulate synchronized thermal infrared streams. Dual streams undergo $2\times$ square tiling ($640 \times 640$), video-level bounding box annotation in Label Studio, and 24~Hz frame extraction. Curated sequences are partitioned into 240-frame episodes under Option B (parent-video grouped split) with anti-adjacency snippet shuffling to prevent spatial data leakage. At edge inference, parallel lightweight YOLO11n detectors process incoming RGB and thermal frames at 24~Hz ($T_s \approx 41.7$~ms), fused through a soft disjunctive max gate ($s[n] = \max(c_{\text{RGB}}[n], c_{\text{Thermal}}[n])$) and evaluated across five lightweight temporal decision methods ($W = 5$ frames, 208~ms latency bound).}
+\caption{System architecture of the MMSAR evaluation framework. Visible RGB video streams are synthesized from scenario text prompts using multimodal large language models (Google Gemini 3.8 Flash and xAI Grok with spatial upscaling to $1280 \times 720$). A 256-level lookup table (\texttt{melo\_lut}) transfers pseudo-thermal styling to emulate synchronized thermal infrared streams. Dual streams undergo $2\times$ square tiling ($640 \times 640$), video-level bounding box annotation in Label Studio, and 24~Hz frame extraction. Curated sequences are partitioned into 240-frame episodes under Option B (parent-video grouped split) with non-adjacent shuffling to prevent spatial data leakage. At edge inference, parallel lightweight YOLO11n detectors process incoming RGB and thermal frames at 24~Hz ($T_s \approx 41.7$~ms), combined with a late fusion max gate ($s[n] = \max(c_{\text{RGB}}[n], c_{\text{Thermal}}[n])$) and evaluated across five lightweight temporal decision methods ($W = 5$ frames, 208~ms latency bound).}
 \label{fig:system_architecture}
 \end{figure*}
 
 \section{Introduction}
 
-Autonomous unmanned aerial vehicles (UAVs) provide rapid aerial coverage in wilderness search and rescue (SAR) missions \cite{rudol2008human}, \cite{silvagni2017multipurpose}. However, onboard vision systems must operate under strict size, weight, power, and computing (SWaP-C) limits. Remote sorties depend on low-bandwidth satellite or cellular Internet of Things (IoT) telemetry \cite{kyrkou2021emergencynet}. In autonomous operations, false alarms trigger costly hover-and-verify maneuvers that drain battery power and risk dispatching rescue teams to empty locations.
+Autonomous unmanned aerial vehicles (UAVs) provide rapid aerial coverage in wilderness search and rescue (SAR) missions \cite{rudol2008human}, \cite{silvagni2017multipurpose}. However, onboard vision systems must operate under strict size, weight, power, and computing (SWaP-C) limits. Remote missions depend on low-bandwidth satellite or cellular Internet of Things (IoT) telemetry \cite{kyrkou2021emergencynet}. In autonomous operations, false alarms trigger costly hover-and-verify maneuvers that drain battery power and risk dispatching rescue teams to empty locations.
 
-Wilderness optical sensing suffers from sensor-specific failure modes. Visible red-green-blue (RGB) cameras degrade in dense shadows, heavy foliage, and poor lighting. Thermal infrared (TIR) cameras detect body heat regardless of illumination \cite{hwang2015multispectral}, \cite{jia2021llvip}, but suffer from thermal crossover when ground temperatures match human body temperature \cite{portmann2014people}. In desert environments, sun-baked rocks emit heat patterns that mimic human signatures. In snowy terrain, high-albedo ground causes visible glare, while insulated winter clothing attenuates body heat emission. Combining RGB and thermal sensors is therefore necessary for reliable target detection across diverse biomes.
+Wilderness optical sensing suffers from sensor-specific failure modes. Visible red-green-blue (RGB) cameras degrade in dense shadows, heavy foliage, and poor lighting. Thermal infrared (TIR) cameras detect body heat regardless of illumination \cite{hwang2015multispectral}, \cite{jia2021llvip}, but suffer from thermal crossover when ground temperatures match human body temperature \cite{portmann2014people}. In desert environments, sun-heated rocks emit thermal patterns that mimic human signatures. In snowy terrain, bright reflective snow causes visible glare, while insulated winter clothing reduces body heat emission. Combining RGB and thermal sensors is therefore necessary for reliable target detection across diverse biomes.
 
 Small UAVs require compact single-stage detectors such as You Only Look Once (YOLO) \cite{redmon2016you}. In this work, we deploy Ultralytics YOLO11n \cite{jocher2024yolo11} (2.6M parameters, 6.5 giga floating-point operations [GFLOPs] at $640 \times 640$) trained in 32-bit floating-point (FP32) precision. However, per-frame detections fluctuate due to platform vibration, motion blur, and background clutter. These fluctuations create brief false alarms in background areas and intermittent dropouts on actual human targets.
 
-To address these issues, we evaluate lightweight causal temporal decision methods that convert noisy per-frame multimodal detections into dependable mission alerts. Upstream detectors and late fusion remain strictly fixed across all experiments to isolate the impact of temporal filtering. Frame detections are combined using a soft disjunctive max gate and filtered across a causal five-frame sliding window ($208\text{ ms}$ at $24\text{ Hz}$). We benchmark five temporal decision strategies under validation-calibrated thresholds: raw thresholding, moving average, median filtering, history consensus, and a learned Mamba selective state-space model (SSSM) \cite{gu2023mamba}.
+To address these issues, we evaluate lightweight causal temporal decision methods that convert noisy per-frame multimodal detections into dependable mission alerts. Upstream detectors and late fusion remain strictly fixed across all experiments to isolate the impact of temporal filtering. Frame detections are combined using a late fusion max gate and filtered across a causal five-frame sliding window ($208\text{ ms}$ at $24\text{ Hz}$). We benchmark five temporal decision strategies under validation-calibrated thresholds: raw thresholding, moving average, median filtering, history consensus, and a learned Mamba selective state-space model (SSSM) \cite{gu2023mamba}.
 
 The central research question is: \textit{How do lightweight causal temporal decision methods compare in generating reliable alerts from multimodal detections for autonomous aerial search and rescue?}
 
 This work provides three main contributions:
 \begin{enumerate}
-\item \textbf{Multimodal SAR Benchmark:} A controlled $3\times 2$ experimental setup covering desert, forest, and snow alpine biomes across synchronized RGB and pseudo-TIR video streams, evaluating fixed lightweight YOLO11n detectors and soft disjunctive late fusion.
+\item \textbf{Multimodal SAR Benchmark:} A controlled $3\times 2$ experimental setup covering desert, forest, and snow alpine biomes across synchronized RGB and pseudo-TIR video streams, evaluating fixed lightweight YOLO11n detectors with late fusion.
 \item \textbf{Causal Decision Benchmark:} Empirical evaluation of five causal decision filters (raw thresholding, moving average, median filter, history consensus, and Mamba-SSSM) using alert-level metrics: false alerts per minute (FA/min), positive-event recall, and decision latency.
-\item \textbf{Window Sensitivity and Pareto Analysis:} Empirical ablation of causal window length ($W \in \{1, 3, 5, 7\}$) and alert trade-offs, showing that finite impulse response (FIR) moving averages achieve Pareto-optimal operating efficiency on edge companion computers.
+\item \textbf{Window Sensitivity and Pareto Analysis:} Empirical ablation of causal window length ($W \in \{1, 3, 5, 7\}$) and alert trade-offs, showing that finite impulse response (FIR) moving averages achieve the best operating balance between false alarm reduction and real-time responsiveness on edge companion computers.
 \end{enumerate}
 
 \section{Related Work}
 \label{sec:related_work}
 
 \subsection{Multispectral and Multimodal Person Detection}
-Multispectral sensing combines complementary spectral bands to overcome lighting and weather extremes. Hwang et al.~\cite{hwang2015multispectral} introduced the KAIST multispectral pedestrian benchmark, and Jia et al.~\cite{jia2021llvip} created the LLVIP dataset for visible-thermal surveillance. Liu et al.~\cite{liu2016multispectral} showed that late fusion preserves modality-specific features more effectively than early channel concatenation. Li et al.~\cite{li2018illumination} used illumination weighting, and Zhang et al.~\cite{zhang2019cross} applied cross-modality attention networks. In our framework, we use soft disjunctive late fusion via max-pooling. This approach allows decoupled detector execution without requiring complex hardware synchronization between sensors.
+Multispectral sensing combines complementary spectral bands to overcome lighting and weather extremes. Hwang et al.~\cite{hwang2015multispectral} introduced the KAIST multispectral pedestrian benchmark, and Jia et al.~\cite{jia2021llvip} created the LLVIP dataset for visible-thermal surveillance. Liu et al.~\cite{liu2016multispectral} showed that late fusion preserves modality-specific features more effectively than early channel concatenation. Li et al.~\cite{li2018illumination} used illumination weighting, and Zhang et al.~\cite{zhang2019cross} applied cross-modality attention networks. In our framework, we use a late fusion max gate. This approach allows decoupled detector execution without requiring hardware synchronization between sensors.
 
 \subsection{Lightweight Detectors for Aerial Search and Rescue}
 Deploying vision models on UAVs requires balancing detection accuracy against SWaP-C limits. Rudol and Doherty~\cite{rudol2008human} demonstrated dual-band person geolocation from UAVs, while Silvagni et al.~\cite{silvagni2017multipurpose} showed that battery capacity directly limits flight endurance. Lygouras et al.~\cite{lygouras2019unsupervised} found that heavy neural ensembles exceed onboard power budgets, and Portmann et al.~\cite{portmann2014people} identified thermal crossover as a primary cause of wilderness false alarms. Kyrkou and Theocharides~\cite{kyrkou2021emergencynet} addressed telemetry constraints with EmergencyNet. Building on single-stage detection principles established by YOLO~\cite{redmon2016you}, we deploy Ultralytics YOLO11n~\cite{jocher2024yolo11} (2.6M parameters, 6.5 GFLOPs) for edge inference.
@@ -83,7 +83,7 @@ Applying per-frame detectors to video produces high-frequency confidence fluctua
 \section{Methodology}
 \label{sec:methodology}
 
-The MMSAR pipeline integrates dual-spectrum detection, soft disjunctive late fusion, and causal temporal filtering (Fig.~\ref{fig:system_architecture}). Synchronized visible RGB frames $I_{\text{RGB}}[n]$ and thermal frames $I_{\text{Thermal}}[n]$ produce per-frame target confidences $c_{\text{RGB}}[n], c_{\text{Thermal}}[n] \in [0.0, 1.0]$. The upstream detectors and late fusion gate remain fixed across all experiments.
+The MMSAR pipeline integrates dual-spectrum detection, late fusion, and causal temporal filtering (Fig.~\ref{fig:system_architecture}). Synchronized visible RGB frames $I_{\text{RGB}}[n]$ and thermal frames $I_{\text{Thermal}}[n]$ produce per-frame target confidences $c_{\text{RGB}}[n], c_{\text{Thermal}}[n] \in [0.0, 1.0]$. The upstream detectors and late fusion gate remain fixed across all experiments.
 
 \subsection{Video Ingestion and Real-Time Edge Budget}
 Autonomous UAV companion computers (such as the NVIDIA Jetson Orin Nano, operating within a 7--15\,W thermal design power [TDP] envelope) require frame-synchronous processing that matches sensor capture rates. Video streams are captured at $f_s = 24\text{ Hz}$, yielding a frame period $T_s \approx 41.7\text{ ms}$. To avoid dropping frames or accumulating queue delay, processing must satisfy:
@@ -93,8 +93,8 @@ Autonomous UAV companion computers (such as the NVIDIA Jetson Orin Nano, operati
 \end{equation}
 where $T_{\text{RGB}}$ and $T_{\text{Thermal}}$ are detector latencies, $T_{\text{fusion}}$ is max-pooling latency ($O(1)$), and $T_{\text{postproc}}$ is temporal filter latency. We deploy two parallel YOLO11n models \cite{jocher2024yolo11}: (1)~\textbf{YOLO11n-RGB} and (2)~\textbf{YOLO11n-Thermal}. Frames containing no target predictions yield confidence 0.0.
 
-\subsection{Soft Disjunctive Late Fusion Gate}
-To prevent single-modality occlusions from causing target dropouts, detector confidences are combined using a soft disjunctive late fusion gate:
+\subsection{Late Fusion Max Gate}
+To prevent target dropouts when one sensor is occluded, detector confidences are combined using a late fusion max gate:
 \begin{equation}
 s[n] = \max\big(c_{\text{RGB}}[n], \, c_{\text{Thermal}}[n]\big) \in [0.0, 1.0].
 \label{eq:late_fusion}
@@ -132,11 +132,11 @@ sweeping $\tau$ with step size $\Delta \tau = 0.02$ across 46 candidate values. 
 
 We benchmark five causal decision methods:
 \begin{enumerate}
-\item \textbf{M1 (Baseline Raw):} Instantaneous thresholding $y_{\text{raw}}[n] = \mathbb{I}(s[n] \ge \tau_{\text{raw}}^*)$ ($O(1)$ time, 0~B state buffer).
-\item \textbf{M2 (Moving Average):} Causal arithmetic mean $\tilde{s}_{\text{MA}}[n] = \frac{1}{W} \sum_{k=0}^{W-1} s[n-k]$, asserting $y_{\text{MA}}[n] = \mathbb{I}(\tilde{s}_{\text{MA}}[n] \ge \tau_{\text{MA}}^*)$ ($O(1)$ time, 20~B buffer for $W=5$).
-\item \textbf{M3 (Median Filter):} Order-statistic filter $\tilde{s}_{\text{med}}[n] = \text{median}(s[n], \dots, s[n-4])$, asserting $y_{\text{med}}[n] = \mathbb{I}(\tilde{s}_{\text{med}}[n] \ge \tau_{\text{med}}^*)$ ($O(W)$ time, 20~B buffer).
-\item \textbf{M4 (History Consensus):} Majority gate ($M=3, W=5$): $y_{\text{hist}}[n] = \mathbb{I}(\sum_{k=0}^{W-1} \mathbb{I}(s[n-k] \ge \tau_{\text{hist}}^*) \ge 3)$ ($O(W)$ time, 5~B buffer).
-\item \textbf{M5 (Learned Mamba-SSSM):} Pure-PyTorch selective SSM ($d_{\text{model}} = 16, d_{\text{state}} = 8$). The fused scalar confidence is projected into latent space with input-dependent time-step $\Delta_t = \text{softplus}(W_\Delta x_t)$ and matrices $B_t, C_t$, updating recurrent hidden state $h_t \in \mathbb{R}^{16 \times 8}$ with selective decay ($O(d_{\text{model}} d_{\text{state}})$ time, 512~B state, 753 learned parameters). The model is trained on validation confidence sequences using binary cross-entropy (BCE) loss and the Adam optimizer (learning rate $0.01$, 40 epochs) across 5 random seeds, asserting $y_{\text{Mamba}}[n] = \mathbb{I}(\hat{y}_t \ge \tau_{\text{Mamba}}^*)$.
+\item \textbf{M1 (Baseline Raw):} Instantaneous thresholding: $y_{\text{raw}}[n] = \mathbb{I}(s[n] \ge \tau_{\text{raw}}^*)$ ($O(1)$ time, 0~B state buffer).
+\item \textbf{M2 (Moving Average):} Causal arithmetic mean $\tilde{s}_{\text{MA}}[n] = \frac{1}{W} \sum_{k=0}^{W-1} s[n-k]$, setting $y_{\text{MA}}[n] = \mathbb{I}(\tilde{s}_{\text{MA}}[n] \ge \tau_{\text{MA}}^*)$ ($O(1)$ time, 20~B buffer for $W=5$).
+\item \textbf{M3 (Median Filter):} Order-statistic filter $\tilde{s}_{\text{med}}[n] = \text{median}(s[n], \dots, s[n-4])$, setting $y_{\text{med}}[n] = \mathbb{I}(\tilde{s}_{\text{med}}[n] \ge \tau_{\text{med}}^*)$ ($O(W)$ time, 20~B buffer).
+\item \textbf{M4 (History Consensus):} Majority gate ($M=3, W=5$): setting $y_{\text{hist}}[n] = 1$ when $\sum_{k=0}^{W-1} \mathbb{I}(s[n-k] \ge \tau_{\text{hist}}^*) \ge 3$ ($O(W)$ time, 5~B buffer).
+\item \textbf{M5 (Learned Mamba-SSSM):} Pure-PyTorch selective SSM ($d_{\text{model}} = 16, d_{\text{state}} = 8$). The fused scalar confidence is projected into latent space with input-dependent time-step $\Delta_t = \text{softplus}(W_\Delta x_t)$ and matrices $B_t, C_t$, updating recurrent hidden state $h_t \in \mathbb{R}^{16 \times 8}$ with selective decay ($O(d_{\text{model}} d_{\text{state}})$ time, 512~B state, 753 learned parameters). The model is trained on validation confidence sequences using binary cross-entropy (BCE) loss and the Adam optimizer (learning rate $0.01$, 40 epochs) across 5 random seeds, setting $y_{\text{Mamba}}[n] = \mathbb{I}(\hat{y}_t \ge \tau_{\text{Mamba}}^*)$.
 \end{enumerate}
 
 \subsection{Alert-Level Evaluation Metrics}
@@ -144,7 +144,7 @@ To measure operational mission effectiveness, we report primary alert-level metr
 \begin{itemize}
 \item \textbf{False Alerts per Minute (FA/min):} Rate of false alarm events triggered during non-target periods: $\text{FA/min} = K_{\text{FA}} / T_{\text{flight}}$, where an alarm event is defined as a contiguous sequence of positive detections ($y[n]=1$).
 \item \textbf{Positive Target Recall (\%):} Proportion of ground-truth target episodes successfully detected by at least one confirmed alert event.
-\item \textbf{Alert Latency (Time-to-Alarm):} Elapsed time (in frames and milliseconds) from target onset to the first asserted alarm.
+\item \textbf{Alert Latency (Time-to-Alarm):} Elapsed time (in frames and milliseconds) from target onset to the first triggered alert.
 \item \textbf{False Alarm Suppression Ratio (FASR):} Relative reduction in false alarm frames compared to the M1 raw baseline:
 \begin{equation}
 \text{FASR} = 1 - \frac{\sum_n \mathbb{I}(y_{\text{method}}[n] = 1 \wedge y_{\text{true}}[n] = 0)}{\sum_n \mathbb{I}(y_{\text{baseline}}[n] = 1 \wedge y_{\text{true}}[n] = 0)}.
@@ -157,15 +157,15 @@ To measure operational mission effectiveness, we report primary alert-level metr
 
 Wilderness SAR dual-spectrum datasets remain scarce in the literature. As summarized in Table~\ref{tab:system_config}, our controlled $3\times 2$ experimental design balances modality and environment across three wilderness biomes:
 \begin{itemize}
-\item \textbf{Arid Desert:} Characterized by rocky terrain, sparse vegetation, and midday thermal crossover where sun-heated ground radiation matches human skin temperature.
-\item \textbf{Temperate Forest:} Characterized by dense canopies, dappled shadows, intermittent foliage occlusions, and wildlife distractors.
-\item \textbf{Snow-Covered Alpine:} Characterized by high-albedo snow cover causing visible glare and overexposure, contrasted against sub-zero backgrounds where insulated clothing attenuates target thermal emissions.
+\item \textbf{Arid Desert:} Rocky terrain, sparse vegetation, and midday thermal crossover, where sun-heated rocks match human skin temperature.
+\item \textbf{Temperate Forest:} Dense canopies, dappled shadows, intermittent foliage occlusions, and wildlife distractors.
+\item \textbf{Snow-Covered Alpine:} High-albedo snow causing visible glare, contrasted against freezing backgrounds where winter clothing insulates body heat.
 \end{itemize}
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\columnwidth]{figures/figure_2_biome_samples.png}
-\caption{Multimodal benchmark comparison across arid desert, temperate forest, and snow alpine biomes: visible RGB viewports (left) and synchronized Melo lookup table (LUT) pseudo-thermal infrared viewports (right) with ground-truth target annotations. The snow biome illustrates the high-albedo lookup table artifact, where bright snow cover maps to high pseudo-thermal intensity while the human subject renders cooler than the terrain background.}
+\caption{Multimodal benchmark comparison across arid desert, temperate forest, and snow alpine biomes: visible RGB viewports (left) and synchronized pseudo-thermal infrared viewports (right) with ground-truth target annotations. The snow biome illustrates the lookup table artifact: bright snow cover maps to high pseudo-thermal intensity, making snow appear warm while the human subject renders cooler than the terrain background.}
 \label{fig:biome_samples}
 \end{figure}
 
@@ -203,7 +203,7 @@ Dataset partitioning is conducted strictly at the sequence level under Option B 
 \label{sec:results}
 
 \subsection{Upstream Detection Across Modalities and Biomes}
-We first evaluate the upstream frame-level detection performance of the two fixed YOLO11n models and the soft disjunctive late fusion gate on the held-out test split under standard thresholding ($\tau = 0.50$). Table~\ref{tab:fusion_comparison} summarizes precision, recall, and F1-score across all three biomes.
+We first evaluate the upstream frame-level detection performance of the two fixed YOLO11n models and the late fusion max gate on the held-out test split under standard thresholding ($\tau = 0.50$). Table~\ref{tab:fusion_comparison} summarizes precision, recall, and F1-score across all three biomes.
 
 \begin{table}[!t]
 \centering
@@ -230,7 +230,7 @@ YOLO11n-Thermal (Snow/Alpine)      & 0.865 & 0.914 & 0.889 \\
 }
 \end{table}
 
-The upstream modalities display complementary failure characteristics: visible RGB provides sharp localization under clear illumination but drops recall under forest canopy shadows (recall drops to 83.5\%); thermal infrared reliably detects human heat signatures through foliage (recall 95.2\%) but incurs false positives on sun-heated rocks in the desert and elevated noise in snow. The soft disjunctive late fusion gate ($s[n] = \max(c_{\text{RGB}}[n], c_{\text{Thermal}}[n])$) maximizes target recall across all biomes, reaching 99.5\% in desert, 98.8\% in forest, and 97.6\% in snow. However, because max-pooling propagates the highest score, it also forwards transient clutter spikes from both channels, producing false alarms on negative distractor scenes.
+The upstream modalities display complementary failure characteristics: visible RGB provides sharp localization under clear illumination but drops recall under forest canopy shadows (recall drops to 83.5\%); thermal infrared reliably detects human heat signatures through foliage (recall 95.2\%) but incurs false positives on sun-heated rocks in the desert and elevated noise in snow. The late fusion max gate ($s[n] = \max(c_{\text{RGB}}[n], c_{\text{Thermal}}[n])$) maximizes target recall across all biomes, reaching 99.5\% in desert, 98.8\% in forest, and 97.6\% in snow. However, because max-pooling propagates the highest score, it also forwards transient clutter spikes from both channels, producing false alarms on negative distractor scenes.
 
 \begin{table*}[!t]
 \centering
@@ -287,14 +287,14 @@ Fig.~\ref{fig:real_temporal_sequence} illustrates this behavior on an actual tes
 \end{figure}
 
 \subsection{Temporal Window Length Sensitivity}
-To evaluate the impact of window size, we ablate $W \in \{1, 3, 5, 7\}$ frames ($41.7\text{ ms}$ to $291.7\text{ ms}$ at $24\text{ Hz}$) using the top-performing moving average filter (Fig.~\ref{fig:window_ablation}). At $W = 1$, the filter collapses to baseline raw thresholding ($F_1 = 0.848$, 12.0 FA/min). Expanding to $W = 3$ smooths high-frequency noise, increasing $F_1$ to 0.925 and halving false alerts to 6.0 FA/min. At $W = 5$, the filter reaches peak performance ($F_1 = 0.971$, 4.0 FA/min, 100.0\% recall) within a 208~ms latency bound. Expanding further to $W = 7$ attenuates target onsets, creating edge delay and lowering $F_1$ to 0.942. Thus, $W = 5$ provides the optimal operational trade-off.
+To evaluate the impact of window size, we ablate $W \in \{1, 3, 5, 7\}$ frames ($41.7\text{ ms}$ to $291.7\text{ ms}$ at $24\text{ Hz}$) using the top-performing moving average filter (Fig.~\ref{fig:window_ablation}). At $W = 1$, the filter collapses to baseline raw thresholding ($F_1 = 0.848$, 12.0 FA/min). Expanding to $W = 3$ smooths high-frequency noise, increasing $F_1$ to 0.925 and halving false alerts to 6.0 FA/min. At $W = 5$, the filter reaches peak performance ($F_1 = 0.971$, 4.0 FA/min, 100.0\% recall) within a 208~ms latency bound. Expanding further to $W = 7$ delays target onset detection, creating lag and lowering $F_1$ to 0.942. Thus, $W = 5$ provides the optimal operational trade-off.
 
 \subsection{Environmental Robustness Across Biomes}
 The three biomes exhibit distinct operational challenges:
 \begin{itemize}
 \item \textbf{Desert:} Solar heating elevates rock temperatures, creating thermal crossover spikes that temporal averaging reliably suppresses (FASR 87.0\%).
 \item \textbf{Forest:} Canopy occlusions produce intermittent RGB dropouts, but late fusion and moving-average temporal smoothing bridge gaps, sustaining continuous target tracks.
-\item \textbf{Snow/Alpine:} High-albedo glare reduces RGB contrast, while insulated cold-weather gear attenuates thermal emission. Late fusion achieves 97.6\% recall, and temporal filtering suppresses false alarms from terrain shadows.
+\item \textbf{Snow/Alpine:} High-albedo glare reduces RGB contrast, while insulated cold-weather clothing blocks body heat emissions. Late fusion achieves 97.6\% recall, and temporal filtering suppresses false alarms from terrain shadows.
 \end{itemize}
 
 \subsection{Limitations}
@@ -309,7 +309,7 @@ Several constraints bound our findings:
 
 \section{Conclusion}
 \label{sec:conclusion}
-This paper investigated lightweight multimodal person detection with causal temporal post-processing for UAV wilderness SAR across desert, forest, and snow biomes. Holding upstream YOLO11n detectors and soft disjunctive late fusion fixed, we benchmarked five causal decision methods under validation-calibrated thresholds. Five-frame moving average achieves 100.0\% target recall while suppressing false alerts by 67\% (down to 4.0 FA/min) with sub-microsecond latency, outperforming baseline thresholding and learned state-space modeling. Causal temporal post-processing provides an effective, computationally negligible layer for preventing wasteful UAV loiters and bandwidth congestion.
+This paper investigated lightweight multimodal person detection with causal temporal post-processing for UAV wilderness SAR across desert, forest, and snow biomes. Holding upstream YOLO11n detectors and the late fusion max gate fixed, we benchmarked five causal decision methods under validation-calibrated thresholds. Five-frame moving average achieves 100.0\% target recall while suppressing false alerts by 67\% (down to 4.0 FA/min) with sub-microsecond latency, outperforming baseline thresholding and learned state-space modeling. Causal temporal post-processing provides an effective, computationally negligible layer for preventing wasteful UAV loiters and bandwidth congestion.
 
 \balance
 

@@ -85,12 +85,12 @@
 
 % 5. Melo Thermal Stylizing (Inputs from Upscaled Grok and Native 720p Gemini)
 \node[box, fill=orange!10, draw=orange!80!black, thick, font=\fontsize{5.6pt}{6.6pt}\selectfont, text width=2.6cm, align=center, minimum height=1.15cm] (melo_th) at (10.0, 6.0) {
-    \textbf{Melobytes 256-Level LUT}\\[2pt]
-    {\scriptsize Pseudo-Thermal Color Transfer}\\[1pt]
-    {\tiny Non-Radiometric Emulation}
+    \textbf{256-Level Color LUT}\\[2pt]
+    {\scriptsize Grayscale-to-TIR Remap}\\[1pt]
+    {\tiny Synthetic TIR Emulation}
 };
-\node[above=4pt of melo_th, ttl, text=orange!80!black] (lbl_melo) {Melo Thermal Stylizing};
-\node[below=2pt of melo_th, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_melo) {\texttt{melo\_lut} Processing};
+\node[above=4pt of melo_th, ttl, text=orange!80!black] (lbl_melo) {Pseudo-Thermal Transfer};
+\node[below=3pt of melo_th, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_melo) {LUT Color Mapping};
 
 \draw[orangearrow] (upscale_box.east) -- ([yshift=5pt]melo_th.west);
 \draw[orangearrow] (rgb_videos.east) -- ([yshift=-5pt]melo_th.west);

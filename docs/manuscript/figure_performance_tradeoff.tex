@@ -29,7 +29,7 @@
 
 % 3. Axes
 \draw[axisline] (0, 0) -- (6.8, 0) node[right=2pt, font=\sffamily\scriptsize\bfseries] {FA/min};
-\node[below=12pt, font=\sffamily\tiny] at (3.2, 0) {False Alerts per Minute ($\leftarrow$ Lower is better)};
+\node[below=11pt, font=\sffamily\scriptsize\bfseries] at (3.15, 0) {False Alerts per Minute ($\leftarrow$ Lower is better)};
 
 \draw[axisline] (0, 0) -- (0, 4.5);
 \node[rotate=90, anchor=south, font=\sffamily\scriptsize\bfseries] at (-0.65, 2.1) {Positive Target Recall (\%)};
@@ -61,13 +61,13 @@
 \node[point, draw=teal!90!black, fill=teal!40, inner sep=3.2pt] (pt2) at (4.50, 3.60) {};
 \node[labelnode, text=teal!90!black, anchor=north west] at (4.60, 3.75) {\textbf{M2: Moving Avg} / \textbf{M3: Median}\\{\tiny \textbf{(4.0 FA/min, 100.0\%)}}\\{\tiny \textbf{Optimal Trade-off}}};
 
-% Legend
-\node[draw=black!25, fill=white, rounded corners=2pt, inner sep=3pt, font=\sffamily\tiny, anchor=north] at (3.2, -0.65) {
-    \textcolor{red!80!black}{$\bullet$ M1: Raw} \quad
-    \textcolor{teal!90!black}{$\bullet$ M2: Moving Avg} \quad
-    \textcolor{blue!80!black}{$\bullet$ M3: Median} \quad
-    \textcolor{teal!80!black}{$\bullet$ M4: Consensus} \quad
-    \textcolor{purple!80!black}{$\bullet$ M5: Mamba}
+% 6. Clean in-plot legend (avoiding bottom axis collision)
+\node[draw=black!25, fill=white, rounded corners=2pt, inner sep=3pt, font=\sffamily\tiny, anchor=south west] at (0.3, 0.4) {
+    \begin{tabular}{@{}ll@{}}
+    \textcolor{red!80!black}{$\bullet$ M1: Raw Baseline} & \textcolor{teal!80!black}{$\bullet$ M4: Consensus} \\
+    \textcolor{teal!90!black}{$\bullet$ M2: Moving Average} & \textcolor{purple!80!black}{$\bullet$ M5: Mamba-SSSM} \\
+    \textcolor{blue!80!black}{$\bullet$ M3: Median Filter} & \\
+    \end{tabular}
 };
 
 \end{tikzpicture}

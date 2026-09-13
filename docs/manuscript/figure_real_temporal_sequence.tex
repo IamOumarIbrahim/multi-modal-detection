@@ -66,17 +66,16 @@
 
 % Annotation for noise spike vs smoothed
 \draw[->, thick, red!75!black] (2.16, 4.05) -- (2.16, 3.88);
-\node[font=\sffamily\tiny\bfseries, text=red!80!black, above=1pt] at (2.16, 4.05) {Raw Clutter Spike ($0.82$)};
+\node[font=\sffamily\tiny\bfseries, text=red!80!black, above=1pt] at (2.16, 4.05) {Clutter Spike ($0.82$)};
 
 \draw[->, thick, teal!85!black] (2.8, 2.9) -- (2.4, 2.68);
-\node[font=\sffamily\tiny, text=teal!90!black, right=1pt] at (2.8, 2.9) {MA Filter Attenuation ($< \tau_{\text{MA}}^*$)};
+\node[font=\sffamily\tiny, text=teal!90!black, right=1pt] at (2.8, 2.9) {Moving Avg Suppression ($< \tau_{\text{MA}}^*$)};
 
 % -------------------------------------------------------------
 % BOTTOM PANEL: Causal Binary Alert Decisions y[n] \in {0, 1}
 % -------------------------------------------------------------
 \draw[axis] (0, 0.0) -- (7.5, 0.0) node[right, font=\sffamily\tiny] {Frame $n$};
-\draw[axis] (0, 0.0) -- (0, 1.8);
-\node[rotate=90, anchor=south, font=\sffamily\tiny\bfseries] at (-0.65, 0.9) {Alert $y[n]$};
+\draw[axis] (0, 0.0) -- (0, 1.85) node[above, font=\sffamily\tiny\bfseries] {Alert $y[n]$};
 
 % Tick labels for frames
 \foreach \f/\x in {0/0.0, 10/1.2, 20/2.4, 30/3.6, 40/4.8, 50/6.0, 60/7.2} {
@@ -87,13 +86,14 @@
 % M1 Trace (y-offset: 1.1)
 \node[anchor=east, font=\sffamily\tiny\bfseries, text=blue!85!black] at (-0.05, 1.25) {M1 (Raw)};
 \draw[blue!75!black, thick] (0, 1.1) -- (2.10, 1.1) -- (2.10, 1.45) -- (2.22, 1.45) -- (2.22, 1.1) -- (3.80, 1.1) -- (3.80, 1.45) -- (7.2, 1.45);
-\node[font=\sffamily\tiny, text=red!80!black, anchor=south] at (2.16, 1.45) {\textbf{Spurious Alarm}};
+\node[font=\sffamily\tiny, text=red!80!black, anchor=south] at (2.16, 1.45) {\textbf{False Alarm}};
 
 % M2 Trace (y-offset: 0.6)
 \node[anchor=east, font=\sffamily\tiny\bfseries, text=teal!85!black] at (-0.05, 0.75) {M2 (MA)};
 \draw[teal!85!black, line width=1.3pt] (0, 0.6) -- (4.04, 0.6) -- (4.04, 0.95) -- (7.2, 0.95);
 \node[font=\sffamily\tiny, text=green!50!black, anchor=south] at (2.16, 0.6) {\textbf{Suppressed}};
-\draw[->, semithick, teal!80!black] (3.84, 0.45) -- node[below, font=\sffamily\tiny] {$\Delta t = 2\text{ frames}$} (4.04, 0.45);
+\draw[->, semithick, teal!80!black] (3.84, 0.45) -- (4.04, 0.45);
+\node[font=\sffamily\tiny, text=teal!90!black, anchor=north] at (4.50, 0.52) {$\Delta t = 2\text{ frames}$};
 
 % M5 Trace (y-offset: 0.1)
 \node[anchor=east, font=\sffamily\tiny\bfseries, text=purple!85!black] at (-0.05, 0.25) {M5 (Mamba)};
