@@ -74,32 +74,17 @@ A.~Gu and T.~Dao, ``Mamba: Linear-time sequence modeling with selective state
   spaces,'' in \emph{Proceedings of the First Conference on Language Modeling
   (COLM)}, 2024, also arXiv:2312.00752.
 
-\bibitem{liu2016multispectral}
-J.~Liu, S.~Zhang, S.~Wang, and D.~N. Metaxas, ``Multispectral deep neural
-  networks for pedestrian detection,'' in \emph{Proceedings of the British
-  Machine Vision Conference (BMVC)}, 2016, pp. 73.1--73.13.
-
-\bibitem{li2018illumination}
-C.~Li, D.~Song, R.~Tong, and M.~Tang, ``Illumination-aware faster {R-CNN} for
-  robust multispectral pedestrian detection,'' \emph{Pattern Recognition},
-  vol.~85, pp. 161--171, 2019.
-
-\bibitem{zhang2019cross}
-L.~Zhang, Z.~Liu, S.~Zhang, X.~Yang, H.~Qiao, K.~Huang, and A.~Hussain,
-  ``Cross-modality interactive attention network for multispectral pedestrian
-  detection,'' \emph{Information Fusion}, vol.~50, pp. 20--29, 2019.
+\bibitem{broyles2022wisard}
+D.~Broyles, C.~R. Hayner, and K.~Leung, ``{WiSARD}: A labeled visual and
+  thermal image dataset for wilderness search and rescue,'' in
+  \emph{Proceedings of the IEEE/RSJ International Conference on Intelligent
+  Robots and Systems (IROS)}, 2022, pp. 9467--9474.
 
 \bibitem{lygouras2019unsupervised}
 V.~Lygouras, N.~Santavas, A.~Taitzoglou, K.~Tarchanidis, A.~Mitropoulos, and
   A.~Gasteratos, ``Unsupervised human detection with an embedded vision system
   on a fully autonomous {UAV} for search and rescue operations,''
   \emph{Sensors}, vol.~19, no.~16, p. 3542, 2019.
-
-\bibitem{broyles2022wisard}
-D.~Broyles, C.~R. Hayner, and K.~Leung, ``{WiSARD}: A labeled visual and
-  thermal image dataset for wilderness search and rescue,'' in
-  \emph{Proceedings of the IEEE/RSJ International Conference on Intelligent
-  Robots and Systems (IROS)}, 2022, pp. 9467--9474.
 
 \bibitem{wald1945sequential}
 A.~Wald, ``Sequential tests of statistical hypotheses,'' \emph{The Annals of
@@ -115,13 +100,5 @@ L.~R. Rabiner, M.~R. Sambur, and C.~E. Schmidt, ``Applications of a nonlinear
   smoothing algorithm to speech processing,'' \emph{IEEE Transactions on
   Acoustics, Speech, and Signal Processing}, vol.~23, no.~6, pp. 552--557,
   1975.
-
-\bibitem{gu2022efficiently}
-\BIBentryALTinterwordspacing
-A.~Gu, K.~Goel, and C.~R{\'e}, ``Efficiently modeling long sequences with
-  structured state spaces,'' in \emph{Proceedings of the International
-  Conference on Learning Representations (ICLR)}, 2022. [Online]. Available:
-  \url{https://openreview.net/forum?id=uYLFoz1vlAC}
-\BIBentrySTDinterwordspacing
 
 \end{thebibliography}

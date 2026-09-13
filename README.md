@@ -354,9 +354,9 @@ Downstream temporal decision methods are benchmarked across four core dimensions
 
 | Partition | Proportion | Clips per Modality | Frames per Modality (24 Hz) | Positive Frames | Negative Frames |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Train Split** | 60% | 44 clips | 9,800 frames | — | — |
-| **Validation Split** | 20% | 22 clips | 4,994 frames | — | — |
-| **Test Split (Held-Out)** | 20% | 24 clips | 5,570 frames | — | — |
+| **Train Split** | 60% | 44 clips | 9,800 frames | - | - |
+| **Validation Split** | 20% | 22 clips | 4,994 frames | - | - |
+| **Test Split (Held-Out)** | 20% | 24 clips | 5,570 frames | - | - |
 | **Total Corpus** | **100%** | **90 clips** | **20,364 frames** | **11,240 (55.2%)** | **9,124 (44.8%)** |
 
 </div>
