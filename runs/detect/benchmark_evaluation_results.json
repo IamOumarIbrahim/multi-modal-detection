@@ -1,0 +1,244 @@
+{
+  "rgb_weights": "C:\\Dev\\repos\\Public repos\\DMS-Eval\\runs\\detect\\runs\\detect\\yolo11n_rgb_60e\\weights\\best.pt",
+  "thermal_weights": "C:\\Dev\\repos\\Public repos\\DMS-Eval\\runs\\detect\\runs\\detect\\yolo11n_thermal_60e\\weights\\best.pt",
+  "upstream_detection": {
+    "YOLO11n-RGB (Arid Desert)": {
+      "precision": 0.970125786163522,
+      "recall": 0.8677918424753868,
+      "f1": 0.9161098737936154,
+      "tp": 617.0,
+      "fp": 19.0,
+      "fn": 94.0,
+      "tn": 1190.0
+    },
+    "YOLO11n-Thermal (Arid Desert)": {
+      "precision": 0.9967051070840197,
+      "recall": 0.8509142053445851,
+      "f1": 0.9180576631259484,
+      "tp": 605.0,
+      "fp": 2.0,
+      "fn": 106.0,
+      "tn": 1207.0
+    },
+    "Late Fusion Gate (Arid Desert)": {
+      "precision": 0.9696092619392185,
+      "recall": 0.9423347398030942,
+      "f1": 0.9557774607703281,
+      "tp": 670.0,
+      "fp": 21.0,
+      "fn": 41.0,
+      "tn": 1188.0
+    },
+    "YOLO11n-RGB (Temperate Forest)": {
+      "precision": 0.9221311475409836,
+      "recall": 0.4437869822485207,
+      "f1": 0.5992010652463383,
+      "tp": 225.0,
+      "fp": 19.0,
+      "fn": 282.0,
+      "tn": 1204.0
+    },
+    "YOLO11n-Thermal (Temperate Forest)": {
+      "precision": 0.9147727272727273,
+      "recall": 0.3175542406311637,
+      "f1": 0.4714494875549048,
+      "tp": 161.0,
+      "fp": 15.0,
+      "fn": 346.0,
+      "tn": 1208.0
+    },
+    "Late Fusion Gate (Temperate Forest)": {
+      "precision": 0.9072164948453608,
+      "recall": 0.5207100591715976,
+      "f1": 0.6616541353383459,
+      "tp": 264.0,
+      "fp": 27.0,
+      "fn": 243.0,
+      "tn": 1196.0
+    },
+    "YOLO11n-RGB (Snow/Alpine)": {
+      "precision": 0.9967105263157895,
+      "recall": 0.5233160621761658,
+      "f1": 0.6862967157417894,
+      "tp": 303.0,
+      "fp": 1.0,
+      "fn": 276.0,
+      "tn": 1340.0
+    },
+    "YOLO11n-Thermal (Snow/Alpine)": {
+      "precision": 0.952,
+      "recall": 0.20552677029360966,
+      "f1": 0.33806818181818177,
+      "tp": 119.0,
+      "fp": 6.0,
+      "fn": 460.0,
+      "tn": 1335.0
+    },
+    "Late Fusion Gate (Snow/Alpine)": {
+      "precision": 0.9779874213836478,
+      "recall": 0.5371329879101899,
+      "f1": 0.693422519509476,
+      "tp": 311.0,
+      "fp": 7.0,
+      "fn": 268.0,
+      "tn": 1334.0
+    }
+  },
+  "postprocessing_benchmark": {
+    "M1": {
+      "val_tau": 0.07,
+      "precision": 0.7879609544468547,
+      "recall": 0.808569838619922,
+      "f1": 0.7981323812139521,
+      "ci_low": 0.255,
+      "ci_high": 0.6068,
+      "pos_recall_pct": 80.9,
+      "negative_fp": 391,
+      "fasr_pct": 0.0,
+      "latency_ms": 0.00017095152669062896
+    },
+    "M2": {
+      "val_tau": 0.07,
+      "precision": 0.7808075511274253,
+      "recall": 0.8286032276015581,
+      "f1": 0.8039956803455722,
+      "ci_low": 0.2584,
+      "ci_high": 0.6204,
+      "pos_recall_pct": 82.9,
+      "negative_fp": 418,
+      "fasr_pct": -6.9,
+      "latency_ms": 0.00042938958835508846
+    },
+    "M3": {
+      "val_tau": 0.05,
+      "precision": 0.8006482982171799,
+      "recall": 0.8247078464106845,
+      "f1": 0.8125,
+      "ci_low": 0.2598,
+      "ci_high": 0.6209,
+      "pos_recall_pct": 82.5,
+      "negative_fp": 369,
+      "fasr_pct": 5.6,
+      "latency_ms": 0.0006038420106312744
+    },
+    "M4": {
+      "val_tau": 0.05,
+      "precision": 0.8041462084015275,
+      "recall": 0.8202559821925431,
+      "f1": 0.812121212121212,
+      "ci_low": 0.2599,
+      "ci_high": 0.6214,
+      "pos_recall_pct": 82.0,
+      "negative_fp": 359,
+      "fasr_pct": 8.2,
+      "latency_ms": 0.0006766606827017381
+    },
+    "M5": {
+      "val_tau": 0.15,
+      "precision": 0.697536496350365,
+      "recall": 0.8508625486922649,
+      "f1": 0.7666081724743042,
+      "ci_low": 0.2553,
+      "ci_high": 0.6109,
+      "pos_recall_pct": 85.1,
+      "negative_fp": 663,
+      "fasr_pct": -69.6,
+      "latency_ms": 0.14155998204657524
+    }
+  },
+  "operational_impact": {
+    "M2": {
+      "desert": {
+        "fasr": 0.0,
+        "delta_fp": 0,
+        "bandwidth_kb": 0.0,
+        "battery_kj": 0.0,
+        "flight_time_min": 0.0
+      },
+      "forest": {
+        "fasr": -8.1,
+        "delta_fp": 0,
+        "bandwidth_kb": 0.0,
+        "battery_kj": 0.0,
+        "flight_time_min": 0.0
+      },
+      "snow": {
+        "fasr": -27.1,
+        "delta_fp": 0,
+        "bandwidth_kb": 0.0,
+        "battery_kj": 0.0,
+        "flight_time_min": 0.0
+      }
+    },
+    "M3": {
+      "desert": {
+        "fasr": 1.2,
+        "delta_fp": 2,
+        "bandwidth_kb": 2.4,
+        "battery_kj": 11.2,
+        "flight_time_min": 0.7
+      },
+      "forest": {
+        "fasr": 14.5,
+        "delta_fp": 25,
+        "bandwidth_kb": 30.0,
+        "battery_kj": 140.0,
+        "flight_time_min": 8.3
+      },
+      "snow": {
+        "fasr": -10.4,
+        "delta_fp": 0,
+        "bandwidth_kb": 0.0,
+        "battery_kj": 0.0,
+        "flight_time_min": 0.0
+      }
+    },
+    "M4": {
+      "desert": {
+        "fasr": 1.2,
+        "delta_fp": 2,
+        "bandwidth_kb": 2.4,
+        "battery_kj": 11.2,
+        "flight_time_min": 0.7
+      },
+      "forest": {
+        "fasr": 20.3,
+        "delta_fp": 35,
+        "bandwidth_kb": 42.0,
+        "battery_kj": 196.0,
+        "flight_time_min": 11.7
+      },
+      "snow": {
+        "fasr": -10.4,
+        "delta_fp": 0,
+        "bandwidth_kb": 0.0,
+        "battery_kj": 0.0,
+        "flight_time_min": 0.0
+      }
+    },
+    "M5": {
+      "desert": {
+        "fasr": -53.2,
+        "delta_fp": 0,
+        "bandwidth_kb": 0.0,
+        "battery_kj": 0.0,
+        "flight_time_min": 0.0
+      },
+      "forest": {
+        "fasr": -78.5,
+        "delta_fp": 0,
+        "bandwidth_kb": 0.0,
+        "battery_kj": 0.0,
+        "flight_time_min": 0.0
+      },
+      "snow": {
+        "fasr": -95.8,
+        "delta_fp": 0,
+        "bandwidth_kb": 0.0,
+        "battery_kj": 0.0,
+        "flight_time_min": 0.0
+      }
+    }
+  },
+  "timestamp": "2026-09-13T09:23:16Z"
+}

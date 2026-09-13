@@ -11,9 +11,9 @@ class HistoryTrackingPostProcessor:
     frames available so far are considered in the window.
     """
 
-    def __init__(self, window_size: int = 5, required_hits: int = 3):
+    def __init__(self, window_size: int = 5, required_hits: int = 3, min_detections: int | None = None):
         self.window_size = window_size
-        self.required_hits = required_hits
+        self.required_hits = min_detections if min_detections is not None else required_hits
 
     def decide(self, confidence: Sequence[float], tau: float) -> list[int]:
         """Convert confidence sequence into alarms based on temporal hit count."""

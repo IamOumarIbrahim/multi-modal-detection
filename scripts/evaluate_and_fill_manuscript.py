@@ -1,8 +1,8 @@
-﻿"""MMSAR Benchmark Evaluation & Automated LaTeX Manuscript Filler.
+"""MMSAR Benchmark Evaluation & Automated LaTeX Manuscript Filler.
 
 Ingests trained YOLO11n-RGB and YOLO11n-Thermal weights, executes multi-biome evaluation,
 calibrates causal post-processing filters (M1-M5), calculates operational resource savings,
-and directly fills every [TBD] placeholder in docs/manuscript/main.tex and README.md.
+and directly fills every [TBD] placeholder in docs/manuscript/main.tex.
 """
 
 from __future__ import annotations
@@ -40,8 +40,8 @@ SEEDS = [42, 101, 2024, 777, 999]
 def find_weights(model_name: str) -> Path | None:
     """Locate best.pt weights from local or Ultralytics runs directory."""
     candidates = [
-        Path(f"runs/detect/{model_name}/weights/best.pt"),
         Path(f"C:/Dev/repos/Public repos/DMS-Eval/runs/detect/runs/detect/{model_name}/weights/best.pt"),
+        Path(f"runs/detect/{model_name}/weights/best.pt"),
         Path(f"C:/Dev/repos/Public repos/DMS-Eval/runs/detect/{model_name}/weights/best.pt"),
     ]
     for c in candidates:
@@ -50,19 +50,25 @@ def find_weights(model_name: str) -> Path | None:
     return None
 
 
-def parse_split_episodes(split_txt_path: str | Path) -> list[dict[str, Any]]:
-    """Parse a split txt file into ordered episodic sequences of frames."""
-    p = Path(split_txt_path)
-    if not p.exists():
-        raise FileNotFoundError(f"Split file not found: {p}")
+def parse_split_episodes(rgb_txt_path: str | Path, thermal_txt_path: str | Path) -> list[dict[str, Any]]:
+    """Parse aligned RGB and Thermal split text files into ordered episodic sequences."""
+    p_rgb = Path(rgb_txt_path)
+    p_th = Path(thermal_txt_path)
+    if not p_rgb.exists():
+        raise FileNotFoundError(f"RGB split file not found: {p_rgb}")
+    if not p_th.exists():
+        raise FileNotFoundError(f"Thermal split file not found: {p_th}")
 
-    lines = [line.strip() for line in p.read_text(encoding="utf-8").splitlines() if line.strip()]
-    
-    episodes_dict: dict[str, list[str]] = {}
-    episode_meta: dict[str, dict[str, str]] = {}
+    lines_rgb = [l.strip() for l in p_rgb.read_text(encoding="utf-8").splitlines() if l.strip()]
+    lines_th = [l.strip() for l in p_th.read_text(encoding="utf-8").splitlines() if l.strip()]
 
-    for frame_path in lines:
-        norm = frame_path.replace("\\", "/")
+    if len(lines_rgb) != len(lines_th):
+        raise ValueError(f"Line count mismatch: {len(lines_rgb)} RGB vs {len(lines_th)} Thermal")
+
+    episodes_dict: dict[str, dict[str, Any]] = {}
+
+    for rgb_path, th_path in zip(lines_rgb, lines_th):
+        norm = rgb_path.replace("\\", "/")
         match = re.search(r"images/([^/]+)/([^/]+)/rgb/([^/]+)_frame_\d+\.png", norm)
         if match:
             biome = match.group(1)
@@ -74,28 +80,20 @@ def parse_split_episodes(split_txt_path: str | Path) -> list[dict[str, Any]]:
             scenario = "unknown"
 
         if ep_id not in episodes_dict:
-            episodes_dict[ep_id] = []
-            episode_meta[ep_id] = {"biome": biome, "scenario": scenario}
-        episodes_dict[ep_id].append(norm)
+            episodes_dict[ep_id] = {
+                "episode_id": ep_id,
+                "biome": biome,
+                "scenario": scenario,
+                "rgb_frames": [],
+                "thermal_frames": [],
+                "labels": [],
+            }
 
-    episodes_list = []
-    for ep_id, frames in episodes_dict.items():
-        frames.sort()
-        episodes_list.append({
-            "episode_id": ep_id,
-            "biome": episode_meta[ep_id]["biome"],
-            "scenario": episode_meta[ep_id]["scenario"],
-            "rgb_frames": frames,
-            "thermal_frames": [
-                f.replace("/rgb/", "/thermal/").replace("_RGB_", "_thermal_")
-                for f in frames
-            ],
-            "labels": [
-                load_binary_label(f) for f in frames
-            ]
-        })
+        episodes_dict[ep_id]["rgb_frames"].append(rgb_path)
+        episodes_dict[ep_id]["thermal_frames"].append(th_path)
+        episodes_dict[ep_id]["labels"].append(load_binary_label(rgb_path))
 
-    return episodes_list
+    return list(episodes_dict.values())
 
 
 def load_binary_label(image_path: str) -> int:
@@ -150,7 +148,6 @@ def run_benchmark_and_fill(
     rgb_weights_path: Path,
     thermal_weights_path: Path,
     main_tex_path: Path = Path("docs/manuscript/main.tex"),
-    readme_path: Path = Path("README.md"),
     output_json: Path = Path("runs/detect/benchmark_evaluation_results.json"),
 ) -> dict[str, Any]:
     print("=" * 80)
@@ -162,37 +159,69 @@ def run_benchmark_and_fill(
     model_rgb = YOLO(str(rgb_weights_path))
     model_thermal = YOLO(str(thermal_weights_path))
 
-    val_episodes = parse_split_episodes("data/splits/val_rgb.txt")
-    test_episodes = parse_split_episodes("data/splits/test_rgb.txt")
+    val_episodes = parse_split_episodes("data/splits/val_rgb.txt", "data/splits/val_thermal.txt")
+    test_episodes = parse_split_episodes("data/splits/test_rgb.txt", "data/splits/test_thermal.txt")
     print(f"Loaded {len(val_episodes)} validation episodes, {len(test_episodes)} test episodes.")
 
-    print("\n[1/5] Extracting validation confidences...")
-    val_fused_seqs = []
-    val_gt_seqs = []
-    for ep in val_episodes:
-        c_rgb = extract_confidences(model_rgb, ep["rgb_frames"])
-        c_th = extract_confidences(model_thermal, ep["thermal_frames"])
-        fused = [max(r, t) for r, t in zip(c_rgb, c_th)]
-        val_fused_seqs.append(fused)
-        val_gt_seqs.append(ep["labels"])
+    # -------------------------------------------------------------------------
+    # 1. Ingest Confidences (with disk cache)
+    # -------------------------------------------------------------------------
+    cache_file = Path("runs/detect/extracted_confidences_cache.json")
+    if cache_file.exists():
+        print(f"\n[1/5] Loading pre-extracted confidences from cache: {cache_file}", flush=True)
+        with open(cache_file, "r") as f:
+            cache_data = json.load(f)
+        val_fused_seqs = cache_data["val_fused_seqs"]
+        val_gt_seqs = cache_data["val_gt_seqs"]
+        test_rgb_seqs = cache_data["test_rgb_seqs"]
+        test_th_seqs = cache_data["test_th_seqs"]
+        test_fused_seqs = cache_data["test_fused_seqs"]
+        test_gt_seqs = cache_data["test_gt_seqs"]
+        test_biomes = cache_data["test_biomes"]
+    else:
+        print("\n[1/5] Extracting validation confidences...", flush=True)
+        val_fused_seqs = []
+        val_gt_seqs = []
+        for ep in val_episodes:
+            c_rgb = extract_confidences(model_rgb, ep["rgb_frames"])
+            c_th = extract_confidences(model_thermal, ep["thermal_frames"])
+            fused = [max(r, t) for r, t in zip(c_rgb, c_th)]
+            val_fused_seqs.append(fused)
+            val_gt_seqs.append(ep["labels"])
 
-    print("[2/5] Extracting test confidences across all biomes...")
-    test_rgb_seqs = []
-    test_th_seqs = []
-    test_fused_seqs = []
-    test_gt_seqs = []
-    test_biomes = []
-    for ep in test_episodes:
-        c_rgb = extract_confidences(model_rgb, ep["rgb_frames"])
-        c_th = extract_confidences(model_thermal, ep["thermal_frames"])
-        fused = [max(r, t) for r, t in zip(c_rgb, c_th)]
-        test_rgb_seqs.append(c_rgb)
-        test_th_seqs.append(c_th)
-        test_fused_seqs.append(fused)
-        test_gt_seqs.append(ep["labels"])
-        test_biomes.append(ep["biome"])
+        print("[2/5] Extracting test confidences across all biomes...", flush=True)
+        test_rgb_seqs = []
+        test_th_seqs = []
+        test_fused_seqs = []
+        test_gt_seqs = []
+        test_biomes = []
+        for ep in test_episodes:
+            c_rgb = extract_confidences(model_rgb, ep["rgb_frames"])
+            c_th = extract_confidences(model_thermal, ep["thermal_frames"])
+            fused = [max(r, t) for r, t in zip(c_rgb, c_th)]
+            test_rgb_seqs.append(c_rgb)
+            test_th_seqs.append(c_th)
+            test_fused_seqs.append(fused)
+            test_gt_seqs.append(ep["labels"])
+            test_biomes.append(ep["biome"])
 
-    print("\n[3/5] Computing Table III Upstream Detection Metrics (tau = 0.50)...")
+        cache_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(cache_file, "w") as f:
+            json.dump({
+                "val_fused_seqs": val_fused_seqs,
+                "val_gt_seqs": val_gt_seqs,
+                "test_rgb_seqs": test_rgb_seqs,
+                "test_th_seqs": test_th_seqs,
+                "test_fused_seqs": test_fused_seqs,
+                "test_gt_seqs": test_gt_seqs,
+                "test_biomes": test_biomes,
+            }, f)
+        print(f"Saved extracted confidences cache to: {cache_file}", flush=True)
+
+    # -------------------------------------------------------------------------
+    # 2. Table III: Frame-Level Upstream Detection (tau = 0.50 on test split)
+    # -------------------------------------------------------------------------
+    print("\n[3/5] Computing Table III Upstream Detection Metrics (tau = 0.50)...", flush=True)
     upstream_results: dict[str, dict[str, float]] = {}
 
     biome_keys = ["desert", "forest", "snow"]
@@ -218,21 +247,24 @@ def run_benchmark_and_fill(
         m_fuse = calculate_frame_metrics(y_true_b, y_fuse_b)
         upstream_results[f"Late Fusion Gate ({biome_display[b]})"] = m_fuse
 
-        print(f"  {b.capitalize():7s} | RGB: P={m_rgb['precision']:.3f} R={m_rgb['recall']:.3f} F1={m_rgb['f1']:.3f} | TH: P={m_th['precision']:.3f} R={m_th['recall']:.3f} F1={m_th['f1']:.3f} | Fuse: P={m_fuse['precision']:.3f} R={m_fuse['recall']:.3f} F1={m_fuse['f1']:.3f}")
+        print(f"  {b.capitalize():7s} | RGB: P={m_rgb['precision']:.3f} R={m_rgb['recall']:.3f} F1={m_rgb['f1']:.3f} | TH: P={m_th['precision']:.3f} R={m_th['recall']:.3f} F1={m_th['f1']:.3f} | Fuse: P={m_fuse['precision']:.3f} R={m_fuse['recall']:.3f} F1={m_fuse['f1']:.3f}", flush=True)
 
-    print("\n[4/5] Calibrating & Benchmarking Post-Processing Methods (M1-M5)...")
+    # -------------------------------------------------------------------------
+    # 3. Table I: Comparative Benchmark of Causal Temporal Post-Processing
+    # -------------------------------------------------------------------------
+    print("\n[4/5] Calibrating & Benchmarking Post-Processing Methods (M1-M5)...", flush=True)
     methods: dict[str, Any] = {
         "M1": BaselinePostProcessor(),
         "M2": MovingAveragePostProcessor(window_size=5),
         "M3": MedianFilterPostProcessor(window_size=5),
-        "M4": HistoryTrackingPostProcessor(window_size=5, min_detections=3),
+        "M4": HistoryTrackingPostProcessor(window_size=5, required_hits=3),
     }
 
     calibrated_taus: dict[str, float] = {}
     for key, proc in methods.items():
         tau_star, val_f1 = find_optimal_threshold(proc, val_fused_seqs, val_gt_seqs, metric="f1")
         calibrated_taus[key] = tau_star
-        print(f"  {key:3s} optimal tau* = {tau_star:.2f} (Val F1: {val_f1:.4f})")
+        print(f"  {key:3s} optimal tau* = {tau_star:.2f} (Val F1: {val_f1:.4f})", flush=True)
 
     print("  Training Learned Mamba-SSSM across seeds...")
     best_mamba_val_f1 = -1.0
@@ -301,6 +333,9 @@ def run_benchmark_and_fill(
         }
         print(f"  {key} -> Prec: {m['precision']:.3f}, Rec: {m['recall']:.3f}, F1: {m['f1']:.3f} [{ci_low:.3f}, {ci_high:.3f}], FASR: {fasr_pct}%, Lat: {lat_ms:.3f}ms")
 
+    # -------------------------------------------------------------------------
+    # 4. Table IV: Operational Impact Across Biomes
+    # -------------------------------------------------------------------------
     print("\n[5/5] Computing Table IV Operational Resource Savings Across Biomes...")
     operational_results: dict[str, dict[str, dict[str, Any]]] = {}
 
@@ -342,9 +377,13 @@ def run_benchmark_and_fill(
             }
             print(f"  {key} ({b:7s}) | FASR: {fasr_val:5.1f}% | ΔFP: {delta_fp:4d} | ΔΩ: {bandwidth_kb:6.1f} kB | ΔE: {battery_kj:6.1f} kJ | Δt: {flight_time_min:5.1f} min")
 
+    # -------------------------------------------------------------------------
+    # 5. Fill main.tex Placeholders
+    # -------------------------------------------------------------------------
     print("\nFilling [TBD] placeholders in docs/manuscript/main.tex...")
     main_tex_content = main_tex_path.read_text(encoding="utf-8")
 
+    # Table I Replacement
     t1_lines = {
         "M1": f"M1: Baseline Raw Thresholding   & $O(1)$             & 0 B   & {postprocessing_results['M1']['val_tau']:.2f} & {postprocessing_results['M1']['precision']:.3f} & {postprocessing_results['M1']['recall']:.3f} & {postprocessing_results['M1']['f1']:.3f} & [{postprocessing_results['M1']['ci_low']:.3f}, {postprocessing_results['M1']['ci_high']:.3f}] & {postprocessing_results['M1']['pos_recall_pct']:.1f} & {postprocessing_results['M1']['negative_fp']} & --- & {postprocessing_results['M1']['latency_ms']:.3f} ms \\\\",
         "M2": f"M2: Five-Frame Moving Average   & $O(1)$ amortized   & 20 B  & {postprocessing_results['M2']['val_tau']:.2f} & {postprocessing_results['M2']['precision']:.3f} & {postprocessing_results['M2']['recall']:.3f} & {postprocessing_results['M2']['f1']:.3f} & [{postprocessing_results['M2']['ci_low']:.3f}, {postprocessing_results['M2']['ci_high']:.3f}] & {postprocessing_results['M2']['pos_recall_pct']:.1f} & {postprocessing_results['M2']['negative_fp']} & {postprocessing_results['M2']['fasr_pct']:.1f} & {postprocessing_results['M2']['latency_ms']:.3f} ms \\\\",
@@ -356,11 +395,15 @@ def run_benchmark_and_fill(
     lines_tex = main_tex_content.splitlines()
     for key, repl in t1_lines.items():
         for idx, l in enumerate(lines_tex):
-            if l.strip().startswith(key):
+            if key == "M5" and "M5: Learned Mamba-SSSM" in l and "[TBD]" in l:
+                lines_tex[idx] = repl
+                break
+            elif l.strip().startswith(key) and "[TBD]" in l:
                 lines_tex[idx] = repl
                 break
     main_tex_content = "\n".join(lines_tex)
 
+    # Table III Replacement
     t3_map = {
         "YOLO11n-RGB (Arid Desert)": upstream_results["YOLO11n-RGB (Arid Desert)"],
         "YOLO11n-RGB (Temperate Forest)": upstream_results["YOLO11n-RGB (Temperate Forest)"],
@@ -388,6 +431,7 @@ def run_benchmark_and_fill(
                 break
     main_tex_content = "\n".join(lines_tex)
 
+    # Table IV Replacement
     t4_name_map = {
         "M2": "M2: Moving Avg.",
         "M3": "M3: Median",

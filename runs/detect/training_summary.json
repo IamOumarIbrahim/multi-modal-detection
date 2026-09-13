@@ -1,0 +1,14 @@
+{
+  "rgb": {
+    "training_time_seconds": 5966.73,
+    "training_time_minutes": 99.45,
+    "weights_path": "C:\\Dev\\repos\\Public repos\\research\\multi-modal-detection\\runs\\detect\\yolo11n_rgb_60e\\weights\\best.pt"
+  },
+  "thermal": {
+    "training_time_seconds": 5324.92,
+    "training_time_minutes": 88.75,
+    "weights_path": "C:\\Dev\\repos\\Public repos\\research\\multi-modal-detection\\runs\\detect\\yolo11n_thermal_60e\\weights\\best.pt"
+  },
+  "total_training_time_minutes": 188.19,
+  "total_training_time_hours": 3.14
+}
