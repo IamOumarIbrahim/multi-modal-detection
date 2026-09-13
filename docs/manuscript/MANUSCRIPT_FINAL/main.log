@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  14 SEP 2026 03:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  14 SEP 2026 03:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -818,20 +818,13 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
 
-LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 5
-1.
-(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsptm.fd
-File: omsptm.fd 
-)
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 51.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 55.
-
+LaTeX Font Info:    Calculating math sizes for size <11> on input line 58.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 58.
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 55.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 58.
 
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -993,15 +986,12 @@ LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.9> not available
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.9> not available
 (Font)              size <5> substituted on input line 165.
 
-)
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [1{C:/Users/omarb/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/o
-marb/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
+) [1{C:/Users/omarb/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/
+omarb/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
 
 
 ]
-Underfull \hbox (badness 1521) in paragraph at lines 100--102
+Underfull \hbox (badness 1521) in paragraph at lines 107--109
 \OT1/ptm/m/n/10 la-tency. We de-ploy two par-al-lel YOLO11n mod-els [8]:
  []
 
@@ -1013,7 +1003,10 @@ _th_video.png (PNG copy)> <./figures/forest_th_video.png (PNG copy)> <./figures
 /snow_th_video.jpg.png> <./figures/crop_640_left_video.png (PNG copy)> <./figur
 es/crop_640_right_video.png (PNG copy)> <./figures/icon_label_studio.png> <./fi
 gures/desert_rgb_annotated.png (PNG copy)> <./figures/desert_th_annotated.png (
-PNG copy)> <./figures/snow_th_annotated.png>] [3]
+PNG copy)> <./figures/snow_th_annotated.png>]
+Underfull \vbox (badness 3138) has occurred while \output is active []
+
+ [3]
 (figure_real_temporal_sequence.tex) (figure_performance_tradeoff.tex
 Package pgfplots info on input line 26: Using 'lua backend=false' for axis: zmo
 de=log unsupported (yet).
@@ -1042,11 +1035,11 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 26939 strings out of 467871
- 693425 string characters out of 5418376
- 1248852 words of memory out of 5000000
- 55351 multiletter control sequences out of 15000+600000
- 708517 words of font info for 198 fonts, out of 8000000 for 9000
+ 26942 strings out of 467871
+ 693550 string characters out of 5418376
+ 1249339 words of memory out of 5000000
+ 55356 multiletter control sequences out of 15000+600000
+ 712937 words of font info for 212 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,17n,94p,1561b,2141s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
@@ -1079,7 +1072,7 @@ pe1/urw/helvetic/uhvr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts
 /type1/urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/font
 s/type1/urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/font
 s/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (6 pages, 10963073 bytes).
+Output written on main.pdf (6 pages, 10962603 bytes).
 PDF statistics:
  184 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

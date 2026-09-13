@@ -1,0 +1,46 @@
+{
+  "M1": {
+    "precision": 0.757,
+    "recall_frame": 0.824,
+    "tile_recall_pct": 100.0,
+    "detected_pos": 13,
+    "total_pos_tiles": 13,
+    "fp_frames": 474,
+    "fa_per_min": 55.07,
+    "mean_delay_ms": 226.9,
+    "tau_star": 0.05
+  },
+  "M2": {
+    "precision": 0.727,
+    "recall_frame": 0.842,
+    "tile_recall_pct": 100.0,
+    "detected_pos": 13,
+    "total_pos_tiles": 13,
+    "fp_frames": 567,
+    "fa_per_min": 21.2,
+    "mean_delay_ms": 199.1,
+    "tau_star": 0.05
+  },
+  "M3": {
+    "precision": 0.801,
+    "recall_frame": 0.825,
+    "tile_recall_pct": 100.0,
+    "detected_pos": 13,
+    "total_pos_tiles": 13,
+    "fp_frames": 369,
+    "fa_per_min": 17.06,
+    "mean_delay_ms": 455.9,
+    "tau_star": 0.05
+  },
+  "M4": {
+    "precision": 0.804,
+    "recall_frame": 0.82,
+    "tile_recall_pct": 100.0,
+    "detected_pos": 13,
+    "total_pos_tiles": 13,
+    "fp_frames": 359,
+    "fa_per_min": 16.03,
+    "mean_delay_ms": 475.5,
+    "tau_star": 0.05
+  }
+}
