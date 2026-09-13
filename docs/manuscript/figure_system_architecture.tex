@@ -26,34 +26,40 @@
 % (Extended to the left for generous spacing between LLMs, videos, upscale, and Melo)
 % =========================================================================
 
-% 1. RGB video prompt (Text File Icon, placed at x = -4.6)
-\node[iconbox] (prompt_rgb) at (-4.6, 6.10) {
-    \includegraphics[height=0.76cm]{figures/icon_lorem_ipsum.png}
+% 1. RGB video prompt (Text Prompt Card at x = -4.6)
+\node[box, fill=blue!6, draw=blue!70!black, thick, font=\fontsize{5.6pt}{6.6pt}\selectfont, text width=1.6cm, align=center, minimum height=1.05cm] (prompt_rgb) at (-4.6, 6.10) {
+    \textbf{Flight Script}\\[2pt]
+    {\tiny Drone Altitude,}\\[-1pt]
+    {\tiny Biome \& Speed}
 };
-\node[above=4pt of prompt_rgb, ttl, text=blue!80!black] (lbl_p1) {Scenario Prompt};
+\node[above=3pt of prompt_rgb, ttl, text=blue!80!black] (lbl_p1) {Scenario Prompt};
 \node[below=2pt of prompt_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_p1) {Structured Text};
 
 % 2. Video Generator LLMs (Grok above Gemini at x = -1.4)
-\node[iconbox] (grok_rgb) at (-1.4, 7.35) {
-    \includegraphics[height=0.72cm]{figures/grok_logo.png}
+\node[box, fill=purple!8, draw=purple!80!black, thick, font=\fontsize{5.6pt}{6.6pt}\selectfont, text width=1.9cm, align=center, minimum height=1.05cm] (grok_rgb) at (-1.4, 7.35) {
+    \textbf{xAI Grok}\\[2pt]
+    {\tiny Video Model}\\[-1pt]
+    {\tiny 752$\times$416}
 };
 \node[above=3pt of grok_rgb, ttl, text=purple!80!black] (lbl_g1) {AI Video Generator};
-\node[below=2pt of grok_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_grok) {xAI Grok};
+\node[below=2pt of grok_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_grok) {Synthetic Gen};
 
-\node[iconbox] (gemini_rgb) at (-1.4, 4.85) {
-    \includegraphics[height=0.72cm]{figures/gemini_logo.png}
+\node[box, fill=blue!8, draw=blue!80!black, thick, font=\fontsize{5.6pt}{6.6pt}\selectfont, text width=1.9cm, align=center, minimum height=1.05cm] (gemini_rgb) at (-1.4, 4.85) {
+    \textbf{Gemini 3.8 Flash}\\[2pt]
+    {\tiny Video Model}\\[-1pt]
+    {\tiny 1280$\times$720}
 };
-\node[below=2pt of gemini_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_g1) {Google Gemini 3.8 Flash};
+\node[below=2pt of gemini_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_g1) {Google DeepMind};
 
 \draw[bluearrow] (prompt_rgb.east) -- (grok_rgb.west);
 \draw[bluearrow] (prompt_rgb.east) -- (gemini_rgb.west);
 
-% 3. 16:9 RGB Videos for Grok (752x416 @ 24 FPS) & Gemini (1280x720 @ 24 FPS)
-\node[videobox] (grok_videos) at (2.6, 7.35) {
-    \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
-    \includegraphics[width=1.12cm]{figures/grok_desert_video.png} &
-    \includegraphics[width=1.12cm]{figures/grok_forest_video.png} \\
-    {\tiny\bfseries Desert RGB} & {\tiny\bfseries Forest RGB}
+% 3. 16:9 RGB Videos for Grok & Gemini
+\node[videobox, text width=2.4cm, minimum height=1.05cm] (grok_videos) at (2.6, 7.35) {
+    \textbf{\scriptsize 16:9 Video Stream}\\[2pt]
+    \begin{tabular}{@{}c@{\hspace{4pt}}c@{}}
+    \fcolorbox{blue!50}{blue!8}{\tiny Desert} &
+    \fcolorbox{blue!50}{blue!8}{\tiny Forest}
     \end{tabular}
 };
 \node[above=3pt of grok_videos, ttl, text=black] (lbl_gv) {16:9 RGB Videos};
@@ -61,11 +67,11 @@
 
 \draw[bluearrow] (grok_rgb.east) -- (grok_videos.west);
 
-\node[videobox] (rgb_videos) at (2.6, 4.85) {
-    \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
-    \includegraphics[width=1.12cm]{figures/desert_rgb_video.png} &
-    \includegraphics[width=1.12cm]{figures/forest_rgb_video.png} \\
-    {\tiny\bfseries Desert RGB} & {\tiny\bfseries Forest RGB}
+\node[videobox, text width=2.4cm, minimum height=1.05cm] (rgb_videos) at (2.6, 4.85) {
+    \textbf{\scriptsize 16:9 Video Stream}\\[2pt]
+    \begin{tabular}{@{}c@{\hspace{4pt}}c@{}}
+    \fcolorbox{blue!50}{blue!8}{\tiny Desert} &
+    \fcolorbox{blue!50}{blue!8}{\tiny Forest}
     \end{tabular}
 };
 \node[above=3pt of rgb_videos, ttl, text=black] (lbl_v1) {16:9 RGB Videos};
@@ -96,11 +102,11 @@
 \draw[orangearrow] (rgb_videos.east) -- ([yshift=-5pt]melo_th.west);
 
 % 6. 16:9 Thermal Videos
-\node[videobox] (th_videos) at (14.5, 6.0) {
-    \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
-    \includegraphics[width=1.12cm]{figures/desert_th_video.png} &
-    \includegraphics[width=1.12cm]{figures/forest_th_video.png} \\
-    {\tiny\bfseries Desert TIR} & {\tiny\bfseries Forest TIR}
+\node[videobox, text width=2.5cm, minimum height=1.05cm] (th_videos) at (14.5, 6.0) {
+    \textbf{\scriptsize 16:9 Thermal TIR}\\[2pt]
+    \begin{tabular}{@{}c@{\hspace{4pt}}c@{}}
+    \fcolorbox{orange!60}{orange!12}{\tiny Desert TIR} &
+    \fcolorbox{orange!60}{orange!12}{\tiny Forest TIR}
     \end{tabular}
 };
 \node[above=4pt of th_videos, ttl, text=black] (lbl_v2) {16:9 Thermal Videos};
@@ -109,11 +115,11 @@
 \draw[orangearrow] (melo_th.east) -- (th_videos.west);
 
 % 7. Crop 640x640 (2 Videos)
-\node[videobox] (crops) at (18.5, 6.0) {
-    \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
-    \includegraphics[width=0.83cm]{figures/crop_640_left_video.png} &
-    \includegraphics[width=0.83cm]{figures/crop_640_right_video.png} \\
-    {\tiny\bfseries Left ($x=0$)} & {\tiny\bfseries Right ($x=640$)}
+\node[videobox, text width=2.5cm, minimum height=1.05cm] (crops) at (18.5, 6.0) {
+    \textbf{\scriptsize 640$\times$640 Dual Crop}\\[2pt]
+    \begin{tabular}{@{}c@{\hspace{4pt}}c@{}}
+    \fcolorbox{purple!60}{purple!10}{\tiny Left $x{=}0$} &
+    \fcolorbox{purple!60}{purple!10}{\tiny Right $x{=}640$}
     \end{tabular}
 };
 \node[above=4pt of crops, ttl, text=purple!80!black] (lbl_c) {Crop 640$\times$640 (2 Videos)};
@@ -122,8 +128,10 @@
 \draw[purplearrow] (th_videos) -- (crops);
 
 % 8. Label Studio Video Annotation
-\node[iconbox] (label_studio) at (21.6, 6.0) {
-    \includegraphics[height=0.76cm]{figures/icon_label_studio.png}
+\node[box, fill=red!8, draw=red!80!black, thick, font=\fontsize{5.6pt}{6.6pt}\selectfont, text width=1.8cm, align=center, minimum height=1.05cm] (label_studio) at (21.6, 6.0) {
+    \textbf{Label Studio}\\[2pt]
+    {\tiny Bounding Boxes}\\[-1pt]
+    {\tiny Keyframe Track}
 };
 \node[above=4pt of label_studio, ttl, text=red!80!black] (lbl_ls) {Label Studio};
 \node[below=2pt of label_studio, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_ls) {Video Annotation};
@@ -140,12 +148,12 @@
 
 \draw[greenarrow] (label_studio) -- (v2f);
 
-% 10. Annotated Frames (Square Clean Frames with Accurate Person Bounding Boxes)
-\node[framebox] (annotated_frames) at (27.0, 6.0) {
-    \begin{tabular}{@{}c@{\hspace{3pt}}c@{}}
-    \includegraphics[width=0.82cm]{figures/desert_rgb_annotated.png} &
-    \includegraphics[width=0.82cm]{figures/desert_th_annotated.png} \\
-    {\tiny\bfseries RGB Frame} & {\tiny\bfseries Thermal Frame}
+% 10. Annotated Frames
+\node[framebox, text width=2.4cm, minimum height=1.05cm] (annotated_frames) at (27.0, 6.0) {
+    \textbf{\scriptsize Synchronized Pairs}\\[2pt]
+    \begin{tabular}{@{}c@{\hspace{4pt}}c@{}}
+    \fcolorbox{teal!60}{teal!10}{\tiny RGB Frame} &
+    \fcolorbox{teal!60}{teal!10}{\tiny Thermal Frame}
     \end{tabular}
 };
 \node[above=4pt of annotated_frames, ttl, text=teal!80!black] (lbl_af) {Annotated Frames};
@@ -197,7 +205,7 @@
 \node[fusion] (fusion) at (7.2, -0.7) {
     \textbf{Late Decision Fusion}\\[2pt]
     Confidence Max Gate\\[2pt]
-    {\scriptsize Soft Disjunctive OR}
+    {\scriptsize Max Confidence Gate}
 };
 
 % Horizontal score labels (No sloped rotation)

@@ -88,10 +88,10 @@ The MMSAR pipeline integrates dual-spectrum detection, late fusion, and causal t
 \subsection{Video Ingestion and Real-Time Edge Budget}
 Autonomous UAV companion computers (such as the NVIDIA Jetson Orin Nano, operating within a 7--15\,W thermal design power [TDP] envelope) require frame-synchronous processing that matches sensor capture rates. Video streams are captured at $f_s = 24\text{ Hz}$, yielding a frame period $T_s \approx 41.7\text{ ms}$. To avoid dropping frames or accumulating queue delay, processing must satisfy:
 \begin{equation}
-\max\big(T_{\text{RGB}}, \, T_{\text{Thermal}}\big) + T_{\text{fusion}} + T_{\text{postproc}} \le T_s \approx 41.7\text{ ms},
+T_{\text{detect}} + T_{\text{fusion}} + T_{\text{filter}} \le 41.7\text{ ms},
 \label{eq:realtime_budget}
 \end{equation}
-where $T_{\text{RGB}}$ and $T_{\text{Thermal}}$ are detector latencies, $T_{\text{fusion}}$ is max-pooling latency ($O(1)$), and $T_{\text{postproc}}$ is temporal filter latency. We deploy two parallel YOLO11n models \cite{jocher2024yolo11}: (1)~\textbf{YOLO11n-RGB} and (2)~\textbf{YOLO11n-Thermal}. Frames containing no target predictions yield confidence 0.0.
+where $T_{\text{detect}} = \max(T_{\text{RGB}}, T_{\text{Thermal}})$ is the parallel detection runtime, $T_{\text{fusion}}$ is the fusion latency, and $T_{\text{filter}}$ is the post-processing filter latency. We deploy two parallel YOLO11n models \cite{jocher2024yolo11}: (1)~\textbf{YOLO11n-RGB} and (2)~\textbf{YOLO11n-Thermal}. Frames containing no target predictions yield confidence 0.0.
 
 \subsection{Late Fusion Max Gate}
 To prevent target dropouts when one sensor is occluded, detector confidences are combined using a late fusion max gate:
@@ -110,9 +110,9 @@ This max gate ensures that confident detections in either spectrum propagate for
 \ENSURE Binary alert decision $y[n] \in \{0,1\}$
 \STATE $c_{\text{RGB}}[n] \leftarrow \text{YOLO11n-RGB}(I_{\text{RGB}}[n])$ \COMMENT{Fixed detector}
 \STATE $c_{\text{Thermal}}[n] \leftarrow \text{YOLO11n-Thermal}(I_{\text{Thermal}}[n])$ \COMMENT{Fixed detector}
-\STATE $s[n] \leftarrow \max(c_{\text{RGB}}[n], c_{\text{Thermal}}[n])$ \COMMENT{Late fusion gate}
-\STATE $\mathcal{W}[n] \leftarrow \{s[n-W+1],\dots,s[n]\}$ \COMMENT{Causal window ($W=5$)}
-\STATE $y[n] \leftarrow \mathcal{M}_m(\mathcal{W}[n];\, \tau_m^*)$ \COMMENT{Decision method $m$}
+\STATE $s[n] \leftarrow \max(c_{\text{RGB}}[n], c_{\text{Thermal}}[n])$ \COMMENT{Late fusion max gate}
+\STATE $\mathbf{w}[n] \leftarrow [s[n-W+1],\dots,s[n]]$ \COMMENT{Sliding window ($W=5$)}
+\STATE $y[n] \leftarrow \text{DecisionFilter}(\mathbf{w}[n], \, \tau^*)$ \COMMENT{Decision method}
 \IF{$y[n] = 1$}
   \STATE Emit telemetry alert and trigger UAV verification loiter
 \ENDIF
@@ -123,20 +123,24 @@ This max gate ensures that confident detections in either spectrum propagate for
 
 \subsection{Causal Temporal Post-Processing Methods}
 \label{sec:causal_postprocessing}
-Direct thresholding of raw per-frame confidence produces high false-alarm rates due to brief clutter spikes. Downstream processing filters the fused confidence stream across a causal sliding window of length $W = 5$ frames ($208\text{ ms}$ at $f_s = 24\text{ Hz}$): $\mathcal{W}[n] = \{s[n-4], \dots, s[n]\}$. Each method $m \in \{\text{M1}, \dots, \text{M5}\}$ uses an optimal decision threshold $\tau_m^*$ calibrated on the disjoint validation set $\mathcal{D}_{\text{val}}$:
+Direct thresholding of raw per-frame confidence produces high false-alarm rates due to brief clutter spikes. Downstream processing filters the fused confidence stream across a causal sliding window of length $W = 5$ frames ($208\text{ ms}$ at $24\text{ Hz}$): $\mathbf{w}[n] = [s[n-4], \dots, s[n]]$. Each method uses an optimal decision threshold $\tau^*$ calibrated on the validation set $\mathcal{D}_{\text{val}}$:
 \begin{equation}
-\tau_m^* = \arg\max_{\tau \in [0.05, 0.95]} F_1\big(\tau; \, \mathcal{D}_{\text{val}}, \, \mathcal{M}_m\big),
+\tau^* = \arg\max_\tau F_1(\tau),
 \label{eq:threshold_optimization}
 \end{equation}
-sweeping $\tau$ with step size $\Delta \tau = 0.02$ across 46 candidate values. Calibrated thresholds remain frozen during test evaluation.
+evaluating candidate thresholds from 0.05 to 0.95 with step size 0.02. Calibrated thresholds remain frozen during test evaluation.
 
 We benchmark five causal decision methods:
 \begin{enumerate}
-\item \textbf{M1 (Baseline Raw):} Instantaneous thresholding: $y_{\text{raw}}[n] = \mathbb{I}(s[n] \ge \tau_{\text{raw}}^*)$ ($O(1)$ time, 0~B state buffer).
-\item \textbf{M2 (Moving Average):} Causal arithmetic mean $\tilde{s}_{\text{MA}}[n] = \frac{1}{W} \sum_{k=0}^{W-1} s[n-k]$, setting $y_{\text{MA}}[n] = \mathbb{I}(\tilde{s}_{\text{MA}}[n] \ge \tau_{\text{MA}}^*)$ ($O(1)$ time, 20~B buffer for $W=5$).
-\item \textbf{M3 (Median Filter):} Order-statistic filter $\tilde{s}_{\text{med}}[n] = \text{median}(s[n], \dots, s[n-4])$, setting $y_{\text{med}}[n] = \mathbb{I}(\tilde{s}_{\text{med}}[n] \ge \tau_{\text{med}}^*)$ ($O(W)$ time, 20~B buffer).
-\item \textbf{M4 (History Consensus):} Majority gate ($M=3, W=5$): setting $y_{\text{hist}}[n] = 1$ when $\sum_{k=0}^{W-1} \mathbb{I}(s[n-k] \ge \tau_{\text{hist}}^*) \ge 3$ ($O(W)$ time, 5~B buffer).
-\item \textbf{M5 (Learned Mamba-SSSM):} Pure-PyTorch selective SSM ($d_{\text{model}} = 16, d_{\text{state}} = 8$). The fused scalar confidence is projected into latent space with input-dependent time-step $\Delta_t = \text{softplus}(W_\Delta x_t)$ and matrices $B_t, C_t$, updating recurrent hidden state $h_t \in \mathbb{R}^{16 \times 8}$ with selective decay ($O(d_{\text{model}} d_{\text{state}})$ time, 512~B state, 753 learned parameters). The model is trained on validation confidence sequences using binary cross-entropy (BCE) loss and the Adam optimizer (learning rate $0.01$, 40 epochs) across 5 random seeds, setting $y_{\text{Mamba}}[n] = \mathbb{I}(\hat{y}_t \ge \tau_{\text{Mamba}}^*)$.
+\item \textbf{M1 (Baseline Raw):} Instantaneous thresholding: sets alert $y[n] = 1$ when current confidence $s[n] \ge \tau^*$, with zero state memory ($O(1)$ time, 0~B buffer).
+\item \textbf{M2 (Moving Average):} Averages the last $W$ frame confidences:
+\begin{equation}
+\bar{s}[n] = \frac{1}{W} \sum_{k=0}^{W-1} s[n-k],
+\end{equation}
+triggering an alert ($y[n] = 1$) when $\bar{s}[n] \ge \tau^*$ ($O(1)$ time, 20~B buffer for $W=5$).
+\item \textbf{M3 (Median Filter):} Takes the median confidence of the last five frames: $\tilde{s}[n] = \text{median}(s[n-4], \dots, s[n])$, triggering an alert when $\tilde{s}[n] \ge \tau^*$ ($O(W)$ time, 20~B buffer).
+\item \textbf{M4 (History Consensus):} Majority voting: triggers an alert when at least 3 of the last 5 frames have raw confidence $s[n-k] \ge \tau^*$ ($O(W)$ time, 5~B buffer).
+\item \textbf{M5 (Learned Mamba-SSSM):} Lightweight selective state-space model ($d_{\text{model}} = 16, d_{\text{state}} = 8$, 753 learned parameters). It updates an internal hidden state using data-dependent decay and outputs alert probability $\hat{y}[n]$, triggering an alert when $\hat{y}[n] \ge \tau^*$ ($O(d_{\text{model}} d_{\text{state}})$ time, 512~B buffer). The model is trained on validation confidence sequences using binary cross-entropy loss and Adam across 5 random seeds.
 \end{enumerate}
 
 \subsection{Alert-Level Evaluation Metrics}
@@ -145,11 +149,12 @@ To measure operational mission effectiveness, we report primary alert-level metr
 \item \textbf{False Alerts per Minute (FA/min):} Rate of false alarm events triggered during non-target periods: $\text{FA/min} = K_{\text{FA}} / T_{\text{flight}}$, where an alarm event is defined as a contiguous sequence of positive detections ($y[n]=1$).
 \item \textbf{Positive Target Recall (\%):} Proportion of ground-truth target episodes successfully detected by at least one confirmed alert event.
 \item \textbf{Alert Latency (Time-to-Alarm):} Elapsed time (in frames and milliseconds) from target onset to the first triggered alert.
-\item \textbf{False Alarm Suppression Ratio (FASR):} Relative reduction in false alarm frames compared to the M1 raw baseline:
+\item \textbf{False Alarm Suppression Ratio (FASR):} Percentage reduction in false alarm frames compared to the raw baseline:
 \begin{equation}
-\text{FASR} = 1 - \frac{\sum_n \mathbb{I}(y_{\text{method}}[n] = 1 \wedge y_{\text{true}}[n] = 0)}{\sum_n \mathbb{I}(y_{\text{baseline}}[n] = 1 \wedge y_{\text{true}}[n] = 0)}.
+\text{FASR} = 1 - \frac{\text{FP}_{\text{filter}}}{\text{FP}_{\text{raw}}},
 \label{eq:fasr}
 \end{equation}
+where $\text{FP}_{\text{filter}}$ and $\text{FP}_{\text{raw}}$ are the total false-positive frames produced by the temporal filter and raw baseline, respectively.
 \end{itemize}
 
 \section{Experimental Setup and Dataset}
@@ -162,12 +167,6 @@ Wilderness SAR dual-spectrum datasets remain scarce in the literature. As summar
 \item \textbf{Snow-Covered Alpine:} High-albedo snow causing visible glare, contrasted against freezing backgrounds where winter clothing insulates body heat.
 \end{itemize}
 
-\begin{figure}[!t]
-\centering
-\includegraphics[width=\columnwidth]{figures/figure_2_biome_samples.png}
-\caption{Multimodal benchmark comparison across arid desert, temperate forest, and snow alpine biomes: visible RGB viewports (left) and synchronized pseudo-thermal infrared viewports (right) with ground-truth target annotations. The snow biome illustrates the lookup table artifact: bright snow cover maps to high pseudo-thermal intensity, making snow appear warm while the human subject renders cooler than the terrain background.}
-\label{fig:biome_samples}
-\end{figure}
 
 \begin{table}[!t]
 \centering
@@ -195,7 +194,7 @@ Decision Strategies & Raw (M1), Moving Avg (M2), Median (M3), Consensus (M4), Ma
 }
 \end{table}
 
-Raw aerial video is captured in $1280 \times 720$ resolution at 24 frames per second (FPS). To preserve ground sampling distance (GSD) without downsampling small human targets, a $2\times$ dual-crop extraction produces disjoint $640 \times 640$ snippets (left tile $x \in [0, 640]$ and right tile $x \in [640, 1280]$, $y = 40$). This produces 30 desert sequences (20 positive, 10 negative), 30 forest sequences (20 positive, 10 negative), and 30 snow alpine sequences (28 positive, 2 negative), totaling 90 video streams and 20,364 frames at 24~Hz per modality (180 streams and 40,728 frames combined across synchronized RGB and thermal modalities). Sequences are annotated in Label Studio using keyframe interpolation, yielding precise ground-truth bounding boxes. Fig.~\ref{fig:biome_samples} illustrates representative viewport pairs across the three biomes.
+Raw aerial video is captured in $1280 \times 720$ resolution at 24 frames per second (FPS). To preserve ground sampling distance (GSD) without downsampling small human targets, a $2\times$ dual-crop extraction produces disjoint $640 \times 640$ snippets (left tile $x \in [0, 640]$ and right tile $x \in [640, 1280]$, $y = 40$). This produces 30 desert sequences (20 positive, 10 negative), 30 forest sequences (20 positive, 10 negative), and 30 snow alpine sequences (28 positive, 2 negative), totaling 90 video streams and 20,364 frames at 24~Hz per modality (180 streams and 40,728 frames combined across synchronized RGB and thermal modalities). Sequences are annotated in Label Studio using keyframe interpolation, yielding precise ground-truth bounding boxes.
 
 Dataset partitioning is conducted strictly at the sequence level under Option B (Parent-Video Grouped Episodic Partitioning) to prevent spatial or temporal data leakage between derived sibling tiles. Sequences follow a 60/20/20 split: 44 training clips (9,800 frames per modality), 22 validation clips (4,994 frames per modality), and 24 testing clips (5,570 frames per modality). Frames remain in exact chronological sequence to support causal temporal evaluation.
 
@@ -277,7 +276,7 @@ The data demonstrate clear performance differences across methods:
 \label{fig:performance_tradeoff}
 \end{figure}
 
-Fig.~\ref{fig:real_temporal_sequence} illustrates this behavior on an actual test clip: an isolated rock clutter spike is suppressed by M2 and M5, whereas M1 triggers a spurious alert. Fig.~\ref{fig:performance_tradeoff} depicts the Pareto frontier, establishing M2 as the dominant operating point.
+Fig.~\ref{fig:real_temporal_sequence} illustrates this behavior on an actual test clip: an isolated rock clutter spike is suppressed by M2 and M5, whereas M1 triggers a spurious alert. Fig.~\ref{fig:performance_tradeoff} depicts the Pareto frontier, establishing M2 as the optimal operating point.
 
 \begin{figure}[!t]
 \centering
