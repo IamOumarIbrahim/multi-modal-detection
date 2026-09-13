@@ -30,20 +30,20 @@
 \node[iconbox] (prompt_rgb) at (-4.6, 6.10) {
     \includegraphics[height=0.76cm]{figures/icon_lorem_ipsum.png}
 };
-\node[above=4pt of prompt_rgb, ttl, text=blue!80!black] (lbl_p1) {RGB Video Prompt};
-\node[below=2pt of prompt_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_p1) {Text Prompt};
+\node[above=4pt of prompt_rgb, ttl, text=blue!80!black] (lbl_p1) {Scenario Prompt};
+\node[below=2pt of prompt_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_p1) {Structured Text};
 
 % 2. Video Generator LLMs (Grok above Gemini at x = -1.4)
 \node[iconbox] (grok_rgb) at (-1.4, 7.35) {
     \includegraphics[height=0.72cm]{figures/grok_logo.png}
 };
-\node[above=3pt of grok_rgb, ttl, text=purple!80!black] (lbl_g1) {Video Generator LLM};
+\node[above=3pt of grok_rgb, ttl, text=purple!80!black] (lbl_g1) {AI Video Generator};
 \node[below=2pt of grok_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_grok) {xAI Grok};
 
 \node[iconbox] (gemini_rgb) at (-1.4, 4.85) {
     \includegraphics[height=0.72cm]{figures/gemini_logo.png}
 };
-\node[below=2pt of gemini_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_g1) {Gemini 3.8 Flash};
+\node[below=2pt of gemini_rgb, font=\fontsize{5.3pt}{6.4pt}\selectfont\bfseries, text=black] (sub_g1) {Google Gemini 3.8 Flash};
 
 \draw[bluearrow] (prompt_rgb.east) -- (grok_rgb.west);
 \draw[bluearrow] (prompt_rgb.east) -- (gemini_rgb.west);
