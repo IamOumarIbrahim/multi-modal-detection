@@ -69,11 +69,6 @@ G.~Jocher and J.~Qiu, ``Ultralytics {YOLO11},'' 2024. [Online]. Available:
   \url{https://github.com/ultralytics/ultralytics}
 \BIBentrySTDinterwordspacing
 
-\bibitem{gu2023mamba}
-A.~Gu and T.~Dao, ``Mamba: Linear-time sequence modeling with selective state
-  spaces,'' in \emph{Proceedings of the First Conference on Language Modeling
-  (COLM)}, 2024, also arXiv:2312.00752.
-
 \bibitem{broyles2022wisard}
 D.~Broyles, C.~R. Hayner, and K.~Leung, ``{WiSARD}: A labeled visual and
   thermal image dataset for wilderness search and rescue,'' in
@@ -100,5 +95,10 @@ L.~R. Rabiner, M.~R. Sambur, and C.~E. Schmidt, ``Applications of a nonlinear
   smoothing algorithm to speech processing,'' \emph{IEEE Transactions on
   Acoustics, Speech, and Signal Processing}, vol.~23, no.~6, pp. 552--557,
   1975.
+
+\bibitem{gu2023mamba}
+A.~Gu and T.~Dao, ``Mamba: Linear-time sequence modeling with selective state
+  spaces,'' in \emph{Proceedings of the First Conference on Language Modeling
+  (COLM)}, 2024, also arXiv:2312.00752.
 
 \end{thebibliography}

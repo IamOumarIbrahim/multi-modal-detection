@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  13 SEP 2026 20:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.7.19)  14 SEP 2026 01:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -299,6 +299,9 @@ Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/preprint\balance.sty
 Package: balance 1999/02/23 4.3 (PWD)
 \oldvsize=\dimen196
+)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/placeins\placeins.sty
+Package: placeins 2005/04/18  v 2.2
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\tikz.
 sty
@@ -602,13 +605,140 @@ File: pgfmodulematrix.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 z/libraries\tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )))
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/pgfplots\pgfplots.sty
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplots.rev
+ision.tex)
+Package: pgfplots 2021/05/15 v1.18.1 Data Visualization (1.18.1)
+
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplots.cod
+e.tex
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotscore
+.code.tex
+\t@pgfplots@toka=\toks39
+\t@pgfplots@tokb=\toks40
+\t@pgfplots@tokc=\toks41
+\pgfplots@tmpa=\dimen303
+\c@pgfplots@coordindex=\count333
+\c@pgfplots@scanlineindex=\count334
+
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/sys\pgfplots
+sysgeneric.code.tex))
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/libs\pgfplot
+slibrary.code.tex)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/oldpgfcompat
+ib\pgfplotsoldpgfsupp_loader.code.tex
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
+aryfpu.code.tex)
+Package pgfplots: loading complementary utilities for your pgf version...
+\t@pgf@toka=\toks42
+\t@pgf@tokb=\toks43
+\t@pgf@tokc=\toks44
+
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/oldpgfcompat
+ib\pgfplotsoldpgfsupp_pgfutil-common-lists.tex))
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/util\pgfplot
+sutil.code.tex
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/liststructur
+e\pgfplotsliststructure.code.tex)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/liststructur
+e\pgfplotsliststructureext.code.tex)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/liststructur
+e\pgfplotsarray.code.tex
+\c@pgfplotsarray@tmp=\count335
+)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/liststructur
+e\pgfplotsmatrix.code.tex)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/numtable\pgf
+plotstableshared.code.tex
+\c@pgfplotstable@counta=\count336
+\t@pgfplotstable@a=\toks45
+)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/liststructur
+e\pgfplotsdeque.code.tex)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/util\pgfplot
+sbinary.code.tex
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/util\pgfplot
+sbinary.data.code.tex))
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/util\pgfplot
+sutil.verb.code.tex)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/libs\pgflibr
+arypgfplots.surfshading.code.tex
+\c@pgfplotslibrarysurf@no=\count337
+
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/sys\pgflibra
+rypgfplots.surfshading.pgfsys-pdftex.def)))
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/util\pgfplot
+scolormap.code.tex
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/util\pgfplot
+scolor.code.tex))
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotsstac
+kedplots.code.tex)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotsplot
+handlers.code.tex
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotsmesh
+plothandler.code.tex
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotsmesh
+plotimage.code.tex)))
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplots.sca
+ling.code.tex)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotscoor
+dprocessing.code.tex)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplots.err
+orbars.code.tex)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplots.mar
+kers.code.tex)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplotstick
+s.code.tex)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplots.pat
+hs.code.tex)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibrarydecorations.code.tex
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
+decorations.code.tex
+\pgfdecoratedcompleteddistance=\dimen304
+\pgfdecoratedremainingdistance=\dimen305
+\pgfdecoratedinputsegmentcompleteddistance=\dimen306
+\pgfdecoratedinputsegmentremainingdistance=\dimen307
+\pgf@decorate@distancetomove=\dimen308
+\pgf@decorate@repeatstate=\count338
+\pgfdecorationsegmentamplitude=\dimen309
+\pgfdecorationsegmentlength=\dimen310
+)
+\tikz@lib@dec@box=\box70
+)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibrarydecorations.pathmorphing.code.tex
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries/decorat
+ions\pgflibrarydecorations.pathmorphing.code.tex))
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibrarydecorations.pathreplacing.code.tex
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries/decorat
+ions\pgflibrarydecorations.pathreplacing.code.tex))
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots/libs\tikzlib
+rarypgfplots.contourlua.code.tex)
+\pgfplots@numplots=\count339
+\pgfplots@xmin@reg=\dimen311
+\pgfplots@xmax@reg=\dimen312
+\pgfplots@ymin@reg=\dimen313
+\pgfplots@ymax@reg=\dimen314
+\pgfplots@zmin@reg=\dimen315
+\pgfplots@zmax@reg=\dimen316
+)
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibraryplotmarks.code.tex
+File: tikzlibraryplotmarks.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
+aryplotmarks.code.tex
+File: pgflibraryplotmarks.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)))
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
 aryarrows.meta.code.tex
 File: pgflibraryarrows.meta.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgfarrowinset=\dimen303
-\pgfarrowlength=\dimen304
-\pgfarrowwidth=\dimen305
-\pgfarrowlinewidth=\dimen306
+\pgfarrowinset=\dimen317
+\pgfarrowlength=\dimen318
+\pgfarrowwidth=\dimen319
+\pgfarrowlinewidth=\dimen320
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
 z/libraries\tikzlibrarypositioning.code.tex
@@ -633,66 +763,47 @@ File: tikzlibraryfit.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
 z/libraries\tikzlibrarybackgrounds.code.tex
 File: tikzlibrarybackgrounds.code.tex 2025-08-29 v3.1.11a (3.1.11a)
-\pgf@layerbox@background=\box70
-\pgf@layerboxsaved@background=\box71
+\pgf@layerbox@background=\box71
+\pgf@layerboxsaved@background=\box72
 )
-(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibrarydecorations.pathreplacing.code.tex
-(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
-z/libraries\tikzlibrarydecorations.code.tex
-(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
-decorations.code.tex
-\pgfdecoratedcompleteddistance=\dimen307
-\pgfdecoratedremainingdistance=\dimen308
-\pgfdecoratedinputsegmentcompleteddistance=\dimen309
-\pgfdecoratedinputsegmentremainingdistance=\dimen310
-\pgf@decorate@distancetomove=\dimen311
-\pgf@decorate@repeatstate=\count333
-\pgfdecorationsegmentamplitude=\dimen312
-\pgfdecorationsegmentlength=\dimen313
-)
-\tikz@lib@dec@box=\box72
-)
-(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries/decorat
-ions\pgflibrarydecorations.pathreplacing.code.tex))
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count334
+\l__color_backend_stack_int=\count340
 ) (main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
 
 -- Lines per column: 56 (exact).
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count335
-\scratchdimen=\dimen314
+\scratchcounter=\count341
+\scratchdimen=\dimen321
 \scratchbox=\box73
-\nofMPsegments=\count336
-\nofMParguments=\count337
-\everyMPshowfont=\toks39
-\MPscratchCnt=\count338
-\MPscratchDim=\dimen315
-\MPnumerator=\count339
-\makeMPintoPDFobject=\count340
-\everyMPtoPDFconversion=\toks40
+\nofMPsegments=\count342
+\nofMParguments=\count343
+\everyMPshowfont=\toks46
+\MPscratchCnt=\count344
+\MPscratchDim=\dimen322
+\MPnumerator=\count345
+\makeMPintoPDFobject=\count346
+\everyMPtoPDFconversion=\toks47
 )
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
 ase.sty
@@ -704,28 +815,31 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 fg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 3
-5.
- (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsptm.fd
+Package pgfplots notification 'compat/show suggested version=true': document ha
+s been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
+
+LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 5
+3.
+(C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 35.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 39.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 53.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 57.
 
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 39.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 57.
 
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 (figure_system_architecture.tex
-LaTeX Font Info:    Trying to load font information for OT1+phv on input line 3
-0.
+LaTeX Font Info:    Trying to load font information for OT1+phv on input line 2
+9.
 
 (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1phv.fd
 File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
@@ -733,28 +847,33 @@ File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
 <figures/icon_lorem_ipsum.png, id=4, 160.6pt x 200.75pt>
 File: figures/icon_lorem_ipsum.png Graphic file (type png)
 <use figures/icon_lorem_ipsum.png>
-Package pdftex.def Info: figures/icon_lorem_ipsum.png  used on input line 31.
+Package pdftex.def Info: figures/icon_lorem_ipsum.png  used on input line 30.
 (pdftex.def)             Requested size: 17.29846pt x 21.62393pt.
 <figures/grok_logo.png, id=6, 564.1075pt x 547.04375pt>
 File: figures/grok_logo.png Graphic file (type png)
 <use figures/grok_logo.png>
-Package pdftex.def Info: figures/grok_logo.png  used on input line 38.
+Package pdftex.def Info: figures/grok_logo.png  used on input line 37.
 (pdftex.def)             Requested size: 21.12299pt x 20.48601pt.
 <figures/gemini_logo.png, id=7, 501.875pt x 501.875pt>
 File: figures/gemini_logo.png Graphic file (type png)
 <use figures/gemini_logo.png>
-Package pdftex.def Info: figures/gemini_logo.png  used on input line 44.
+Package pdftex.def Info: figures/gemini_logo.png  used on input line 43.
 (pdftex.def)             Requested size: 20.4851pt x 20.48601pt.
 <figures/grok_desert_video.png, id=8, 754.82pt x 417.56pt>
 File: figures/grok_desert_video.png Graphic file (type png)
 <use figures/grok_desert_video.png>
-Package pdftex.def Info: figures/grok_desert_video.png  used on input line 54.
+Package pdftex.def Info: figures/grok_desert_video.png  used on input line 53.
 (pdftex.def)             Requested size: 31.86694pt x 17.62341pt.
 <figures/grok_forest_video.png, id=9, 754.82pt x 417.56pt>
 File: figures/grok_forest_video.png Graphic file (type png)
 <use figures/grok_forest_video.png>
-Package pdftex.def Info: figures/grok_forest_video.png  used on input line 55.
+Package pdftex.def Info: figures/grok_forest_video.png  used on input line 54.
 (pdftex.def)             Requested size: 31.86694pt x 17.62341pt.
+<figures/snow_rgb_video.jpg, id=10, 1284.8pt x 722.7pt>
+File: figures/snow_rgb_video.jpg Graphic file (type jpg)
+<use figures/snow_rgb_video.jpg>
+Package pdftex.def Info: figures/snow_rgb_video.jpg  used on input line 55.
+(pdftex.def)             Requested size: 31.86694pt x 17.91968pt.
 LaTeX Font Info:    Calculating math sizes for size <5.3> on input line 60.
 
 
@@ -769,128 +888,150 @@ LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.65> not available
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.65> not available
 (Font)              size <5> substituted on input line 60.
 
-<figures/desert_rgb_video.png, id=10, 1284.8pt x 722.7pt>
+<figures/desert_rgb_video.png, id=11, 1284.8pt x 722.7pt>
 File: figures/desert_rgb_video.png Graphic file (type png)
 <use figures/desert_rgb_video.png>
 Package pdftex.def Info: figures/desert_rgb_video.png  used on input line 66.
 (pdftex.def)             Requested size: 31.86694pt x 17.91968pt.
-<figures/forest_rgb_video.png, id=11, 1284.8pt x 722.7pt>
+<figures/forest_rgb_video.png, id=12, 1284.8pt x 722.7pt>
 File: figures/forest_rgb_video.png Graphic file (type png)
 <use figures/forest_rgb_video.png>
 Package pdftex.def Info: figures/forest_rgb_video.png  used on input line 67.
 (pdftex.def)             Requested size: 31.86694pt x 17.91968pt.
-LaTeX Font Info:    Calculating math sizes for size <5.6> on input line 79.
+File: figures/snow_rgb_video.jpg Graphic file (type jpg)
+<use figures/snow_rgb_video.jpg>
+Package pdftex.def Info: figures/snow_rgb_video.jpg  used on input line 68.
+(pdftex.def)             Requested size: 31.86694pt x 17.91968pt.
+LaTeX Font Info:    Calculating math sizes for size <5.6> on input line 80.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.8> not available
-(Font)              size <5> substituted on input line 79.
+(Font)              size <5> substituted on input line 80.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.8> not available
-(Font)              size <5> substituted on input line 79.
+(Font)              size <5> substituted on input line 80.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.8> not available
-(Font)              size <5> substituted on input line 79.
+(Font)              size <5> substituted on input line 80.
 
-<figures/desert_th_video.png, id=12, 1284.8pt x 722.7pt>
+<figures/desert_th_video.png, id=13, 1284.8pt x 722.7pt>
 File: figures/desert_th_video.png Graphic file (type png)
 <use figures/desert_th_video.png>
-Package pdftex.def Info: figures/desert_th_video.png  used on input line 101.
+Package pdftex.def Info: figures/desert_th_video.png  used on input line 102.
 (pdftex.def)             Requested size: 31.86694pt x 17.91968pt.
-<figures/forest_th_video.png, id=13, 1284.8pt x 722.7pt>
+<figures/forest_th_video.png, id=14, 1284.8pt x 722.7pt>
 File: figures/forest_th_video.png Graphic file (type png)
 <use figures/forest_th_video.png>
-Package pdftex.def Info: figures/forest_th_video.png  used on input line 102.
+Package pdftex.def Info: figures/forest_th_video.png  used on input line 103.
 (pdftex.def)             Requested size: 31.86694pt x 17.91968pt.
-<figures/crop_640_left_video.png, id=14, 642.4pt x 642.4pt>
+<figures/snow_th_video.jpg.png, id=15, 1284.8pt x 722.7pt>
+File: figures/snow_th_video.jpg.png Graphic file (type png)
+<use figures/snow_th_video.jpg.png>
+Package pdftex.def Info: figures/snow_th_video.jpg.png  used on input line 104.
+
+(pdftex.def)             Requested size: 31.86694pt x 17.91968pt.
+<figures/crop_640_left_video.png, id=16, 642.4pt x 642.4pt>
 File: figures/crop_640_left_video.png Graphic file (type png)
 <use figures/crop_640_left_video.png>
 Package pdftex.def Info: figures/crop_640_left_video.png  used on input line 11
-4.
+6.
 (pdftex.def)             Requested size: 23.61583pt x 23.61354pt.
-<figures/crop_640_right_video.png, id=15, 642.4pt x 642.4pt>
+<figures/crop_640_right_video.png, id=17, 642.4pt x 642.4pt>
 File: figures/crop_640_right_video.png Graphic file (type png)
 <use figures/crop_640_right_video.png>
 Package pdftex.def Info: figures/crop_640_right_video.png  used on input line 1
-15.
+17.
 (pdftex.def)             Requested size: 23.61583pt x 23.61354pt.
-LaTeX Font Info:    Calculating math sizes for size <6.2> on input line 119.
+LaTeX Font Info:    Calculating math sizes for size <6.2> on input line 121.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.09999> not available
-(Font)              size <5> substituted on input line 119.
+(Font)              size <5> substituted on input line 121.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.09999> not available
-(Font)              size <5> substituted on input line 119.
+(Font)              size <5> substituted on input line 121.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.09999> not available
-(Font)              size <5> substituted on input line 119.
+(Font)              size <5> substituted on input line 121.
 
-<figures/icon_label_studio.png, id=16, 289.08pt x 289.08pt>
+<figures/icon_label_studio.png, id=18, 289.08pt x 289.08pt>
 File: figures/icon_label_studio.png Graphic file (type png)
 <use figures/icon_label_studio.png>
-Package pdftex.def Info: figures/icon_label_studio.png  used on input line 126.
+Package pdftex.def Info: figures/icon_label_studio.png  used on input line 128.
 
 (pdftex.def)             Requested size: 21.62271pt x 21.62393pt.
-<figures/desert_rgb_annotated.png, id=17, 642.4pt x 642.4pt>
+<figures/desert_rgb_annotated.png, id=19, 642.4pt x 642.4pt>
 File: figures/desert_rgb_annotated.png Graphic file (type png)
 <use figures/desert_rgb_annotated.png>
 Package pdftex.def Info: figures/desert_rgb_annotated.png  used on input line 1
-46.
+48.
 (pdftex.def)             Requested size: 23.33147pt x 23.32928pt.
-<figures/desert_th_annotated.png, id=18, 642.4pt x 642.4pt>
+<figures/desert_th_annotated.png, id=20, 642.4pt x 642.4pt>
 File: figures/desert_th_annotated.png Graphic file (type png)
 <use figures/desert_th_annotated.png>
 Package pdftex.def Info: figures/desert_th_annotated.png  used on input line 14
-7.
+9.
 (pdftex.def)             Requested size: 23.33147pt x 23.32928pt.
-LaTeX Font Info:    Calculating math sizes for size <5.8> on input line 163.
+<figures/snow_th_annotated.png, id=21, 722.7pt x 722.7pt>
+File: figures/snow_th_annotated.png Graphic file (type png)
+<use figures/snow_th_annotated.png>
+Package pdftex.def Info: figures/snow_th_annotated.png  used on input line 150.
+
+(pdftex.def)             Requested size: 23.33147pt x 23.32315pt.
+LaTeX Font Info:    Calculating math sizes for size <5.8> on input line 165.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <2.9> not available
-(Font)              size <5> substituted on input line 163.
+(Font)              size <5> substituted on input line 165.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <2.9> not available
-(Font)              size <5> substituted on input line 163.
+(Font)              size <5> substituted on input line 165.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <2.9> not available
-(Font)              size <5> substituted on input line 163.
+(Font)              size <5> substituted on input line 165.
 
-)
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 5
-3.
- (C:\Users\omarb\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1pcr.fd
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)
-[1{C:/Users/omarb/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/om
-arb/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
+) [1{C:/Users/omarb/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/
+omarb/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}
 
 
-] [2 <./figures/icon_lorem_ipsum.png> <./figures/grok_logo.png> <./figures/gemi
-ni_logo.png> <./figures/grok_desert_video.png (PNG copy)> <./figures/grok_fores
-t_video.png (PNG copy)> <./figures/desert_rgb_video.png (PNG copy)> <./figures/
-forest_rgb_video.png (PNG copy)> <./figures/desert_th_video.png (PNG copy)> <./
-figures/forest_th_video.png (PNG copy)> <./figures/crop_640_left_video.png (PNG
- copy)> <./figures/crop_640_right_video.png (PNG copy)> <./figures/icon_label_s
-tudio.png> <./figures/desert_rgb_annotated.png (PNG copy)> <./figures/desert_th
-_annotated.png (PNG copy)>]
-Underfull \hbox (badness 1521) in paragraph at lines 93--95
+]
+Underfull \hbox (badness 1521) in paragraph at lines 107--109
 \OT1/ptm/m/n/10 la-tency. We de-ploy two par-al-lel YOLO11n mod-els [8]:
  []
 
-[3] (figure_real_temporal_sequence.tex)
-Underfull \hbox (badness 2334) in paragraph at lines 246--247
-[]\OT1/ptm/m/n/10 Across the held-out test split, causal tem-po-ral post-
+[2 <./figures/icon_lorem_ipsum.png> <./figures/grok_logo.png> <./figures/gemini
+_logo.png> <./figures/grok_desert_video.png (PNG copy)> <./figures/grok_forest_
+video.png (PNG copy)> <./figures/snow_rgb_video.jpg> <./figures/desert_rgb_vide
+o.png (PNG copy)> <./figures/forest_rgb_video.png (PNG copy)> <./figures/desert
+_th_video.png (PNG copy)> <./figures/forest_th_video.png (PNG copy)> <./figures
+/snow_th_video.jpg.png> <./figures/crop_640_left_video.png (PNG copy)> <./figur
+es/crop_640_right_video.png (PNG copy)> <./figures/icon_label_studio.png> <./fi
+gures/desert_rgb_annotated.png (PNG copy)> <./figures/desert_th_annotated.png (
+PNG copy)> <./figures/snow_th_annotated.png>]
+<figures/figure_2_biome_samples.png, id=59, 1284.8pt x 1923.185pt>
+File: figures/figure_2_biome_samples.png Graphic file (type png)
+<use figures/figure_2_biome_samples.png>
+Package pdftex.def Info: figures/figure_2_biome_samples.png  used on input line
+ 154.
+(pdftex.def)             Requested size: 88.20154pt x 132.02496pt.
+ [3 <./figures/figure_2_biome_samples.png>] (figure_real_temporal_sequence.tex)
+
+Overfull \hbox (21.49095pt too wide) in paragraph at lines 167--239
+ [][] 
  []
 
-[4] (figure_window_ablation.tex) [5]
-Underfull \hbox (badness 1565) in paragraph at lines 300--301
-[]\OT1/ptm/m/n/10 Several con-straints bound our find-ings. First, pseudo-
+(figure_window_ablation.tex)
+Overfull \hbox (6.57428pt too wide) in paragraph at lines 91--245
+ [][] 
  []
 
-(main.bbl)
+[4] (figure_performance_tradeoff.tex
+Package pgfplots info on input line 26: Using 'lua backend=false' for axis: zmo
+de=log unsupported (yet).
+) [5] (main.bbl)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -903,7 +1044,7 @@ Before submitting the final camera ready copy, remember to:
  process uses the appropriate paper size.
 
 
-Overfull \vbox (15.53131pt too high) has occurred while \output is active []
+Overfull \vbox (0.81927pt too high) has occurred while \output is active []
 
 
 [6] (main.aux)
@@ -918,13 +1059,13 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 16948 strings out of 467871
- 354890 string characters out of 5418376
- 787504 words of memory out of 5000000
- 45484 multiletter control sequences out of 15000+600000
- 706818 words of font info for 198 fonts, out of 8000000 for 9000
+ 26981 strings out of 467871
+ 694532 string characters out of 5418376
+ 1232889 words of memory out of 5000000
+ 55390 multiletter control sequences out of 15000+600000
+ 708517 words of font info for 198 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,17n,94p,2336b,968s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,17n,94p,1760b,2122s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmbx10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmex10.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -948,17 +1089,16 @@ ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/oma
 rb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/U
 sers/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.p
 fb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/sy
-mbols/msam5.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/c
-ourier/ucrr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw
-/helvetic/uhvb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/
-urw/helvetic/uhvr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/urw/times/utmri8a.pfb>
-Output written on main.pdf (6 pages, 10210616 bytes).
+mbols/msam5.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/urw/h
+elvetic/uhvb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1/ur
+w/helvetic/uhvr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
+/urw/times/utmb8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type1
+/urw/times/utmbi8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type
+1/urw/times/utmr8a.pfb><C:/Users/omarb/AppData/Local/Programs/MiKTeX/fonts/type
+1/urw/times/utmri8a.pfb>
+Output written on main.pdf (6 pages, 14730634 bytes).
 PDF statistics:
- 184 PDF objects out of 1000 (max. 8388607)
+ 186 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 83 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 103 words of extra memory for PDF output out of 10000 (max. 10000000)
 

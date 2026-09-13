@@ -1,79 +1,120 @@
-\begin{tikzpicture}[
-    >=Stealth,
-    font=\sffamily\small,
-    gridline/.style={draw=black!10, dotted, line width=0.6pt},
-    axisline/.style={draw=black!80, ->, thick},
-    pareto/.style={draw=orange!90!black, dashed, line width=1.4pt},
-    point/.style={circle, inner sep=2.6pt, thick},
-    labelnode/.style={font=\sffamily\tiny\bfseries, align=center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=9.2cm,
+  height=7.2cm,
+  view={58}{22},
+  xmin=0, xmax=10.5,
+  ymin=82, ymax=96,
+  zmode=log,
+  zmin=0.01, zmax=550,
+  zminorticks=false,
+  xtick={0, 2, 4, 6, 8, 10},
+  ytick={84, 88, 92, 96},
+  ztick={0.01, 0.1, 1, 10, 100},
+  zticklabels={$0.01$, $0.1$, $1$, $10$, $100$},
+  xlabel={\textbf{False Alerts / min}},
+  ylabel={\textbf{Alert Recall (\%)}},
+  zlabel={\textbf{Latency ($\mu\text{s}$, log)}},
+  xlabel style={font=\scriptsize, yshift=-10pt},
+  ylabel style={font=\scriptsize, yshift=-14pt},
+  zlabel style={font=\scriptsize, xshift=-34pt},
+  tick label style={font=\tiny},
+  axis line style={semithick, black!65},
+  grid=major,
+  grid style={line width=0.35pt, draw=black!18, dashed},
+  clip=false
 ]
 
-% Coordinate Transformation:
-% X-axis: False Alerts / min from 14 down to 0 (lower is better -> right side is lower!)
-% Canvas X from 0.0 (14 FA/min) to 6.3 (0 FA/min) -> scale: 0.45 cm per 1 FA/min
-% Y-axis: Recall from 88% to 102% -> Canvas Y from 0.0 to 4.2 (scale: 0.30 cm per %)
+  % 1. Directional Improvement Arrows
+  \draw[-{Stealth[length=4.5pt, width=3.5pt]}, semithick, black!55] 
+    (axis cs:8.5, 78.0, 0.01) -- (axis cs:1.5, 78.0, 0.01)
+    node[pos=0.5, sloped, below=1.5pt, font=\tiny\bfseries, text=black!60] {Better ($\leftarrow$)};
 
-% 1. Shaded Optimal Operational Zone (Top-Right: Low FA/min <= 5 -> Canvas X >= 4.05, Recall >= 96%)
-\fill[green!8, rounded corners=4pt] (3.8, 2.4) rectangle (6.5, 4.3);
-\node[font=\sffamily\tiny\bfseries, text=green!60!black, anchor=north west] at (3.9, 4.2) {Optimal Operational Zone};
+  \draw[-{Stealth[length=4.5pt, width=3.5pt]}, semithick, black!55, yshift=-4pt] 
+    (axis cs:12.5, 84.5, 0.01) -- (axis cs:12.5, 94.5, 0.01)
+    node[pos=0.5, sloped, below=1.5pt, font=\tiny\bfseries, text=black!60] {Better ($\rightarrow$)};
 
-% 2. Grid lines
-\foreach \fa/\x in {14/0.0, 12/0.9, 10/1.8, 8/2.7, 6/3.6, 4/4.5, 2/5.4, 0/6.3} {
-    \draw[gridline] (\x, 0) -- (\x, 4.2);
-    \draw (\x, 0) -- (\x, -2pt) node[below=1pt, font=\sffamily\tiny] {\fa};
-}
-\foreach \y/\label in {0.0/88\%, 0.6/90\%, 1.2/92\%, 1.8/94\%, 2.4/96\%, 3.0/98\%, 3.6/100\%} {
-    \draw[gridline] (0, \y) -- (6.3, \y);
-    \draw (0, \y) -- (-2pt, \y) node[left=1pt, font=\sffamily\tiny] {\label};
-}
+  \draw[{Stealth[length=4.5pt, width=3.5pt]}-, semithick, black!55] 
+    (axis cs:0, 78.5, 0.03) -- (axis cs:0, 78.5, 80.0)
+    node[pos=0.5, sloped, above=2pt, font=\tiny\bfseries, text=black!60, fill=white, inner sep=1pt] {Better ($\downarrow$)};
 
-% 3. Axes
-\draw[axisline] (0, 0) -- (6.8, 0) node[right=2pt, font=\sffamily\scriptsize\bfseries] {FA/min};
-\node[below=11pt, font=\sffamily\scriptsize\bfseries] at (3.15, 0) {False Alerts per Minute ($\leftarrow$ Lower is better)};
+  % 2. Depth Drop Lines
+  \draw[dashed, black!55,     line width=1.1pt] (axis cs:9.0, 92.3, 0.01) -- (axis cs:9.0, 92.3, 0.02);
+  \draw[dashed, teal!85!black, line width=1.1pt] (axis cs:2.1, 84.6, 0.01) -- (axis cs:2.1, 84.6, 0.30);
+  \draw[dashed, teal!85!black, line width=1.1pt] (axis cs:3.6, 92.3, 0.01) -- (axis cs:3.6, 92.3, 0.52);
+  \draw[dashed, red!75!black,  line width=1.1pt] (axis cs:3.7, 86.2, 0.01) -- (axis cs:3.7, 86.2, 21.8);
+  \draw[dashed, red!75!black,  line width=1.1pt] (axis cs:1.7, 87.7, 0.01) -- (axis cs:1.7, 87.7, 150.6);
 
-\draw[axisline] (0, 0) -- (0, 4.5);
-\node[rotate=90, anchor=south, font=\sffamily\scriptsize\bfseries] at (-0.65, 2.1) {Positive Target Recall (\%)};
+  % 3. Sub-Microsecond Pareto Frontier
+  \addplot3[
+    color=teal!85!black,
+    line width=1.4pt,
+    dashed
+  ] coordinates {
+    (2.1, 84.6, 0.30)
+    (3.6, 92.3, 0.52)
+  };
 
-% 4. Pareto Frontier (Connecting M1 (12.0, 98.5%) -> M5 (6.0, 100%) -> M2 (4.0, 100%))
-% M1: x = (14 - 12)*0.45 = 0.90, y = (98.5 - 88)*0.30 = 3.15
-% 4. Pareto Frontier (Connecting M1 (12.0, 98.5%) -> M5 (6.0, 100%) -> M2 (4.0, 100%))
-% M1: x = (14 - 12)*0.45 = 0.90, y = (98.5 - 88)*0.30 = 3.15
-% M5: x = (14 - 6.0)*0.45 = 3.60, y = (100.0 - 88)*0.30 = 3.60
-% M2: x = (14 - 4.0)*0.45 = 4.50, y = (100.0 - 88)*0.30 = 3.60
-\draw[pareto] (0.90, 3.15) -- (3.60, 3.60) -- (4.50, 3.60);
-\node[font=\sffamily\tiny\bfseries, text=orange!90!black, anchor=south east] at (2.1, 3.28) {Pareto Frontier};
+  \node[font=\tiny\bfseries, text=teal!85!black, fill=white, inner sep=1.5pt, sloped, above] 
+    at (axis cs:2.75, 87.8, 0.38) {Pareto Frontier};
 
-% 5. Data Points:
-% M1: Raw Baseline (12.0 FA/min, 98.5% Recall)
-\node[point, draw=red!80!black, fill=red!30] (pt1) at (0.90, 3.15) {};
-\node[labelnode, text=red!80!black, anchor=north west] at (0.95, 3.05) {\textbf{M1: Raw Baseline}\\{\tiny (12.0 FA/min, 98.5\%)}};
+  % 4. Method Markers & Annotations
+  \addplot3[
+    only marks,
+    mark=square*,
+    mark size=2.5pt,
+    draw=teal!90!black,
+    fill=teal!25,
+    line width=0.7pt
+  ] coordinates {
+    (2.1, 84.6, 0.30)
+    (3.6, 92.3, 0.52)
+  };
 
-% M4: History Consensus (4.0 FA/min, 97.1% Recall -> x = 4.50, y = (97.1 - 88)*0.30 = 2.73)
-\node[point, draw=teal!80!black, fill=teal!30] (pt4) at (4.50, 2.73) {};
-\node[labelnode, text=teal!80!black, anchor=north] at (4.50, 2.65) {\textbf{M4: Consensus}\\{\tiny (4.0, 97.1\%)}};
+  \node[
+    draw=orange!90!black,
+    line width=1.2pt,
+    circle,
+    inner sep=5.5pt
+  ] at (axis cs:3.6, 92.3, 0.52) {};
 
-% M6: Learned GRU Baseline (8.0 FA/min, 100.0% Recall -> x = (14 - 8.0)*0.45 = 2.70, y = 3.60)
-\node[point, draw=olive!80!black, fill=olive!30] (pt6) at (2.70, 3.60) {};
-\node[labelnode, text=olive!80!black, anchor=north] at (2.70, 3.48) {\textbf{M6: GRU}\\{\tiny (8.0, 100\%)}};
+  \node[font=\scriptsize, anchor=north west, fill=white, inner sep=1.2pt] 
+    at (axis cs:2.1, 84.6, 0.035) {\textbf{M2}: Moving Avg ($0.30\,\mu\text{s}$)};
 
-% M5: Learned Mamba-SSSM (6.0 FA/min, 100.0% Recall -> x = 3.60, y = 3.60)
-\node[point, draw=purple!80!black, fill=purple!30] (pt5) at (3.60, 3.60) {};
-\node[labelnode, text=purple!80!black, anchor=south] at (3.60, 3.66) {\textbf{M5: Mamba}\\{\tiny (6.0, 100\%)}};
+  \node[font=\scriptsize, anchor=west, fill=white, fill opacity=0.9, text opacity=1, inner sep=1.5pt] 
+    at (axis cs:3.95, 92.3, 0.42) {\textbf{M3/M4}: Median / Cons. ($0.5\,\mu\text{s}$) \textbf{\textcolor{orange!90!black}{[Best]}}};
 
-% M3: Median Filter (4.0 FA/min, 100.0% Recall -> x = 4.50, y = 3.60)
-\node[point, draw=blue!80!black, fill=blue!30] (pt3) at (4.50, 3.60) {};
+  \addplot3[
+    only marks,
+    mark=*,
+    mark size=2.5pt,
+    draw=red!75!black,
+    fill=red!20,
+    line width=0.7pt
+  ] coordinates {
+    (1.7, 87.7, 150.6)
+    (3.7, 86.2, 21.8)
+  };
 
-% M2: Moving Average (4.0 FA/min, 100.0% Recall, F1=0.971 -> x = 4.50, y = 3.60)
-\node[point, draw=teal!90!black, fill=teal!40, inner sep=3.2pt] (pt2) at (4.50, 3.60) {};
-\node[labelnode, text=teal!90!black, anchor=north west] at (4.60, 3.75) {\textbf{M2: Moving Avg} / \textbf{M3: Median}\\{\tiny \textbf{(4.0 FA/min, 100.0\%)}}\\{\tiny \textbf{Optimal Frontier}}};
+  \node[font=\scriptsize, anchor=south, fill=white, inner sep=1.2pt] 
+    at (axis cs:1.7, 87.7, 185.0) {\textbf{M5}: Mamba ($151\,\mu\text{s}$)};
 
-% 6. Clean in-plot legend (avoiding bottom axis collision)
-\node[draw=black!25, fill=white, rounded corners=2pt, inner sep=3pt, font=\sffamily\tiny, anchor=south west] at (0.3, 0.4) {
-    \begin{tabular}{@{}ll@{}}
-    \textcolor{red!80!black}{$\bullet$ M1: Raw Baseline} & \textcolor{teal!80!black}{$\bullet$ M4: Consensus} \\
-    \textcolor{teal!90!black}{$\bullet$ M2: Moving Average} & \textcolor{purple!80!black}{$\bullet$ M5: Mamba-SSSM} \\
-    \textcolor{blue!80!black}{$\bullet$ M3: Median Filter} & \textcolor{olive!80!black}{$\bullet$ M6: GRU Baseline} \\
-    \end{tabular}
-};
+  \node[font=\scriptsize, anchor=south west, fill=white, fill opacity=0.9, text opacity=1, inner sep=1.4pt] 
+    at (axis cs:3.9, 86.2, 26.0) {\textbf{M6}: GRU ($22\,\mu\text{s}$)};
 
+  \addplot3[
+    only marks,
+    mark=triangle*,
+    mark size=2.7pt,
+    draw=black!65,
+    fill=black!20,
+    line width=0.7pt
+  ] coordinates {
+    (9.0, 92.3, 0.02)
+  };
+
+  \node[font=\scriptsize, anchor=south, fill=white, inner sep=1.2pt] 
+    at (axis cs:9.0, 92.3, 0.035) {\textbf{M1}: Raw ($0.02\,\mu\text{s}$)};
+
+\end{axis}
 \end{tikzpicture}

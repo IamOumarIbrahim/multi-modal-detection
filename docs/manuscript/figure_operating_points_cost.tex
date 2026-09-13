@@ -1,0 +1,132 @@
+% figure_operating_points_cost.tex
+% Fixed version – no overlapping labels, no truncated text
+
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={
+        group size = 2 by 1,
+        horizontal sep = 1.9cm,
+        ylabels at = edge left,
+    },
+    height = 5.5cm,
+    width  = 0.47\textwidth,
+    grid   = major,
+    grid style = {dashed, gray!25},
+    tick label style = {font=\scriptsize},
+    label style = {font=\small},
+    title style = {font=\small\bfseries},
+]
+
+% -------------------------------------------------
+% (a) Alert reliability
+% -------------------------------------------------
+\nextgroupplot[
+    title  = {(a) Alert reliability},
+    xlabel = {False Alerts / min $\downarrow$},
+    ylabel = {Alert Recall (\%)$\uparrow$},
+    xmin = 0,   xmax = 10.5,
+    ymin = 82,  ymax = 95,
+    xtick = {0,2,4,6,8,10},
+    ytick = {84,88,92},
+    legend style = {
+        at = {(0.97,0.04)},
+        anchor = south east,
+        font = \scriptsize,
+        draw = none,
+        fill = white,
+        fill opacity = 0.92,
+        text opacity = 1,
+        row sep = 1.5pt,
+        cells = {anchor=west},
+    },
+]
+
+% markers
+\addplot[only marks, mark=*, mark size=3.3pt, color=black!65]
+    coordinates {(9.0,92.3)};
+\node[font=\scriptsize, anchor=west] at (9.25,92.3) {M1};
+
+\addplot[only marks, mark=square*, mark size=3.3pt, color=blue!75!black]
+    coordinates {(2.1,84.6)};
+\node[font=\scriptsize, anchor=north, color=blue!75!black]
+    at (2.1,83.7) {M2};
+
+\addplot[only marks, mark=triangle*, mark size=3.8pt, color=green!55!black]
+    coordinates {(3.6,92.3)};
+\node[font=\scriptsize, anchor=south, color=green!55!black]
+    at (3.6,93.2) {M3/M4};
+
+\addplot[only marks, mark=pentagon*, mark size=3.3pt, color=orange!80!black]
+    coordinates {(1.7,87.7)};
+\node[font=\scriptsize, anchor=east, color=orange!80!black]
+    at (1.45,87.7) {M5};
+
+\addplot[only marks, mark=diamond*, mark size=3.3pt, color=red!70!black]
+    coordinates {(3.7,86.2)};
+\node[font=\scriptsize, anchor=west, color=red!70!black]
+    at (3.95,86.2) {M6};
+
+% highlight boxes (slightly tighter)
+\draw[thick, blue!75!black, dashed]
+    (1.55,83.4) rectangle (2.65,85.9);
+\draw[thick, green!55!black, dashed]
+    (3.05,90.9) rectangle (4.15,93.6);
+
+\legend{Raw, Moving Avg, Median/Cons., Mamba, GRU}
+
+% -------------------------------------------------
+% (b) Per-frame filter cost  (log scale, safe labels)
+% -------------------------------------------------
+\nextgroupplot[
+    title  = {(b) Per-frame filter cost},
+    xlabel = {Runtime ($\mu$s / frame)},
+    ytick  = \empty,
+    xmode  = log,
+    log ticks with fixed point,
+    xmin   = 0.008,
+    xmax   = 600,          % extra room so long labels fit
+    ymin   = 0.25,
+    ymax   = 6.9,
+    xtick  = {0.01,0.1,1,10,100},
+    xticklabels = {0.01,0.1,1,10,100},
+]
+
+% bars + labels placed to the right of each bar (never clipped)
+\addplot[xbar, bar width=11pt, fill=black!55, draw=none]
+    coordinates {(0.02,6.0)};
+\node[font=\scriptsize, anchor=west] at (0.028,6.0) {M1: 0.02\,$\mu$s};
+
+\addplot[xbar, bar width=11pt, fill=blue!75!black, draw=none]
+    coordinates {(0.30,5.0)};
+\node[font=\scriptsize, anchor=west] at (0.40,5.0) {M2: 0.30\,$\mu$s};
+
+\addplot[xbar, bar width=11pt, fill=green!55!black, draw=none]
+    coordinates {(0.42,4.0)};
+\node[font=\scriptsize, anchor=west] at (0.55,4.0) {M3: 0.42\,$\mu$s};
+
+\addplot[xbar, bar width=11pt, fill=green!40!black, draw=none]
+    coordinates {(0.63,3.0)};
+\node[font=\scriptsize, anchor=west] at (0.82,3.0) {M4: 0.63\,$\mu$s};
+
+\addplot[xbar, bar width=11pt, fill=red!70!black, draw=none]
+    coordinates {(21.80,2.0)};
+\node[font=\scriptsize, anchor=west] at (28,2.0) {M6: 21.8\,$\mu$s ($73\times$)};
+
+\addplot[xbar, bar width=11pt, fill=orange!80!black, draw=none]
+    coordinates {(150.59,1.0)};
+\node[font=\scriptsize, anchor=west] at (185,1.0) {M5: 150.6\,$\mu$s ($500\times$)};
+
+% 1 µs reference line
+\draw[gray!55, densely dashed] (1,0.25) -- (1,6.9);
+\node[font=\scriptsize, gray, rotate=90, anchor=south]
+    at (1.3,3.5) {1\,$\mu$s};
+
+\end{groupplot}
+
+% short note under the figure
+\node[font=\scriptsize, align=center, text=black!60]
+    at ($(group c1r1.south)!0.5!(group c2r1.south)+(0,-1.5cm)$)
+    {Dashed boxes in (a) mark the two recommended operating points.
+     Panel (b) uses a logarithmic axis; learned models lie far outside the
+     sub-microsecond regime of the classical filters.};
+\end{tikzpicture}

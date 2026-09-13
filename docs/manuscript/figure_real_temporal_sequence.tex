@@ -1,108 +1,167 @@
-\begin{tikzpicture}[
-    >=Stealth,
-    font=\sffamily\scriptsize,
-    axis/.style={draw=black!80, ->, semithick},
-    gridl/.style={draw=black!10, dotted, line width=0.5pt},
-    rawline/.style={draw=blue!75!black, thick},
-    maline/.style={draw=teal!85!black, very thick},
-    mambaline/.style={draw=purple!80!black, thick, dash pattern=on 3pt off 2pt},
-    decision/.style={draw=red!80!black, line width=1.4pt},
-    eventbg/.style={fill=green!12, draw=none}
-]
+% Requires in preamble:
+% \usepackage{pgfplots}
+% \pgfplotsset{compat=1.18}
+% \usetikzlibrary{arrows.meta}
 
-% Coordinate dimensions:
-% X-axis: 0 to 60 frames -> canvas X: 0 to 7.2 cm (scale: 0.12 cm/frame)
-% Panel 1: Fused Confidence s[n] (Canvas Y: 2.2 to 4.2 cm)
-% Panel 2: Decision Traces y[n] (Canvas Y: 0.0 to 1.5 cm)
+\definecolor{cblue}{RGB}{0, 85, 150}
+\definecolor{cvermilion}{RGB}{215, 85, 0}
+\definecolor{cpurple}{RGB}{115, 50, 130}
 
-% Shaded True Target Region (Frames 32 to 60 -> X: 3.84 to 7.2)
-\fill[eventbg] (3.84, 0.0) rectangle (7.2, 4.4);
-\node[font=\sffamily\tiny\bfseries, text=green!55!black, anchor=north] at (5.52, 4.4) {Ground-Truth Human Target Event};
+\begin{tikzpicture}
+  \pgfplotsset{
+    scale only axis,
+    width=0.72\columnwidth, % Sized to reserve gutter space for right-side threshold labels
+    xmin=0,
+    xmax=60,
+    tick label style={font=\tiny},
+    axis line style={semithick, black!75},
+    grid style={dotted, black!18, line width=0.5pt},
+  }
+%
+  % -------------------------------------------------------------
+  % TOP PANEL: Fused Confidence & Filter Responses
+  % -------------------------------------------------------------
+  \begin{axis}[
+    name=top_axis,
+    clip=false, % Allows labels at x=60 to render outside the plot frame
+    title={\small\textbf{Temporal Confidence Trace \& Decision Filtering}},
+    title style={yshift=2pt},
+    height=2.8cm,
+    ymin=0,
+    ymax=1.18,
+    ytick={0.0, 0.5, 1.0},
+    ymajorgrids=true,
+    ylabel={Confidence $s[n]$},
+    ylabel style={font=\scriptsize\bfseries},
+    xtick={0, 10, 20, 30, 40, 50, 60},
+    xticklabels=\empty,
+    axis x line*=bottom,
+    axis y line*=left,
+  ]
+    % Background Intervals
+    \fill[black!8] (axis cs:16, 0) rectangle (axis cs:20, 1.18);
+    \node[font=\tiny\bfseries, text=black!50, anchor=north] at (axis cs:18, 1.15) {Clutter};
 
-% Shaded Distractor Spike Region (Frames 16 to 20 -> X: 1.92 to 2.4)
-\fill[red!8] (1.92, 0.0) rectangle (2.4, 4.4);
+    \fill[black!4] (axis cs:32, 0) rectangle (axis cs:60, 1.18);
+    \node[font=\tiny\bfseries, text=black!50, anchor=north] at (axis cs:46, 1.15) {Target Event};
 
-% -------------------------------------------------------------
-% TOP PANEL: Fused Confidence s[n] & Filter Responses
-% -------------------------------------------------------------
-\draw[axis] (0, 2.2) -- (7.5, 2.2) node[right, font=\sffamily\tiny] {Frame $n$};
-\draw[axis] (0, 2.2) -- (0, 4.5);
-\node[rotate=90, anchor=south, font=\sffamily\tiny\bfseries] at (-0.35, 3.3) {Confidence};
+    % Threshold Lines (Labels placed directly to the right of each dashed line)
+    \draw[dash pattern=on 3pt off 2pt, draw=cvermilion!85!black, line width=0.7pt] 
+      (axis cs:0, 0.57) -- (axis cs:60, 0.57)
+      node[right=2pt, font=\tiny\bfseries, text=cvermilion!95!black] {$\tau_{\text{MA}}^* = 0.57$};
 
-% Y-ticks
-\draw (0, 2.2) -- (-2pt, 2.2) node[left, font=\sffamily\tiny] {0.0};
-\draw (0, 3.2) -- (-2pt, 3.2) node[left, font=\sffamily\tiny] {0.5};
-\draw (0, 4.2) -- (-2pt, 4.2) node[left, font=\sffamily\tiny] {1.0};
-\draw[gridl] (0, 3.2) -- (7.2, 3.2);
-\draw[gridl] (0, 4.2) -- (7.2, 4.2);
+    \draw[dashed, draw=black!50, line width=0.6pt] 
+      (axis cs:0, 0.43) -- (axis cs:60, 0.43)
+      node[right=2pt, font=\tiny\bfseries, text=black!70] {$\tau_{\text{raw}}^* = 0.43$};
 
-% Threshold lines
-\draw[draw=blue!60, dashed, line width=0.7pt] (0, 3.06) -- (7.2, 3.06) node[right, font=\sffamily\tiny, text=blue!70!black] {$\tau_{\text{raw}}^*=0.43$};
-\draw[draw=teal!80, dashed, line width=0.8pt] (0, 3.34) -- (7.2, 3.34) node[right, font=\sffamily\tiny, text=teal!80!black] {$\tau_{\text{MA}}^*=0.57$};
+    % Trace 1: Fused raw confidence s[n]
+    \addplot[
+      color=cblue,
+      very thick,
+      solid,
+      mark=*,
+      mark repeat=3,
+      mark options={scale=0.75, fill=cblue}
+    ] coordinates {
+      (0, 0.05)  (2, 0.04)  (4, 0.06)  (6, 0.04)  (8, 0.05)
+      (10, 0.04) (12, 0.06) (14, 0.05) (16, 0.07) (17, 0.15)
+      (18, 0.82) (19, 0.18) (20, 0.06) (22, 0.04) (24, 0.05)
+      (26, 0.05) (28, 0.06) (30, 0.07) (31, 0.18) (32, 0.78)
+      (34, 0.85) (36, 0.81) (38, 0.88) (40, 0.84) (42, 0.91)
+      (44, 0.86) (46, 0.93) (48, 0.89) (50, 0.94) (52, 0.88)
+      (54, 0.91) (56, 0.93) (58, 0.89) (60, 0.91)
+    };
 
-% Trace 1: Raw fused confidence s[n]
-% Background frames 0-16: ~0.05
-% Frame 18: sharp isolated spike to 0.82
-% Frames 19-31: ~0.05
-% Frames 32-60: sustained target ~0.80 - 0.94
-\draw[rawline] 
-    (0.00, 2.30) -- (0.24, 2.28) -- (0.48, 2.32) -- (0.72, 2.28) -- 
-    (0.96, 2.30) -- (1.20, 2.29) -- (1.44, 2.33) -- (1.68, 2.31) -- 
-    (1.92, 2.34) -- (2.04, 2.45) -- (2.16, 3.84) -- (2.28, 2.50) -- 
-    (2.40, 2.32) -- (2.64, 2.29) -- (2.88, 2.31) -- (3.12, 2.30) -- 
-    (3.36, 2.32) -- (3.60, 2.35) -- (3.72, 2.55) -- (3.84, 3.75) -- 
-    (4.08, 3.90) -- (4.32, 3.82) -- (4.56, 3.95) -- (4.80, 3.88) -- 
-    (5.04, 4.02) -- (5.28, 3.92) -- (5.52, 4.05) -- (5.76, 3.98) -- 
-    (6.00, 4.08) -- (6.24, 3.95) -- (6.48, 4.02) -- (6.72, 4.05) -- 
-    (6.96, 3.98) -- (7.20, 4.02);
+    % Trace 2: Moving average s_MA[n]
+    \addplot[
+      color=cvermilion,
+      very thick,
+      dashed,
+      mark=square*,
+      mark repeat=3,
+      mark options={scale=0.75, fill=cvermilion, solid}
+    ] coordinates {
+      (0, 0.05)  (8, 0.05)  (14, 0.05) (17, 0.06) (18, 0.21)
+      (19, 0.22) (20, 0.23) (21, 0.22) (22, 0.05) (30, 0.06)
+      (32, 0.20) (33, 0.38) (34, 0.68) (36, 0.83) (38, 0.84)
+      (40, 0.86) (42, 0.88) (46, 0.90) (50, 0.91) (54, 0.91)
+      (60, 0.91)
+    };
+  \end{axis}
+%
+  % -------------------------------------------------------------
+  % BOTTOM PANEL: Alert Waveforms with Expanded Row Padding
+  % -------------------------------------------------------------
+  \begin{axis}[
+    name=bottom_axis,
+    at=(top_axis.below south west),
+    anchor=above north west,
+    yshift=-0.32cm,
+    height=3.8cm,
+    ymin=-0.2,
+    ymax=3.9,
+    ytick={0.5, 1.8, 3.1},
+    yticklabels={%
+      {\bfseries M5 (Mamba)},
+      {\bfseries M2 (MA)},
+      {\bfseries M1 (Raw)}%
+    },
+    ylabel={Alert Output},
+    ylabel style={font=\scriptsize\bfseries},
+    yticklabel style={font=\tiny},
+    ymajorgrids=false,
+    xmajorgrids=true,
+    xtick={0, 10, 20, 30, 40, 50, 60},
+    xlabel={Video Frame Index $n$},
+    xlabel style={font=\scriptsize\bfseries},
+    axis x line*=bottom,
+    axis y line*=left,
+  ]
+    % Aligned Intervals
+    \fill[black!8] (axis cs:16, -0.2) rectangle (axis cs:20, 3.9);
+    \fill[black!4] (axis cs:32, -0.2) rectangle (axis cs:60, 3.9);
 
-% Trace 2: Moving average s_MA[n] (smoothed, suppresses frame 18 spike to ~0.16)
-\draw[maline] 
-    (0.00, 2.30) -- (0.96, 2.30) -- (1.68, 2.31) -- 
-    (2.04, 2.33) -- (2.16, 2.62) -- (2.28, 2.65) -- (2.40, 2.66) -- (2.52, 2.65) -- (2.64, 2.31) -- 
-    (3.60, 2.33) -- (3.84, 2.60) -- (3.96, 2.95) -- (4.08, 3.55) -- 
-    (4.32, 3.85) -- (4.56, 3.88) -- (4.80, 3.92) -- (5.04, 3.96) -- 
-    (5.52, 4.00) -- (6.00, 4.02) -- (6.48, 4.01) -- (7.20, 4.02);
+    % Baseline Reference Rails (0-state)
+    \draw[black!15, line width=0.5pt] (axis cs:0, 2.8) -- (axis cs:60, 2.8);
+    \draw[black!15, line width=0.5pt] (axis cs:0, 1.5) -- (axis cs:60, 1.5);
+    \draw[black!15, line width=0.5pt] (axis cs:0, 0.2) -- (axis cs:60, 0.2);
 
-% Annotation for noise spike vs smoothed
-\draw[->, thick, red!75!black] (2.16, 4.05) -- (2.16, 3.88);
-\node[font=\sffamily\tiny\bfseries, text=red!80!black, above=1pt] at (2.16, 4.05) {Clutter Spike ($0.82$)};
+    % M1 (Raw): Spurious pulse at frame 18; onset at frame 31.5
+    \addplot[color=cblue, very thick, const plot] coordinates {
+      (0, 2.8) (17.5, 3.4) (18.5, 2.8) (31.5, 3.4) (60, 3.4)
+    };
 
-\draw[->, thick, teal!85!black] (2.8, 2.9) -- (2.4, 2.68);
-\node[font=\sffamily\tiny, text=teal!90!black, right=1pt] at (2.8, 2.9) {Moving Avg Suppression ($< \tau_{\text{MA}}^*$)};
+    % M2 (MA): Suppressed spike; onset at frame 33.5
+    \addplot[color=cvermilion, very thick, dashed, const plot] coordinates {
+      (0, 1.5) (33.5, 2.1) (60, 2.1)
+    };
 
-% -------------------------------------------------------------
-% BOTTOM PANEL: Causal Binary Alert Decisions y[n] \in {0, 1}
-% -------------------------------------------------------------
-\draw[axis] (0, 0.0) -- (7.5, 0.0) node[right, font=\sffamily\tiny] {Frame $n$};
-\draw[axis] (0, 0.0) -- (0, 1.85) node[above, font=\sffamily\tiny\bfseries] {Alert $y[n]$};
+    % M5 (Mamba): Suppressed spike; onset at frame 32.5
+    \addplot[color=cpurple, very thick, dashdotted, const plot] coordinates {
+      (0, 0.2) (32.5, 0.8) (60, 0.8)
+    };
 
-% Tick labels for frames
-\foreach \f/\x in {0/0.0, 10/1.2, 20/2.4, 30/3.6, 40/4.8, 50/6.0, 60/7.2} {
-    \draw (\x, 0.0) -- (\x, -2pt) node[below=1pt, font=\sffamily\tiny] {\f};
-    \draw[gridl] (\x, 0.0) -- (\x, 1.6);
-}
-
-% M1 Trace (y-offset: 1.1)
-\node[anchor=east, font=\sffamily\tiny\bfseries, text=blue!85!black] at (-0.05, 1.25) {M1 (Raw)};
-\draw[blue!75!black, thick] (0, 1.1) -- (2.10, 1.1) -- (2.10, 1.45) -- (2.22, 1.45) -- (2.22, 1.1) -- (3.80, 1.1) -- (3.80, 1.45) -- (7.2, 1.45);
-\node[font=\sffamily\tiny, text=red!80!black, anchor=south] at (2.16, 1.45) {\textbf{False Alarm}};
-
-% M2 Trace (y-offset: 0.6)
-\node[anchor=east, font=\sffamily\tiny\bfseries, text=teal!85!black] at (-0.05, 0.75) {M2 (MA)};
-\draw[teal!85!black, line width=1.3pt] (0, 0.6) -- (4.04, 0.6) -- (4.04, 0.95) -- (7.2, 0.95);
-\node[font=\sffamily\tiny, text=green!50!black, anchor=south] at (2.16, 0.6) {\textbf{Suppressed}};
-\draw[->, semithick, teal!80!black] (3.84, 0.45) -- (4.04, 0.45);
-\node[font=\sffamily\tiny, text=teal!90!black, anchor=north] at (4.50, 0.52) {$\Delta t = 2\text{ frames}$};
-
-% M5 Trace (y-offset: 0.1)
-\node[anchor=east, font=\sffamily\tiny\bfseries, text=purple!85!black] at (-0.05, 0.25) {M5 (Mamba)};
-\draw[purple!85!black, line width=1.1pt] (0, 0.1) -- (3.94, 0.1) -- (3.94, 0.45) -- (7.2, 0.45);
-
-% Legend box
-\node[draw=black!25, fill=white, rounded corners=2pt, font=\sffamily\tiny, anchor=south east, inner sep=2.5pt] at (7.15, 2.35) {
-    \textcolor{blue!75!black}{\textbf{---} Fused $s[n]$} \quad
-    \textcolor{teal!85!black}{\textbf{---} Moving Avg $\tilde{s}[n]$}
-};
-
+    % Clean Latency Measurement
+    \draw[dotted, black!40, semithick] (axis cs:31.5, 2.1) -- (axis cs:31.5, 2.55);
+    \draw[dotted, black!40, semithick] (axis cs:33.5, 2.1) -- (axis cs:33.5, 2.55);
+    \draw[|<->|, semithick, black!75] (axis cs:31.5, 2.45) -- (axis cs:33.5, 2.45);
+    \node[anchor=west, font=\tiny\bfseries, text=black!75] at (axis cs:34.0, 2.45) {$\Delta t = 2$};
+  \end{axis}
+%
+  % -------------------------------------------------------------
+  % COLOR LEGEND: Centered Below the Bottom X-Axis
+  % -------------------------------------------------------------
+  \node[
+    anchor=north,
+    yshift=-0.72cm,
+    draw=black!25,
+    fill=white,
+    rounded corners=2pt,
+    font=\tiny,
+    inner sep=3.5pt
+  ] at (bottom_axis.south) {
+    \textcolor{cblue}{\textbf{--$\bullet$--} Fused $s[n]$ (M1)} \hspace{1.4em}
+    \textcolor{cvermilion}{\textbf{- -$\blacksquare$- -} Moving Avg $\tilde{s}[n]$ (M2)} \hspace{1.4em}
+    \textcolor{cpurple}{\textbf{- $\cdot$ - $\blacktriangle$ - $\cdot$ -} Mamba (M5)}
+  };
 \end{tikzpicture}

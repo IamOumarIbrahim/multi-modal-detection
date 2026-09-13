@@ -15,8 +15,26 @@
 \usepackage{booktabs}
 \usepackage{url}
 \usepackage{balance}
+\usepackage{placeins}
+
+% TikZ & PGFPlots configuration
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc,fit,backgrounds,decorations.pathreplacing}
+\usepackage{pgfplots}
+
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc,fit,backgrounds,decorations.pathreplacing,plotmarks}
+
+% Declare custom pentagon* plotmark used in figure_performance_tradeoff.tex
+\pgfdeclareplotmark{pentagon*}{%
+  \pgfpathmoveto{\pgfpointpolar{90}{\pgfplotmarksize}}%
+  \pgfpathlineto{\pgfpointpolar{162}{\pgfplotmarksize}}%
+  \pgfpathlineto{\pgfpointpolar{234}{\pgfplotmarksize}}%
+  \pgfpathlineto{\pgfpointpolar{306}{\pgfplotmarksize}}%
+  \pgfpathlineto{\pgfpointpolar{18}{\pgfplotmarksize}}%
+  \pgfpathclose
+  \pgfusepathqfillstroke
+}
+
 \setlength{\textfloatsep}{7pt plus 1pt minus 1pt}
 \setlength{\floatsep}{6pt plus 1pt minus 1pt}
 \setlength{\intextsep}{6pt plus 1pt minus 1pt}
@@ -25,7 +43,7 @@
 
 \begin{document}
 
-\title{Causal Temporal Post-Processing of Multimodal Detections for Aerial Search and Rescue}
+\title{Causal Temporal Filtering for Reliable Alerts in Multimodal UAV Search and Rescue Detection}
 
 \author{\IEEEauthorblockN{Oumar Mamoun Ibrahim and Mohamad Khairi bin Ishak}
 \IEEEauthorblockA{\textit{Department of Computer Engineering, University of Sharjah}, Sharjah, United Arab Emirates\\
@@ -36,62 +54,58 @@
 
 \begingroup
 \renewcommand\thefootnote{}
-\footnotetext{This work involved human subject detection in simulated imagery. The author(s) confirm(s) that all human/animal subject research procedures and protocols are exempt from review board approval.}
+\footnotetext{No human subjects were involved; all imagery is synthetically generated.}
 \endgroup
 
 \begin{abstract}
-Autonomous unmanned aerial vehicles (UAVs) in wilderness search and rescue (SAR) require reliable person detection under strict size, weight, power, and computing (SWaP-C) limits. Combining visible red-green-blue (RGB) and thermal infrared (TIR) cameras prevents sensor-specific dropouts caused by canopy shadows, darkness, or thermal crossover. However, per-frame object detectors often produce momentary false alarms from terrain clutter. During autonomous flight, each false alarm triggers unnecessary loiter maneuvers, depletes battery reserves, and wastes telemetry bandwidth over constrained links. This paper evaluates lightweight causal temporal decision methods to generate reliable search alerts from multimodal aerial detections. Using a controlled multimodal benchmark spanning three biomes (arid desert, temperate forest, and snow alpine) across synchronized RGB and pseudo-TIR streams, we deploy two upstream You Only Look Once (YOLO11n) detectors (2.6M parameters, 6.5 giga floating-point operations [GFLOPs]) held strictly fixed. Confidences are combined through a late fusion max gate and filtered over a causal sliding window ($W = 5$ frames, 208~ms buffer latency bound at 24~Hz). We compare six temporal decision strategies with validation-calibrated thresholds: raw thresholding, moving average, median filtering, history consensus, a learned Mamba selective state-space model (SSSM), and a gated recurrent unit (GRU) baseline. On alert-level metrics, temporal post-processing establishes distinct operational trade-offs: a five-frame moving average achieves the lowest false alert rate among non-learned methods, reducing false alerts from 9.0 to 2.1 false alerts per minute (FA/min) (a 77\% reduction, 65.3\% FASR) with 84.6\% target recall (11/13 tiles), while five-frame median filtering preserves 92.3\% recall (12/13 tiles) with faster 291.7~ms time-to-alarm at 3.6 FA/min. Learned sequence models do not improve alert reliability over moving averages: Mamba-SSSM yields statistically indistinguishable false alerts ($p = 0.4922$) while GRU triggers significantly more false alerts ($p = 0.0178$), both incurring $73\times$ to $500\times$ higher execution latency. Lightweight filtering thus provides an optimal, training-free layer for edge avionics.
+Autonomous unmanned aerial vehicles (UAVs) in wilderness search and rescue (SAR) require reliable person alerts under strict Size, Weight, Power, and Cost (SWaP-C) limits, since per-frame detector fluctuations can trigger costly loiter maneuvers. We ask whether learned temporal sequence models are necessary to convert noisy multimodal detections into reliable alerts, or whether simple causal filters suffice. On a controlled benchmark spanning arid desert, temperate forest, and snow alpine biomes with synchronized visible RGB and pseudo-TIR streams (a luminance-based lookup-table encoding, not radiometric infrared), fixed Ultralytics YOLO11n detectors feed a late-fusion max gate and a five-frame causal decision window (208~ms span at 24~Hz). We compare raw thresholding, moving average, median filtering, history consensus, a Mamba selective state-space model (SSSM), and a gated recurrent unit (GRU). A five-frame moving average cuts false alerts from 9.0 to 2.1 per minute (77\% reduction) at 84.6\% recall, while a five-frame median filter preserves the full baseline recall (92.3\%, 12/13 tiles) at a faster 291.7~ms latency and 3.6 false alerts per minute; which operating point is preferable depends on mission priorities. Small Mamba-SSSM and GRU models trained on limited data provide no statistically significant alert-reliability improvement over these filters ($p = 0.4922$ and $p = 0.0178$, respectively) despite $73\times$--$500\times$ higher runtime, though we scope this as a finding about this low-data, short-context regime rather than a general claim about learned sequence models. Lightweight causal filtering is therefore a practical, training-free layer for edge avionics.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Multimodal fusion, search and rescue, unmanned aerial vehicles, state-space models, temporal filtering.
+object detection, edge computing, search and rescue, unmanned aerial vehicles, temporal filtering.
 \end{IEEEkeywords}
 
 \begin{figure*}[!t]
 \centering
 \resizebox{1.0\textwidth}{!}{\input{figure_system_architecture.tex}}
-\caption{System architecture of the MMSAR evaluation framework. Visible RGB video streams are synthesized from scenario text prompts using multimodal large language models (Google Gemini 3.8 Flash and xAI Grok with spatial upscaling to $1280 \times 720$). A 256-level lookup table (\texttt{melo\_lut}) transfers pseudo-thermal styling to emulate synchronized thermal infrared streams. Dual streams undergo $2\times$ square tiling ($640 \times 640$), video-level bounding box annotation in Label Studio, and 24~Hz frame extraction. Curated sequences are partitioned into 240-frame episodes under Option B (parent-video grouped split) with non-adjacent shuffling to prevent spatial data leakage. At edge inference, parallel lightweight YOLO11n detectors process incoming RGB and thermal frames at 24~Hz ($T_s \approx 41.7$~ms), combined with a late fusion max gate ($s[n] = \max(c_{\text{RGB}}[n], c_{\text{Thermal}}[n])$) and evaluated across six lightweight temporal decision methods ($W = 5$ frames, 208~ms latency bound).}
+\caption{MMSAR evaluation framework. Text-to-video models synthesize RGB streams; a 256-level lookup table produces synchronized pseudo-TIR streams. After $2\times$ tiling, annotation, and 24~Hz extraction, parent-video-grouped episodes prevent spatial leakage. Parallel YOLO11n detectors feed the late fusion max gate in Eq.~\eqref{eq:late_fusion} and six causal decision methods ($W=5$, 208~ms window span).}
 \label{fig:system_architecture}
 \end{figure*}
 
 \section{Introduction}
 
-Autonomous unmanned aerial vehicles (UAVs) provide rapid aerial coverage in wilderness search and rescue (SAR) missions \cite{rudol2008human}, \cite{silvagni2017multipurpose}. However, onboard vision systems must operate under strict size, weight, power, and computing (SWaP-C) limits. Remote missions depend on low-bandwidth satellite or cellular Internet of Things (IoT) telemetry \cite{kyrkou2021emergencynet}. In autonomous operations, false alarms trigger costly hover-and-verify maneuvers that drain battery power and risk dispatching rescue teams to empty locations.
+Autonomous unmanned aerial vehicles (UAVs) provide rapid aerial coverage in wilderness search and rescue (SAR) missions \cite{rudol2008human,silvagni2017multipurpose}. Onboard vision systems must operate under strict Size, Weight, Power, and Cost (SWaP-C) limits, and remote missions often depend on low-bandwidth telemetry \cite{kyrkou2021emergencynet}. In autonomous operations, false alarms trigger costly hover-and-verify maneuvers that drain battery power and can divert attention from an active search.
 
-Wilderness optical sensing suffers from sensor-specific failure modes. Visible red-green-blue (RGB) cameras degrade in dense shadows, heavy foliage, and poor lighting. Thermal infrared (TIR) cameras detect body heat regardless of illumination \cite{hwang2015multispectral}, \cite{jia2021llvip}, but suffer from thermal crossover when ground temperatures match human body temperature \cite{portmann2014people}. In desert environments, sun-heated rocks emit thermal patterns that mimic human signatures. In snowy terrain, bright reflective snow causes visible glare, while insulated winter clothing reduces body heat emission. Combining visible RGB and pseudo-thermal sensors is therefore motivated by the complementary failure modes observed across diverse biomes.
+Wilderness optical sensing suffers from sensor-specific failure modes. Visible red-green-blue (RGB) cameras degrade in dense shadows, heavy foliage, and poor lighting. Real thermal infrared (TIR) cameras can detect body heat regardless of illumination \cite{hwang2015multispectral,jia2021llvip}, though they suffer from thermal crossover when ground temperatures approach human body temperature \cite{portmann2014people}. Calibrated radiometric TIR is impractical to synthesize at scale for this study, so we instead generate a pseudo-TIR channel via a grayscale lookup table applied to synthetic RGB frames. This channel is a luminance-based encoding, not a physical temperature measurement, and we treat it throughout as a second, spectrally-distinct view rather than a radiometric proxy. In practice this means that in desert scenes, sun-heated rocks and skin can both produce high RGB luminance and therefore high pseudo-TIR intensity, loosely analogous to real thermal crossover, while in snow scenes the same encoding makes bright snow appear anomalously ``hot,'' an artifact with no physical counterpart. We combine RGB and pseudo-TIR streams because they fail in different, complementary ways across biomes; this is sufficient to motivate late fusion as a controlled multi-stream stress test even without radiometric realism (Section~VI).
 
-Small UAVs require compact single-stage detectors such as You Only Look Once (YOLO) \cite{redmon2016you}. In this work, we deploy Ultralytics YOLO11n \cite{jocher2024yolo11} (2.6M parameters, 6.5 giga floating-point operations [GFLOPs] at $640 \times 640$) trained in 32-bit floating-point (FP32) precision. However, per-frame detections fluctuate due to platform vibration, motion blur, and background clutter. These fluctuations create brief false alarms in background areas and intermittent dropouts on actual human targets.
+Small UAVs require compact single-stage detectors such as You Only Look Once (YOLO) \cite{redmon2016you}. We deploy Ultralytics YOLO11n \cite{jocher2024yolo11} (2.6M parameters, 6.5 giga floating-point operations [GFLOPs] at $640 \times 640$) in 32-bit floating-point (FP32) precision. Per-frame detections nonetheless fluctuate due to platform vibration, motion blur, and background clutter, producing brief false alarms in background regions and intermittent dropouts on real targets.
 
-To address these issues, we evaluate lightweight causal temporal decision methods that convert noisy per-frame multimodal detections into dependable mission alerts. Upstream detectors and late fusion remain strictly fixed across all experiments to isolate the impact of temporal filtering. Frame detections are combined using a late fusion max gate and filtered across a causal five-frame sliding window ($208\text{ ms}$ at $24\text{ Hz}$). We benchmark six temporal decision strategies under validation-calibrated thresholds: raw thresholding, moving average, median filtering, history consensus, a learned Mamba selective state-space model (SSSM) \cite{gu2023mamba}, and a learned gated recurrent unit (GRU) baseline.
-
-We formulate the central hypothesis: \textit{lightweight causal temporal post-processing substantially reduces false alerts from multimodal aerial detections while preserving high mission target recall, and investigate whether added sequence modeling complexity (recurrent gating or selective state-space modeling) provides measurable operational benefit over linear finite impulse response and order-statistic filtering.}
+This raises a focused question: given a fixed, already-lightweight multimodal detector, is a learned temporal sequence model needed to turn its noisy scalar confidence stream into a reliable alert, or does simple causal filtering already capture most of the achievable benefit? Frame detections are combined via a late fusion max gate (Section~III) and evaluated using a strictly validation-calibrated decision protocol, described fully in Section~III.C, under which no detector weights, window lengths, or thresholds are tuned on the held-out test split.
 
 This work provides three main contributions:
 \begin{enumerate}
-\item \textbf{Multimodal SAR Benchmark:} A controlled $3\times 2$ experimental setup covering desert, forest, and snow alpine biomes across synchronized RGB and pseudo-TIR video streams, evaluating fixed lightweight YOLO11n detectors with late fusion (Table~\ref{tab:system_config}, Table~\ref{tab:fusion_comparison}).
-\item \textbf{Causal Decision Benchmark:} Empirical evaluation of six causal decision filters (raw thresholding, moving average, median filter, history consensus, Mamba-SSSM, and GRU) on alert-level metrics, multi-seed variance, and paired episode-level statistical tests (Table~\ref{tab:postprocessing_benchmark}, Fig.~\ref{fig:real_temporal_sequence}), establishing operational Pareto trade-offs between false alarm rejection, alert latency, and edge compute overhead.
-\item \textbf{Window Sensitivity and Environmental Breakdown:} Empirical ablation of causal window length ($W \in \{1, 3, 5, 7\}$) on the validation split and per-biome false alert characterization across desert, forest, and snow terrain, demonstrating that finite impulse response (FIR) moving averages achieve the optimal operational trade-off between false alarm rejection and real-time responsiveness (Table~\ref{tab:per_biome_benchmark}, Fig.~\ref{fig:window_ablation}).
+\item \textbf{Causal Decision Benchmark and Operating-Point Recommendation:} A controlled evaluation of six causal temporal decision rules (raw thresholding, moving average, median filtering, history consensus, Mamba-SSSM, and GRU) on a fixed multimodal detection stream, yielding two practical operating points: a five-frame moving average that maximizes false-alert suppression, and a five-frame median filter that preserves baseline recall at lower latency (Table~\ref{tab:postprocessing_benchmark}, Fig.~\ref{fig:performance_tradeoff}).
+\item \textbf{Scoped Evidence on Learned Sequence Models:} We show that small Mamba-SSSM and GRU models trained on limited data provide no statistically significant alert-reliability improvement over simple filters on this scalar stream, despite $73\times$--$500\times$ higher inference cost, and we discuss the conditions under which this negative result should and should not be generalized (Section~V.C).
+\item \textbf{Multimodal Benchmark and Sensitivity Analysis:} A controlled $3\times 2$ evaluation spanning desert, forest, and snow alpine biomes with synchronized RGB and pseudo-TIR streams under parent-video-grouped episodic isolation, including window-length ablation ($W \in \{1,3,5,7\}$) and per-biome false-alert characterization (Table~\ref{tab:per_biome_benchmark}, Fig.~\ref{fig:window_ablation}).
 \end{enumerate}
 
 \section{Related Work}
-\label{sec:related_work}
 
-Multimodal aerial vision combines complementary visible and thermal bands to mitigate environmental extremes, as explored in ground datasets such as KAIST \cite{hwang2015multispectral} and LLVIP \cite{jia2021llvip}. For wilderness search and rescue (SAR), WiSARD \cite{broyles2022wisard} provides multi-viewpoint benchmarks, while Rudol and Doherty \cite{rudol2008human} demonstrated dual-band geolocation from unmanned aerial vehicles (UAVs). However, edge UAV deployment is tightly constrained by size, weight, power, and computing (SWaP-C) limits \cite{silvagni2017multipurpose}, where complex neural ensembles rapidly drain battery reserves \cite{lygouras2019unsupervised}. Single-stage detectors such as YOLO11n \cite{jocher2024yolo11} deliver real-time frame rates, but per-frame detections fluctuate due to motion blur and terrain thermal crossover \cite{portmann2014people}, generating false alarms that trigger wasteful hover maneuvers.
+Multimodal aerial vision combines complementary visible and thermal bands to mitigate environmental extremes, as explored in ground datasets such as KAIST \cite{hwang2015multispectral} and LLVIP \cite{jia2021llvip}. For wilderness SAR, WiSARD \cite{broyles2022wisard} provides multi-viewpoint benchmarks, while Rudol and Doherty \cite{rudol2008human} demonstrated dual-band geolocation from UAVs. Edge UAV deployment remains tightly constrained by SWaP-C limits \cite{silvagni2017multipurpose}, where complex neural ensembles rapidly drain battery reserves \cite{lygouras2019unsupervised}. Single-stage detectors such as YOLO11n \cite{jocher2024yolo11} deliver real-time frame rates, but per-frame detections fluctuate due to motion blur and terrain-driven confidence noise \cite{portmann2014people}, generating false alarms that trigger wasteful hover maneuvers.
 
-Classical sequential decision making addresses temporal fluctuations through statistical tests such as Wald's sequential probability ratio test \cite{wald1945sequential}, radar sliding-window binary integration ($M$-of-$N$) \cite{richards2014fundamentals}, and running median or moving average filters \cite{rabiner1975applications}. More recently, selective state-space models such as Mamba \cite{gu2023mamba} provide linear-time sequence modeling with recurrent state representations. While prior SAR literature emphasizes per-frame bounding box accuracy or spatial tracking, the problem of turning noisy multimodal scalar confidence streams into reliable mission-level alerts under strict edge latency budgets remains uncharacterized. This paper addresses this gap by benchmarking causal temporal decision rules on fixed multimodal detector streams.
+Classical sequential decision making addresses temporal fluctuations through statistical tests such as Wald's sequential probability ratio test \cite{wald1945sequential}, radar sliding-window binary integration ($M$-of-$N$) \cite{richards2014fundamentals}, and running median or moving average filters \cite{rabiner1975applications}. More recently, selective state-space models such as Mamba \cite{gu2023mamba} provide linear-time sequence modeling with recurrent state representations. While prior SAR literature emphasizes per-frame bounding box accuracy, the question of whether such learned temporal models are actually needed to convert noisy multimodal scalar confidence streams into reliable mission alerts, under a strict edge latency budget, remains largely uncharacterized. This paper addresses that gap with a head-to-head benchmark on fixed multimodal detector streams.
 
 \section{Methodology}
-\label{sec:methodology}
 
-The MMSAR pipeline integrates dual-spectrum detection, late fusion, and causal temporal filtering (Fig.~\ref{fig:system_architecture}). Synchronized visible RGB frames $I_{\text{RGB}}[n]$ and thermal frames $I_{\text{Thermal}}[n]$ produce per-frame target confidences $c_{\text{RGB}}[n], c_{\text{Thermal}}[n] \in [0.0, 1.0]$. The upstream detectors and late fusion gate remain fixed across all experiments.
+The pipeline integrates dual-spectrum detection, late fusion, and causal temporal filtering (Fig.~\ref{fig:system_architecture}). Synchronized visible RGB frames $I_{\text{RGB}}[n]$ and pseudo-TIR frames $I_{\text{Thermal}}[n]$ produce per-frame target confidences $c_{\text{RGB}}[n], c_{\text{Thermal}}[n] \in [0.0, 1.0]$. The upstream detectors and late fusion gate remain fixed across all experiments so that only the temporal decision stage varies.
 
 \subsection{Video Ingestion and Real-Time Edge Budget}
-Autonomous UAV companion computers require frame-synchronous processing that matches sensor capture rates. Video streams are captured at $f_s = 24\text{ Hz}$, yielding a frame period $T_s \approx 41.7\text{ ms}$. To avoid dropping frames or accumulating queue delay, processing must satisfy:
+Video streams are captured at $f_s = 24\text{ Hz}$, yielding a frame period $T_s \approx 41.7\text{ ms}$. To avoid dropped frames or queue delay, processing must satisfy
 \begin{equation}
 T_{\text{detect}} + T_{\text{fusion}} + T_{\text{filter}} \le 41.7\text{ ms},
 \label{eq:realtime_budget}
 \end{equation}
-where $T_{\text{detect}} = \max(T_{\text{RGB}}, T_{\text{Thermal}})$ is parallel detection runtime, $T_{\text{fusion}}$ is fusion latency, and $T_{\text{filter}}$ is post-processing latency. We deploy two parallel YOLO11n models \cite{jocher2024yolo11}: (1)~\textbf{YOLO11n-RGB} and (2)~\textbf{YOLO11n-Thermal}. Frames containing no target predictions yield confidence 0.0.
+where $T_{\text{detect}} = \max(T_{\text{RGB}}, T_{\text{Thermal}})$ is parallel detection runtime, $T_{\text{fusion}}$ is fusion latency, and $T_{\text{filter}}$ is post-processing latency. We deploy two parallel YOLO11n models \cite{jocher2024yolo11}: \textbf{YOLO11n-RGB} and \textbf{YOLO11n-Thermal}. Frames with no target predictions yield confidence 0.0.
 
 \subsection{Late Fusion Max Gate}
 To prevent target dropouts when one sensor is occluded, detector confidences are combined using a late fusion max gate:
@@ -99,44 +113,50 @@ To prevent target dropouts when one sensor is occluded, detector confidences are
 s[n] = \max\big(c_{\text{RGB}}[n], \, c_{\text{Thermal}}[n]\big) \in [0.0, 1.0].
 \label{eq:late_fusion}
 \end{equation}
-This max gate ensures that confident detections in either spectrum propagate forward without requiring pixel-level sensor registration.
+This max gate lets confident detections in either spectrum propagate forward without requiring pixel-level sensor registration.
 
 \subsection{Causal Temporal Post-Processing Methods}
-\label{sec:causal_postprocessing}
-Direct thresholding of raw per-frame confidence produces high false-alarm rates due to brief clutter spikes. Downstream processing buffers the fused confidence stream across a causal sliding window of length $W = 5$ frames ($208\text{ ms}$ at $24\text{ Hz}$): $\mathbf{w}[n] = [s[n-4], \dots, s[n]]$. Each method uses an optimal decision threshold $\tau^* = \arg\max_\tau F_1(\tau)$ calibrated on the validation set $\mathcal{D}_{\text{val}}$ across candidate thresholds from 0.05 to 0.95 (step size 0.02) and held frozen during testing. \textit{Protocol Lock:} No detector weights, temporal-model parameters, decision thresholds, or window lengths were selected or tuned using the test set.
+Direct thresholding of the raw fused confidence produces high false-alarm rates from brief clutter spikes. Downstream processing instead buffers the fused stream across a causal sliding window of length $W = 5$ frames: $\mathbf{w}[n] = [s[n-4], \dots, s[n]]$. This window spans $T_{\text{span}} = WT_s = 208.3\text{ ms}$; the maximum causal buffering delay contributed by the filter itself is $T_{\text{buffer}} = (W-1)T_s = 166.7\text{ ms}$, which is distinct from the empirically measured Alert Latency in Section~III.D, since the latter also includes upstream detector confidence ramp-up. Each method uses an optimal decision threshold $\tau^* = \arg\max_\tau F_1(\tau)$ calibrated on the validation set $\mathcal{D}_{\text{val}}$ across candidate thresholds from 0.05 to 0.95 (step size 0.02) and held frozen during testing. \textit{Protocol Lock:} no detector weights, temporal-model parameters, decision thresholds, or window lengths were selected or tuned using the test set.
 
 We evaluate six causal decision strategies:
-\textbf{M1 (Baseline Raw):} Instantaneous thresholding setting $y[n] = 1$ when $s[n] \ge \tau^*$ ($O(1)$ time, 0~B buffer).
-\textbf{M2 (Moving Average):} Causal FIR mean $\bar{s}[n] = \frac{1}{W} \sum_{k=0}^{W-1} s[n-k]$, triggering an alert when $\bar{s}[n] \ge \tau^*$ ($O(1)$ time, 20~B buffer).
-\textbf{M3 (Median Filter):} Order-statistic median $\tilde{s}[n] = \text{median}(\mathbf{w}[n])$, rejecting noise pulses shorter than 3 frames ($O(W)$ time, 20~B buffer).
-\textbf{M4 (History Consensus):} Binary voting requiring at least 3 detections out of 5 frames ($O(W)$ time, 5~B buffer).
-\textbf{M5 (Learned Mamba-SSSM):} Pure-PyTorch selective state-space model ($d_{\text{model}} = 16, d_{\text{state}} = 8$, 753 parameters, 512~B state buffer) updating a recurrent state from scalar confidences.
-\textbf{M6 (Learned GRU Baseline):} Single-layer gated recurrent unit ($d_{\text{hidden}} = 16$, 1,681 parameters, 64~B state buffer) to benchmark whether conventional recurrent architectures capture temporal dependencies beyond linear low-pass filtering. Both learned models are trained on training partition confidence streams (44 tiles, 9,800 frames per modality) across five random seeds using binary cross-entropy, while decision thresholds $\tau^*$ are calibrated strictly on validation sequences.
+\textbf{M1 (Baseline Raw):} instantaneous thresholding, $y[n] = 1$ when $s[n] \ge \tau^*$ ($O(1)$ time, 0~B buffer).
+\textbf{M2 (Moving Average):} causal FIR mean $\bar{s}[n] = \frac{1}{W} \sum_{k=0}^{W-1} s[n-k]$, alerting when $\bar{s}[n] \ge \tau^*$ ($O(1)$ time, 20~B buffer).
+\textbf{M3 (Median Filter):} order-statistic median $\tilde{s}[n] = \text{median}(\mathbf{w}[n])$, rejecting noise pulses shorter than 3 frames ($O(W)$ time, 20~B buffer).
+\textbf{M4 (History Consensus):} binary voting requiring at least 3 of 5 frames ($O(W)$ time, 5~B buffer).
+\textbf{M5 (Learned Mamba-SSSM):} pure-PyTorch selective state-space model ($d_{\text{model}}=16$, $d_{\text{state}}=8$, 753 parameters, 512~B state).
+\textbf{M6 (Learned GRU Baseline):} single-layer gated recurrent unit ($d_{\text{hidden}}=16$, 1,681 parameters, 64~B state).
+M5 and M6 are deliberately small to remain compatible with edge inference budgets; both are trained on 44 training tiles (9,800 frames per modality) across five seeds, with $\tau^*$ calibrated only on validation sequences. We return to the implications of this scale in Section~V.C.
 
 \subsection{Alert-Level Evaluation Metrics}
 To measure operational mission effectiveness, we report primary alert-level metrics:
 \begin{itemize}
-\item \textbf{False Alerts per Minute (FA/min):} Rate of false alarm events triggered during non-target periods: $\text{FA/min} = K_{\text{FA}} / T_{\text{flight}}$, where an alarm event is defined as a contiguous sequence of positive detections ($y[n]=1$).
-\item \textbf{Positive Target Recall (\%):} Proportion of ground-truth target tiles successfully detected by at least one confirmed alert event.
-\item \textbf{Alert Latency (Time-to-Alarm):} Elapsed flight time (in frames and milliseconds) from target entrance in the camera field of view (FOV) to the first asserted alert ($y[n]=1$). Crucially, this empirical metric captures both the algorithmic filter buffering delay ($\Delta t_{\text{buffer}} = (W-1)T_s \approx 167\text{ ms}$, bounded by the 208~ms causal window at 24~Hz) and upstream detector confidence ramp-up as distant targets approach the UAV.
-\item \textbf{False Alarm Suppression Ratio (FASR):} Percentage reduction in false alarm frames compared to the raw baseline:
+\item \textbf{False Alerts per Minute (FA/min):} rate of false alarm events during non-target periods, $\text{FA/min} = K_{\text{FA}} / T_{\text{flight}}$, where an alarm event is a contiguous run of positive detections ($y[n]=1$).
+\item \textbf{Positive Target Recall (\%):} proportion of ground-truth target tiles for which at least one confirmed alert is produced.
+\item \textbf{Alert Latency (Time-to-Alarm):} elapsed flight time from target entrance in the camera field of view (FOV) to the first asserted alert. This empirical metric captures both the filter's causal buffering delay and the upstream detector's confidence ramp-up as targets approach the UAV.
+\item \textbf{False Alarm Suppression Ratio (FASR):} percentage reduction in false alarm frames relative to the raw baseline,
 \begin{equation}
-\text{FASR} = 1 - \frac{\text{FP}_{\text{filter}}}{\text{FP}_{\text{raw}}},
+\text{FASR} = 1 - \frac{\text{FP}_{\text{filter}}}{\text{FP}_{\text{raw}}}.
 \label{eq:fasr}
 \end{equation}
-where $\text{FP}_{\text{filter}}$ and $\text{FP}_{\text{raw}}$ are the total false-positive frames produced by the temporal filter and raw baseline, respectively.
 \end{itemize}
 
 \section{Experimental Setup and Dataset}
-\label{sec:experimental_setup}
 
-Wilderness SAR dual-spectrum datasets remain scarce in the literature. As summarized in Table~\ref{tab:system_config}, our controlled $3\times 2$ experimental design balances modality and environment across three wilderness biomes:
+Wilderness SAR dual-spectrum datasets remain scarce. As summarized in Table~\ref{tab:system_config}, our controlled $3\times 2$ design balances modality and environment across three wilderness biomes:
 \begin{itemize}
-\item \textbf{Arid Desert:} Rocky terrain, sparse vegetation, and midday thermal crossover, where sun-heated rocks match human skin temperature.
-\item \textbf{Temperate Forest:} Dense canopies, dappled shadows, intermittent foliage occlusions, and wildlife distractors.
-\item \textbf{Snow-Covered Alpine:} High-albedo snow causing visible glare, contrasted against freezing backgrounds where winter clothing insulates body heat.
+\item \textbf{Arid Desert:} rocky terrain, sparse vegetation, and midday lighting under which sun-heated rock surfaces can produce pseudo-TIR intensities comparable to human targets (Section~I).
+\item \textbf{Temperate Forest:} dense canopies, dappled shadows, intermittent foliage occlusions, and wildlife distractors.
+\item \textbf{Snow-Covered Alpine:} high-albedo snow causing visible glare in RGB and anomalously high pseudo-TIR intensity, an encoding artifact rather than a physical thermal effect (Section~VI).
 \end{itemize}
 
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.35\columnwidth]{figures/figure_2_biome_samples.png}
+\caption{Paired RGB (left) and pseudo-TIR (right) sample frames across the three evaluation biomes: arid desert (top), temperate forest (middle), and snow-covered alpine (bottom). White boxes mark the annotated ground-truth person target. The pseudo-TIR encoding is a luminance-based lookup-table transform rather than radiometric infrared, so bright terrain (desert rock, snow) can register as anomalously ``hot'' alongside the target. }
+\label{fig:biome_samples}
+\end{figure}
+
+Fig.~\ref{fig:biome_samples} illustrates representative RGB/pseudo-TIR frame pairs from each biome. The desert pair shows the target clearly separable from background in RGB, but comparable pseudo-TIR intensity between sun-heated ground and the person. The forest pair shows heavy canopy occlusion in both modalities. The snow pair shows the target rendered anomalously hot relative to the surrounding snowpack, an artifact of the luminance-based encoding rather than a true thermal signature.
 
 \begin{table}[!t]
 \centering
@@ -150,7 +170,7 @@ Wilderness SAR dual-spectrum datasets remain scarce in the literature. As summar
 Environments & Arid Desert (30 tiles), Temperate Forest (28 tiles), \\
              & Snow-Covered Alpine (32 tiles) \\
 Sensor Modalities & Synchronized visible RGB and pseudo-thermal infrared (TIR) \\
-Raw Video Format & $1280 \times 720$ at 24~FPS ($T_s \approx 41.7\text{ ms}$), 10.0~s nominal \\
+Raw Video Format & $1280 \times 720$ at 24~Hz ($T_s \approx 41.7\text{ ms}$), 10.0~s nominal \\
 Dual-Crop Tiling & $2\times$ square tiles ($640 \times 640$, left/right, $y = 40$) \\
 Corpus Volume & 90 tiles, 20,364 frames per modality (40,728 total frames; \\
               & 42 positive tiles [5,620 frames], 48 negative distractor tiles [14,744 frames]) \\
@@ -158,7 +178,7 @@ Episodic Partition & Option B parent-grouped (realized: 44 train [17 pos, 27 neg
                    & 22 val [12 pos, 10 neg], 24 test [13 pos, 11 neg] tiles per modality) \\
 Upstream Detectors & Dual YOLO11n (2.6M params, 6.5 GFLOPs at $640\times 640$, FP32) \\
 Training Setup & Batch 16, 60 epochs, SGD cosine schedule ($\text{lr}_0=0.01$) \\
-Decision Window & Sliding causal window $W \in \{1, 3, 5, 7\}$ ($W=5$ nominal; 208~ms) \\
+Decision Window & Sliding causal window $W \in \{1, 3, 5, 7\}$ ($W=5$ nominal; 208~ms span) \\
 Decision Strategies & Raw (M1), Moving Avg (M2), Median (M3), Consensus (M4), \\
                     & Mamba-SSSM (M5), GRU Baseline (M6) \\
 \bottomrule
@@ -166,15 +186,14 @@ Decision Strategies & Raw (M1), Moving Avg (M2), Median (M3), Consensus (M4), \\
 }
 \end{table}
 
-Raw aerial video is captured in $1280 \times 720$ resolution at 24 frames per second (FPS). To preserve ground sampling distance (GSD) without downsampling small human targets, a $2\times$ dual-crop extraction produces disjoint $640 \times 640$ square tiles (left tile $x \in [0, 640]$ and right tile $x \in [640, 1280]$, $y = 40$). Because target persons appear within a single spatial tile in positive parent captures while the companion tile captures ambient terrain, classifying tiles by bounding box presence yields 30 desert tiles (13 positive, 17 negative), 28 forest tiles (14 positive, 14 negative), and 32 snow alpine tiles (15 positive, 17 negative). Across the 90 tiles per modality (42 positive, 48 negative distractor tiles; 180 synchronized streams), the corpus comprises 20,364 frames at 24~Hz per modality (40,728 frames total: 5,620 target frames and 14,744 negative distractor frames per modality). Sequences are annotated in Label Studio using keyframe interpolation, yielding precise ground-truth bounding boxes.
+Raw video is captured at $1280 \times 720$ and 24~Hz. A $2\times$ dual-crop extraction preserves ground sampling distance without downsampling small targets, producing disjoint $640 \times 640$ left/right tiles ($y=40$). The corpus contains 30 desert, 28 forest, and 32 snow-alpine tiles (90 per modality; 42 positive and 48 negative), totaling 20,364 frames per modality. Label Studio keyframe interpolation provides ground-truth boxes.
 
-Dataset partitioning is conducted strictly at the parent-video level under Option B (Parent-Video Grouped Episodic Partitioning) to prevent spatial or temporal data leakage between derived sibling tiles. Sibling left and right tiles are assigned to the same partition. The realized partition allocates 44 training tiles (17 positive, 27 negative; 9,800 frames per modality), 22 validation tiles (12 positive, 10 negative; 4,994 frames per modality), and 24 testing tiles (13 positive, 11 negative; 5,570 frames per modality). In the held-out test split, each biome contributes exactly 8 tiles (desert: 4 positive, 4 negative; forest: 4 positive, 4 negative; snow alpine: 5 positive, 3 negative). Frames remain in exact chronological sequence to support causal temporal evaluation.
+Partitioning is conducted strictly at the parent-video level under Option B (Parent-Video Grouped Episodic Partitioning) to prevent spatial or temporal leakage between derived sibling tiles; left and right sibling tiles share a partition. The realized partition allocates 44 training tiles (17 positive, 27 negative; 9,800 frames per modality), 22 validation tiles (12 positive, 10 negative; 4,994 frames per modality), and 24 testing tiles (13 positive, 11 negative; 5,570 frames per modality). In the held-out test split, each biome contributes 8 tiles (desert: 4 positive, 4 negative; forest: 4 positive, 4 negative; snow alpine: 5 positive, 3 negative). Frames remain in exact chronological order to support causal evaluation.
 
 \section{Results and Discussion}
-\label{sec:results}
 
 \subsection{Upstream Detection Across Modalities and Biomes}
-We first evaluate the upstream frame-level detection performance of the two fixed YOLO11n models and the late fusion max gate on the held-out test split under standard thresholding ($\tau = 0.50$). Table~\ref{tab:fusion_comparison} summarizes precision, recall, and F1-score across all three biomes.
+We first evaluate frame-level detection performance of the two fixed YOLO11n models and the late fusion max gate on the held-out test split under standard thresholding ($\tau = 0.50$). Table~\ref{tab:fusion_comparison} summarizes precision, recall, and F1-score across biomes.
 
 \begin{table}[!t]
 \centering
@@ -212,11 +231,24 @@ Late Fusion Max + Moving Avg ($W=5, \tau^*=0.57$) & \textbf{0.978} & 0.650 & 0.7
 }
 \end{table}
 
-The upstream modalities exhibit distinct physical failure modes across environments: visible RGB provides sharp localization under open sunlight but suffers severe recall dropouts under dense forest canopy shadows (recall drops to 44.4\%); conversely, the thermal stream is attenuated by thick foliage canopy (forest recall drops to 31.8\%, though maintaining 91.5\% precision on visible target patches) and incurs false positives on sun-heated desert rocks. Combining both streams via the late fusion max gate ($s[n] = \max(c_{\text{RGB}}[n], c_{\text{Thermal}}[n])$) mitigates these unimodal dropouts, elevating forest frame-level recall to 52.1\% (a $+7.7\%$ improvement over RGB and $+20.3\%$ over thermal alone) and achieving 94.2\% frame-level recall in desert. However, because max-pooling forwards the highest confidence score, it also propagates isolated noise spikes from both sensors into downstream decision buffers, producing false alarms on negative distractor scenes. Multi-seed detector evaluation across three random seeds (seeds 0, 42, 1234) confirmed stable upstream convergence ($\text{mAP}_{50} = 0.985 \pm 0.008, \text{mAP}_{50-95} = 0.518 \pm 0.017$). This motivates lightweight causal temporal filtering.
+The upstream modalities show distinct failure modes across environments: visible RGB provides sharp localization under open sunlight but loses recall under dense forest canopy shadows (44.4\%); the pseudo-TIR stream is attenuated by thick foliage (forest recall 31.8\%, though 91.5\% precision on visible patches) and produces false positives over sun-heated desert rock. Combining both streams via the late fusion max gate (Eq.~\eqref{eq:late_fusion}) mitigates these unimodal dropouts, raising forest frame-level recall to 52.1\% ($+7.7\%$ over RGB, $+20.3\%$ over thermal) and reaching 94.2\% recall in desert. Because max-pooling forwards the highest confidence score, it also propagates isolated noise spikes into downstream decision buffers, producing false alarms over negative distractor scenes. Multi-seed detector evaluation (seeds 0, 42, 1234) confirmed stable upstream convergence ($\text{mAP}_{50} = 0.985 \pm 0.008$, $\text{mAP}_{50-95} = 0.518 \pm 0.017$), motivating the temporal filtering stage below.
 
-\begin{table*}[!t]
+\begin{figure}[!t]
 \centering
-\caption{Comparative Benchmark of Causal Temporal Decision Methods on Held-Out Test Sequences ($W = 5$ frames / 208 ms at 24 Hz)}
+\input{figure_real_temporal_sequence.tex}
+\caption{Temporal sequence trace from a held-out test clip: (top) fused confidence $s[n]$ with an isolated clutter spike at frame 18 followed by a sustained target event from frame 32; (bottom) causal binary decisions comparing raw thresholding M1 (spurious alert at frame 18), five-frame moving average M2 (spike suppressed, target confirmed with 2-frame delay), and Mamba-SSSM M5.}
+\label{fig:real_temporal_sequence}
+\end{figure}
+\begin{figure}[!t]
+\centering
+\input{figure_window_ablation.tex}
+\caption{Temporal window length ablation ($W \in \{1, 3, 5, 7\}$) for the moving average filter on the validation split, showing $F_1$-score ($\uparrow$) and False Alerts/min ($\downarrow$) across window spans (42~ms to 292~ms at 24~Hz). $W = 5$ achieves the best trade-off on validation sequences, cutting false alerts by 63\% with modest added delay.}
+\label{fig:window_ablation}
+\end{figure}
+
+\begin{table*}[t]
+\centering
+\caption{Comparative Benchmark of Causal Temporal Decision Methods on Held-Out Test Sequences ($W = 5$ frames / 208 ms span at 24 Hz)}
 \label{tab:postprocessing_benchmark}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccccc}
@@ -235,24 +267,27 @@ M6: Learned GRU Baseline (5 seeds)     & 0.50 & 86.2\% $\pm$ 3.4\%      & \textb
 }
 \end{table*}
 
+\subsection{Two Operating Points: False-Alert Suppression versus Recall Preservation}
+Across the held-out test split, causal filtering establishes two practical operating points rather than a single winner (Table~\ref{tab:postprocessing_benchmark}, Fig.~\ref{fig:performance_tradeoff}). If false-alert suppression is the priority, the five-frame moving average (M2) is the strongest non-learned option: false alerts fall 77\%, from 9.0 to 2.1 FA/min (65.3\% FASR, false-positive frames $75\to26$), with paired Wilcoxon tests confirming fewer false-positive frames ($W=2.0$, $p=0.0056$) and false-alert events ($W=2.0$, $p=0.0087$) than M1. This comes at reduced recall (84.6\%, 11/13 tiles) and longer alert latency (592.3~ms).
+
+If recall preservation is the priority, which matters in SAR settings where a missed target is typically costlier than an extra verification maneuver, the five-frame median filter (M3) and 3-of-5 history consensus (M4) retain the full baseline recall of raw thresholding (92.3\%, 12/13 tiles) while still cutting false alerts by 60\% (3.6 FA/min, 32.0\% FASR) and responding roughly twice as fast as M2 (291.7~ms and 313.9~ms, respectively). For $W=5$, M3 and M4 are equivalent after the initial two-frame fill-up (14 false alerts, 51 FP frames each); M3 is preferable on cost, since it needs no running detection count. M2 yields significantly fewer FP frames ($W=0.0$, $p=0.0047$) and alert events ($W=0.0$, $p=0.0143$) than M3, quantifying the smoothing-sensitivity trade-off directly.
+
+Which operating point is preferable is a mission-design choice rather than a property of the filters alone, and we report both instead of selecting one as globally optimal.
+
 \begin{figure}[!t]
 \centering
-\resizebox{0.95\columnwidth}{!}{\input{figure_real_temporal_sequence.tex}}
-\caption{Temporal sequence trace from an actual held-out test clip: (top) upstream fused confidence $s[n]$ exhibiting an isolated clutter spike at frame 18 followed by a sustained ground-truth target event from frame 32; (bottom) causal binary alert decisions comparing baseline thresholding M1 (spurious alert triggered at frame 18), five-frame moving average M2 (clutter spike completely suppressed, target confirmed with 2-frame latency), and Mamba-SSSM M5.}
-\label{fig:real_temporal_sequence}
+\resizebox{0.98\columnwidth}{!}{\input{figure_performance_tradeoff.tex}}
+\caption{Operational trade-offs across temporal decision methods. Lower false-alert rates and higher recall are preferable; bubble area encodes per-frame filter runtime on a logarithmic scale. The dashed line marks the low-compute operating frontier. M3 and M4 share the same recall-false-alert point, while M5's statistically indistinguishable gain over M2 comes at a much larger compute cost.}
+\label{fig:performance_tradeoff}
 \end{figure}
 
-\subsection{Comparative Evaluation of Causal Decision Methods}
-Across the held-out test split, causal temporal post-processing substantially suppresses false alarm events, revealing distinct operational trade-offs across decision methods. Table~\ref{tab:postprocessing_benchmark} reports the primary benchmark results across the six decision strategies, evaluated under validation-calibrated thresholds $\tau_m^*$ with 95\% confidence intervals across evaluation episodes. 
+\subsection{Do Learned Sequence Models Help?}
+Learned sequence models provide no additional operational benefit on this scalar stream. Mamba-SSSM (M5) achieves a slightly lower mean false-alert rate ($1.7\pm0.6$ FA/min) than M2, but the difference is not statistically significant ($W=5.0$, $p=0.4922$), while M5 incurs roughly $500\times$ higher runtime ($150.59\,\mu\text{s}$ vs. $0.30\,\mu\text{s}$), $25\times$ more state memory, and significantly lower episode $F_1$ ($W=8.0$, $p=0.0150$). The GRU baseline (M6) attains the highest frame-level $F_1$ (0.822) but does not improve episode-level $F_1$ over M2 ($W=15.0$, $p=0.0597$), while producing significantly more false alerts ($p=0.0178$) at $73\times$ greater runtime.
 
-The five-frame moving average (M2) achieves the strongest clutter suppression among non-learned methods, reducing false alerts by 77\% (from 9.0 down to 2.1 FA/min) and achieving a 65.3\% frame-level false alarm suppression ratio (FASR, reducing false-positive frames from 75 down to 26), with an alert latency of 592.3~ms and 84.6\% target recall (11 of 13 positive test tiles detected, missing one canopy-occluded forest target and one distant snow target wearing insulating winter clothing). A paired Wilcoxon signed-rank test across the 24 held-out test episodes confirms that M2's reduction in false positive frames ($W = 2.0, p = 0.0056$) and false alert events ($W = 2.0, p = 0.0087$) over baseline M1 is statistically significant.
-
-When mission priorities favor rapid alert triggering and maximum target sensitivity over absolute clutter rejection, order-statistic median filtering (M3) and history consensus (M4) establish an attractive alternative: both preserve 92.3\% target recall (12/13 tiles detected) with faster alert latency (291.7~ms and 313.9~ms), while still achieving a 60\% false alert reduction (3.6 FA/min, 32.0\% FASR). Mathematically, for any odd window length $W = 2k+1$ (here $W=5$), the order-statistic condition $\operatorname{median}(s[n-4], \dots, s[n]) \ge \tau$ is logically equivalent to requiring at least $k+1 = 3$ samples $\ge \tau$, matching the consensus rule of M4 on all steady-state frames ($n \ge 4$). They differ only during the initial 2-frame buffer fill-up, producing identical false alarm counts (14 events, 51 FP frames) with a minor 22.2~ms latency difference. Wilcoxon testing confirms M2 achieves significantly fewer false alarm frames than M3 ($W = 0.0, p = 0.0047$) and fewer false alert events ($W = 0.0, p = 0.0143$), delineating the clear trade-off between M2's stronger smoothing and M3's early detection sensitivity.
-
-In comparison, learned sequence models do not establish a compelling operational advantage over simple low-pass filtering on this 1D scalar stream. While M5 Mamba-SSSM achieves numerically lower false alerts ($1.7 \pm 0.6$ FA/min), an episode-level paired Wilcoxon test confirms that the difference between M2 and M5 is not statistically significant ($W = 5.0, p = 0.4922$). Meanwhile, M5 requires 500$\times$ higher execution latency (150.59~$\mu$s vs. 0.30~$\mu$s), 25$\times$ more state memory (512~B vs. 20~B), and yields significantly lower episode $F_1$ ($W = 8.0, p = 0.0150$). Similarly, while M6 GRU achieves the highest frame-level $F_1$ ($0.822 \pm 0.007$), the difference in episode $F_1$ relative to M2 is not statistically significant ($W = 15.0, p = 0.0597$), while M6 incurs significantly more false alert events ($3.7 \pm 0.3$ FA/min, $W = 0.0, p = 0.0178$) and 73$\times$ greater runtime (21.80~$\mu$s). Because transient clutter spikes are isolated impulses, parameterized recurrent models retain lingering hidden activations, whereas linear FIR averaging provides immediate $1/W = 0.20$ attenuation of isolated noise pulses without state delays or training overhead.
+We emphasize the scope of this finding. M5 and M6 are small models (753 and 1,681 parameters) trained on only 44 tiles (9,800 frames per modality), and $\tau^*$ was calibrated on a validation set of comparable size. These results indicate that, in this specific low-data, short-context, edge-scale regime, added sequence-model capacity does not translate into a measurable alert-reliability gain relative to a training-free linear filter. They are not evidence that learned temporal models are categorically unsuitable for confidence filtering in general; larger training corpora or longer effective context could change this comparison, and we treat that as an open question rather than a settled result.
 
 \subsection{Environmental Robustness Across Biomes}
-To examine whether temporal filtering performs consistently across diverse search environments, Table~\ref{tab:per_biome_benchmark} stratifies performance across the three held-out test biomes (8 tiles per biome, 5,570 frames total). Across all terrains, five-frame moving average (M2) substantially lowers false alert rates compared to instantaneous baseline thresholding (M1): in arid desert, false alerts drop from 10.50 to 1.50 FA/min (an 85.7\% reduction); in temperate forest, false alerts drop from 12.49 to 3.33 FA/min (a 73.3\% reduction); and in snow alpine terrain, false alerts drop from 4.50 to 1.50 FA/min (a 66.7\% reduction). While canopy occlusions in dense forest slightly reduce frame-level target overlap under heavy smoothing (alert recall 75.0\% [3/4 tiles] for M2 vs. 100.0\% [4/4 tiles] for order-statistic median M3, and 80.0\% [4/5 tiles] in snow), M2 achieves the lowest false alert rate across all three biomes, confirming robust environmental transferability.
+Table~\ref{tab:per_biome_benchmark} stratifies performance across the three held-out test biomes (8 tiles per biome, 5,570 frames total). Across all terrains, the moving average (M2) substantially lowers false alerts relative to raw thresholding (M1): desert falls from 10.50 to 1.50 FA/min (85.7\% reduction); forest falls from 12.49 to 3.33 FA/min (73.3\% reduction); snow alpine falls from 4.50 to 1.50 FA/min (66.7\% reduction). Heavy smoothing slightly reduces alert recall under canopy occlusion (75.0\% [3/4 tiles] for M2 vs. 100.0\% [4/4 tiles] for M3, and 80.0\% [4/5 tiles] in snow), but M2 achieves the lowest false-alert rate in every biome, indicating reasonably consistent environmental transferability for this synthetic corpus.
 
 \begin{table}[!t]
 \centering
@@ -263,19 +298,19 @@ To examine whether temporal filtering performs consistently across diverse searc
 \toprule
 \textbf{Environment} & \textbf{Decision Method} & \textbf{Val $\tau^*$} & \textbf{Alert Recall (\%)} & \textbf{FA / min} & \textbf{FP Frames} \\
 \midrule
-\textbf{Arid Desert} 
+\textbf{Arid Desert}
   & M1: Raw Baseline        & 0.43 & 100.0\% & 10.50 & 32 \\
   & M2: Moving Average      & 0.57 & 100.0\% & \textbf{1.50} & \textbf{10} \\
   & M3: Median Filter       & 0.49 & 100.0\% & 3.00 & 20 \\
   & M4: History Consensus   & 0.49 & 100.0\% & 3.00 & 20 \\
 \midrule
-\textbf{Temperate Forest} 
+\textbf{Temperate Forest}
   & M1: Raw Baseline        & 0.43 & 100.0\% & 12.49 & 34 \\
   & M2: Moving Average      & 0.57 & 75.0\%  & \textbf{3.33} & \textbf{13} \\
   & M3: Median Filter       & 0.49 & 100.0\% & 4.99 & 21 \\
   & M4: History Consensus   & 0.49 & 100.0\% & 4.99 & 21 \\
 \midrule
-\textbf{Snow/Alpine} 
+\textbf{Snow/Alpine}
   & M1: Raw Baseline        & 0.43 & 80.0\%  & 4.50 & 9 \\
   & M2: Moving Average      & 0.57 & 80.0\%  & \textbf{1.50} & \textbf{3} \\
   & M3: Median Filter       & 0.49 & 80.0\%  & 3.00 & 10 \\
@@ -285,36 +320,24 @@ To examine whether temporal filtering performs consistently across diverse searc
 }
 \end{table}
 
-\begin{figure}[!t]
-\centering
-\resizebox{0.86\columnwidth}{!}{\input{figure_window_ablation.tex}}
-\caption{Temporal window length ablation ($W \in \{1, 3, 5, 7\}$) for the moving average filter on the validation split, showing $F_1$-score ($\uparrow$) and False Alerts/min ($\downarrow$) across causal latency bounds (42~ms to 292~ms at 24~Hz). $W = 5$ achieves the optimal trade-off on validation sequences, cutting false alerts by 63\% with minimal latency.}
-\label{fig:window_ablation}
-\end{figure}
-
 \subsection{Temporal Window Length Sensitivity}
-A window of $W = 5$ frames ($208\text{ ms}$) achieves the optimal operating trade-off on validation sequences, cutting false alerts from 22.8 down to 8.4 FA/min (a 63.3\% reduction) while maintaining high $F_1 = 0.857$ within a 208~ms latency bound (Fig.~\ref{fig:window_ablation}). Ablating $W \in \{1, 3, 5, 7\}$ frames ($41.7\text{ ms}$ to $291.7\text{ ms}$ at $24\text{ Hz}$) on the validation partition demonstrates that $W = 1$ suffers from high clutter sensitivity (22.8 FA/min, $F_1 = 0.849$). Increasing to $W = 3$ smooths high-frequency noise, decreasing false alerts to 15.3 FA/min ($F_1 = 0.856$). At $W = 5$, the filter suppresses clutter by over 63\% with responsive target acquisition. Expanding further to $W = 7$ yields diminishing returns (5.8 FA/min) while increasing buffer latency to 292~ms. Thus, $W = 5$ was selected on validation and held frozen for testing.
+On validation data, $W=5$ cuts false alerts from 22.8 to 8.4 FA/min (63.3\%) at $F_1=0.857$ within a 208~ms window span (Fig.~\ref{fig:window_ablation}). $W=1$ is clutter-sensitive (22.8 FA/min, $F_1=0.849$); $W=3$ lowers false alerts to 15.3 FA/min ($F_1=0.856$); $W=7$ gives diminishing returns (5.8 FA/min) at a 292~ms span. We selected $W=5$ on validation and froze it for testing. This ablation was performed for the moving average only; we did not separately re-ablate $W$ for the median filter or history consensus, which we note as a limitation below.
 
 \subsection{Limitations}
-\label{sec:limitations}
-Several constraints bound our findings. First, pseudo-thermal infrared streams are generated via a global grayscale lookup table rather than radiometric sensor physics; high-albedo snow renders as the warmest region in frame, inverting thermal contrast relative to physical snowpack. Second, the benchmark evaluates 24 held-out test tiles (5,570 frames per modality under Option B parent-video grouping, 8 tiles per biome with 13 positive and 11 negative tiles). On alert recall, M2 detected 11 of 13 positive test tiles (84.6\%), missing one distant target under dense forest canopy and one in snow where insulated clothing reduced thermal emissions. Third, hyperparameter $W=5$ was selected on validation sequences to balance delay and clutter attenuation; mission-specific flight speeds may require adaptive window scaling. Fourth, clips capture nominal aerial trajectories ($30$--$50$\,m AGL at $8$--$15$\,m/s) in clear conditions; violent turbulence and degraded weather (heavy fog, blizzard snowfall) require further study. Finally, timing benchmarks reflect desktop GPU execution; embedded Jetson Orin Nano flight validation is planned for subsequent work.
+Several constraints bound these findings. First, as introduced in Section~I, the pseudo-TIR channel is a luminance-based lookup-table encoding rather than a radiometric infrared measurement; results and discussion involving the ``thermal'' channel should be read as characterizing a second, spectrally-diverse synthetic view rather than physical thermal crossover, and high-albedo snow rendering as the warmest region in frame is an artifact of this encoding rather than a physical effect. Second, the learned models evaluated (M5, M6) are intentionally small and trained on 44 tiles; the negative result in Section~V.C is scoped to this low-data, short-context regime and should not be generalized to learned sequence models trained at larger scale. Third, the held-out test split contains only 13 positive tiles (5,570 frames, 8 tiles per biome), so tile-level recall differences of a single tile, such as 11/13 versus 12/13, carry limited statistical power; episode-level Wilcoxon tests partially mitigate but do not eliminate this. Fourth, the window-length ablation (Fig.~\ref{fig:window_ablation}) was performed only for the moving average, so the optimal $W$ for median filtering or history consensus was not independently verified. Fifth, evaluated clips capture nominal aerial trajectories ($30$--$50$\,m AGL at $8$--$15$\,m/s) in clear conditions; turbulence and degraded weather remain untested. Finally, timing benchmarks reflect desktop GPU execution; embedded Jetson Orin Nano profiling is planned for future field trials.
 
 \balance
 
 \section{Conclusion}
-\label{sec:conclusion}
-This paper investigated lightweight multimodal person detection with causal temporal post-processing for UAV wilderness SAR across desert, forest, and snow biomes. Holding upstream YOLO11n detectors and the late fusion max gate fixed, we benchmarked six causal decision methods under validation-calibrated thresholds. Causal temporal post-processing establishes a clear operational Pareto trade-off: a five-frame moving average achieves the lowest false alert rate among non-learned methods (2.1 FA/min, a 77\% reduction vs. baseline, 65.3\% FASR) with 84.6\% target recall at sub-microsecond latency (0.30~$\mu$s runtime, 20-byte buffer), while five-frame median filtering preserves 92.3\% recall with responsive 291.7~ms alert latency at 3.6 FA/min. Parameterized sequence models offer no operational advantage over linear moving averages: Mamba-SSSM yields statistically indistinguishable false alerts ($p = 0.4922$) while GRU incurs significantly more false alert events ($p = 0.0178$), both imposing $73\times$ to $500\times$ higher computational latency and state memory overhead. Lightweight causal post-processing provides a computationally negligible, training-free layer for preventing wasteful UAV loiters and conserving telemetry bandwidth in autonomous aerial search operations.
+This paper investigated whether learned temporal sequence models are necessary to convert noisy multimodal person-detection streams into reliable SAR alerts, or whether simple causal filters suffice. Holding upstream YOLO11n detectors and the late fusion max gate fixed, we benchmarked six causal decision methods under a validation-calibrated, test-locked protocol. Two operating points emerge: a five-frame moving average that minimizes false alerts (2.1 FA/min, a 77\% reduction, 65.3\% FASR) at 84.6\% recall and sub-microsecond runtime, and a five-frame median filter that preserves full baseline recall (92.3\%) with a faster 291.7~ms alert latency at 3.6 FA/min. Small Mamba-SSSM and GRU models trained on limited data provided no statistically significant alert-reliability improvement over these filters, at $73\times$ to $500\times$ higher computational cost, though we treat this as evidence specific to the low-data, short-context regime studied here rather than a general claim about learned sequence models. Lightweight causal filtering is therefore a practical, training-free starting point for edge SAR avionics; we expect it would reduce unnecessary hover-and-verify maneuvers in deployment, though we did not directly measure mission-level outcomes in this study.
 
 \section*{AI Use Disclaimer}
-Generative artificial intelligence (AI) tools were used in this research for synthetic training video generation (Google Gemini 3.8 Flash and xAI Grok) as well as AI-assisted manuscript editing and proofreading. All experimental designs, model training, algorithmic code, post-processing pipelines, quantitative evaluations, and scientific interpretations were developed and verified by the authors.
+Generative artificial intelligence (AI) tools were used in this research for synthetic training video generation (Google Gemini 3.8 Flash and xAI Grok) as well as AI-assisted manuscript editing and proofreading.
 
 \section*{Data and Code Availability}
 Simulation frameworks, snippet harvesting tools, dataset split manifests, and PyTorch temporal decision implementations are available at: \url{https://github.com/IamOumarIbrahim/multi-modal-detection}.
 
-\section*{Acknowledgment}
-The authors acknowledge the Department of Computer Engineering at the University of Sharjah for supporting this research and providing computing facilities.
-
 \bibliographystyle{IEEEtran}
 \bibliography{references}
 
-\end{document}
+\end{document}

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>tectonic</id>
+    <version>0.3.2</version>
+    <title>Tectonic</title>
+    <authors>The Tectonic Project</authors>
+    <owners>noobslayer42</owners>
+    <licenseUrl>https://github.com/tectonic-typesetting/tectonic/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://tectonic-typesetting.github.io/</projectUrl>
+    <iconUrl>https://user-images.githubusercontent.com/5019902/50501844-90aedc00-0a9e-11e9-994b-392feaf078fe.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description># The Tectonic Typesetting System
+
+Tectonic is a modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive.
+
+For those new to it, TeX is a programming language that you use to create typeset documents rather than computer software. TeX is quite archaic in some ways, but it’s still the tool of choice for documents that require precision typography or ones that involve lots of mathematical equations, which makes it especially important in the sciences. Tectonic converts TeX files into PDF files.</description>
+    <releaseNotes>https://github.com/tectonic-typesetting/tectonic/releases</releaseNotes>
+    <copyright>2017–2019 The Tectonic Project</copyright>
+    <tags>tectonic tex LaTeX</tags>
+    <projectSourceUrl>https://github.com/tectonic-typesetting/tectonic/</projectSourceUrl>
+    <docsUrl>https://tectonic-typesetting.github.io/en-US/contribute.html</docsUrl>
+    <bugTrackerUrl>https://github.com/tectonic-typesetting/tectonic/issues</bugTrackerUrl>
+  </metadata>
+</package>
