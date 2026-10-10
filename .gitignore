@@ -6,6 +6,7 @@ data/raw/**/*.mp4
 data/raw/**/*.mov
 data/processed/**
 !data/processed/.gitkeep
+data/*.zip
 *.pt
 data/annotations/**
 .venv/
@@ -16,3 +17,4 @@ scratch/
 data/wisard_test/
 *.synctex.gz
 runs/detect/*_cache.json
+* - Copy*

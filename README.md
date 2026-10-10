@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/Resolution-640%C3%97640-555?style=flat" alt="Resolution: 640×640">
   <img src="https://img.shields.io/badge/Sampling_Rate-24_Hz_(41.7_ms)-blue?style=flat" alt="Sampling Rate: 24 Hz">
   <img src="https://img.shields.io/badge/Backbones-2%C3%97_YOLO11n_(2.6M_Params)-orange?style=flat" alt="Backbone: YOLO11n">
-  <img src="https://img.shields.io/badge/Status-ICSPIS_2026_Submission-red?style=flat" alt="Status: ICSPIS 2026 Submission">
+  <a href="https://icspis.com/"><img src="https://img.shields.io/badge/Status-Accepted%20at%20ICSPIS%202026-2ea44f" alt="Status: Accepted at ICSPIS 2026"></a>
 </p>
 
 ## Table of Contents
@@ -33,6 +33,8 @@
   - [Table 3: Environment-Stratified Operational Resource Impact](#table-3-environment-stratified-operational-resource-impact)
 - [Quick Reproduction](#quick-reproduction)
 - [Repository Organization](#repository-organization)
+- [Limitations](#limitations)
+- [Data and Code Availability](#data-and-code-availability)
 - [Authors & Citation](#authors--citation)
 - [Acknowledgments & License](#acknowledgments--license)
 
@@ -46,7 +48,8 @@ This repository contains the official implementation, dataset harvesting pipelin
 
 > **"Lightweight Multimodal Person Detection and Temporal Post-Processing for Aerial Search and Rescue"**  
 > *Oumar Mamoun Ibrahim and Mohamad Khairi bin Ishak*  
-> Planned for submission to the 9th International Conference on Signal Processing and Information Security (**ICSPIS 2026**), 10–12 November 2026, Palace Downtown, Dubai, UAE.
+>  
+> **Accepted** at the 9th International Conference on Signal Processing and Information Security (ICSPIS 2026), Dubai, UAE, 10–12 November 2026. The paper will appear in the conference proceedings. This repository accompanies it.
 
 ---
 
@@ -549,7 +552,29 @@ multi-modal-detection/
 
 ---
 
+## Limitations
+
+- Each detector was trained once, with seed 42. Only the GRU and Mamba post-processors were repeated over five seeds.
+- The test split is small: 24 clips per modality (5,570 frames). Alert recall rests on 13 alerts, so one missed alert moves it by about 8 points.
+- The moving-average versus Mamba difference is not statistically significant (Wilcoxon W = 5.0, p = 0.49).
+- Operational savings in battery, flight time, and telemetry bandwidth are estimates.
+- Per-biome clip counts in the test split are: desert (6 positive, 2 negative), forest (4 positive, 4 negative), and snow (8 positive, 0 negative); false-alert evaluation in snow relies entirely on negative frames within positive clips.
+
+---
+
+## Data and code availability
+
+- **Code:** Apache-2.0, in this repository.
+- **Video corpus:**
+  - **C.** Generated synthetically with Google Gemini (3.8 Flash) and Grok from the prompts in `DATASET_PROMPTS.md`. All clips across desert, forest, and snow environments are synthetic (RGB text-to-video with lookup-table pseudo-TIR).
+- **Annotations:** made in Label Studio by the authors; released under Apache-2.0.
+- **Splits:** by episode, in `data/splits/` (44 train, 22 validation, 24 test clips per modality).
+
+---
+
 ## Authors & Citation
+
+Machine-readable citation metadata is available in [`CITATION.cff`](./CITATION.cff).
 
 - **Oumar Mamoun Ibrahim** - Department of Computer Engineering, University of Sharjah, UAE  
   [U22200741@sharjah.ac.ae](mailto:U22200741@sharjah.ac.ae) · [ORCID: 0009-0008-0312-1605](https://orcid.org/0009-0008-0312-1605)
@@ -559,13 +584,14 @@ multi-modal-detection/
 If you use this work, codebase, or dataset in your research, please cite:
 
 ```bibtex
-@inproceedings{ibrahim2026lightweight,
+@inproceedings{ibrahim2026mmsar,
   title     = {Lightweight Multimodal Person Detection and Temporal Post-Processing for Aerial Search and Rescue},
-  author    = {Ibrahim, Oumar Mamoun and bin Ishak, Mohamad Khairi},
+  author    = {Ibrahim, Oumar Mamoun and {bin Ishak}, Mohamad Khairi},
   booktitle = {Proceedings of the 9th International Conference on Signal Processing and Information Security (ICSPIS)},
   year      = {2026},
+  month     = nov,
   address   = {Dubai, United Arab Emirates},
-  month     = {November}
+  note      = {Accepted; to appear}
 }
 ```
 

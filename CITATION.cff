@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the paper below."
+title: "MMSAR: Lightweight Multimodal Person Detection and Temporal Post-Processing for Aerial Search and Rescue"
+type: software
+authors:
+  - family-names: "Ibrahim"
+    given-names: "Oumar Mamoun"
+    orcid: "https://orcid.org/0009-0008-0312-1605"
+    affiliation: "University of Sharjah"
+  - family-names: "bin Ishak"
+    given-names: "Mohamad Khairi"
+    orcid: "https://orcid.org/0000-0002-3554-0061"
+    affiliation: "University of Sharjah"
+repository-code: "https://github.com/IamOumarIbrahim/multi-modal-detection"
+license: Apache-2.0
+keywords:
+  - UAV search and rescue
+  - person detection
+  - thermal infrared
+  - temporal post-processing
+  - Mamba
+preferred-citation:
+  type: conference-paper
+  title: "Lightweight Multimodal Person Detection and Temporal Post-Processing for Aerial Search and Rescue"
+  authors:
+    - family-names: "Ibrahim"
+      given-names: "Oumar Mamoun"
+      orcid: "https://orcid.org/0009-0008-0312-1605"
+    - family-names: "bin Ishak"
+      given-names: "Mohamad Khairi"
+      orcid: "https://orcid.org/0000-0002-3554-0061"
+  collection-title: "Proceedings of the 9th International Conference on Signal Processing and Information Security (ICSPIS)"
+  conference:
+    name: "9th International Conference on Signal Processing and Information Security (ICSPIS 2026)"
+    city: "Dubai"
+    country: "AE"
+    date-start: "2026-11-10"
+    date-end: "2026-11-12"
+  year: 2026
+  status: in-press
