@@ -1,77 +1,75 @@
 \relax 
-\citation{rudol2008human,silvagni2017multipurpose}
-\citation{kyrkou2021emergencynet}
+\citation{rudol2008human,silvagni2016multipurpose}
+\citation{kyrkou2020emergencynet}
 \citation{hwang2015multispectral,jia2021llvip}
-\citation{portmann2014people}
 \citation{redmon2016you}
 \citation{jocher2024yolo11}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
 \citation{hwang2015multispectral}
 \citation{jia2021llvip}
 \citation{broyles2022wisard}
 \citation{rudol2008human}
-\citation{silvagni2017multipurpose}
+\citation{silvagni2016multipurpose}
 \citation{lygouras2019unsupervised}
 \citation{jocher2024yolo11}
 \citation{portmann2014people}
-\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
 \citation{wald1945sequential}
 \citation{richards2014fundamentals}
 \citation{rabiner1975applications}
-\citation{gu2023mamba}
+\citation{gu2024mamba}
 \citation{jocher2024yolo11}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces MMSAR evaluation framework. Text-to-video models synthesize RGB streams; a 256-level lookup table produces synchronized pseudo-TIR streams. After $2\times $ tiling, annotation, and 24~Hz extraction, parent-video-grouped episodes prevent spatial leakage. Parallel YOLO11n detectors feed the late fusion max gate in Eq.~\eqref  {eq:late_fusion} and six causal decision methods ($W=5$, 208~ms window span).}}{2}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Dual-stream evaluation pipeline with late decision fusion and causal temporal filtering ($W=5$, spanning 166.7~ms at 24~Hz).}}{2}{}\protected@file@percent }
 \newlabel{fig:system_architecture}{{1}{2}{}{figure.1}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{2}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {III}Methodology}{2}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Video Ingestion and Real-Time Edge Budget}{2}{}\protected@file@percent }
 \newlabel{eq:realtime_budget}{{1}{2}{}{equation.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Late Fusion Max Gate}{2}{}\protected@file@percent }
-\newlabel{eq:late_fusion}{{2}{2}{}{equation.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Causal Temporal Post-Processing Methods}{2}{}\protected@file@percent }
-\newlabel{eq:f1_opt}{{3}{3}{}{equation.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Late Fusion Max Gate}{3}{}\protected@file@percent }
+\newlabel{eq:late_fusion}{{2}{3}{}{equation.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Causal Temporal Post-Processing Methods}{3}{}\protected@file@percent }
+\newlabel{eq:window_vector}{{3}{3}{}{equation.3}{}}
 \newlabel{eq:fbeta}{{4}{3}{}{equation.4}{}}
-\newlabel{eq:asymcost}{{5}{3}{}{equation.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Alert-Level Evaluation Metrics}{3}{}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Corpus Partitioning and Experimental System Specifications}}{3}{}\protected@file@percent }
 \newlabel{tab:system_config}{{I}{3}{}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Alert-Level Evaluation Metrics}{3}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {IV}Experimental Setup and Dataset}{3}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {V}Results and Discussion}{3}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Upstream Detection Across Modalities and Biomes}{3}{}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Frame-Level Upstream Detection Performance and Modality Progression on Held-Out Test Split (Fixed Detectors, Threshold $\tau = 0.50$)}}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Results and Discussion}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Upstream Detection Across Modalities and Biomes}{4}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Frame-Level Upstream Detection Across Sensing Streams ($\tau = 0.50$)}}{4}{}\protected@file@percent }
 \newlabel{tab:fusion_comparison}{{II}{4}{}{table.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Two Operating Points: False-Alert Suppression versus Recall Preservation}{4}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Temporal sequence trace: (top) fused confidence $s[n]$ with clutter spike at frame 18 and target event from frame 32; (bottom) causal decisions for M1 (spurious alert), M2 (spike suppressed), and M5.}}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Temporal confidence trace (top) and causal alert decisions (bottom) across clutter and target events.}}{4}{}\protected@file@percent }
 \newlabel{fig:real_temporal_sequence}{{2}{4}{}{figure.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Operational trade-offs across temporal decision methods. Lower false-alert rates and higher recall are preferable; the log-scale $z$-axis encodes per-frame filter runtime ($\mu $s). The dashed line marks the low-compute operating frontier. M2 achieves the fewest false alerts; M3 and M4 share the same recall-preserving operating point. M5's statistically indistinguishable gain over M2 comes at a much larger compute cost.}}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Operational trade-offs across causal temporal decision methods. Log-scale $z$-axis encodes filter runtime ($\mu $s).}}{4}{}\protected@file@percent }
 \newlabel{fig:performance_tradeoff}{{3}{4}{}{figure.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Do Learned Sequence Models Help?}{4}{}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Comparative Benchmark of Causal Temporal Decision Methods on Held-Out Test Sequences ($W = 5$ frames / 208 ms span at 24 Hz)}}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Two Operating Points: False-Alert Suppression versus Recall Preservation}{4}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Benchmark of Causal Temporal Decision Methods on Held-Out Test Sequences ($W = 5$, 166.7~ms Span, 24~Hz)}}{5}{}\protected@file@percent }
 \newlabel{tab:postprocessing_benchmark}{{III}{5}{}{table.3}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Environment-Stratified Causal Decision Performance on Held-Out Test Split (8 Tiles per Biome, 5,570 Total Frames)}}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Learned Sequence Models: False-Alert Reduction and Edge Trade-Offs}{5}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Biome-Stratified Causal Decision Performance on Held-Out Test Split}}{5}{}\protected@file@percent }
 \newlabel{tab:per_biome_benchmark}{{IV}{5}{}{table.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Environmental Robustness Across Biomes}{5}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-E}}Temporal Window Length Sensitivity}{5}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-F}}Limitations}{5}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-G}}Sensitivity Analysis: Recall-Weighted Operational Regimes}{5}{}\protected@file@percent }
-\newlabel{sec:sensitivity_analysis}{{\mbox  {V-G}}{5}{}{subsection.5.7}{}}
 \bibstyle{IEEEtran}
 \bibdata{references}
 \bibcite{rudol2008human}{1}
-\bibcite{silvagni2017multipurpose}{2}
-\bibcite{kyrkou2021emergencynet}{3}
+\bibcite{silvagni2016multipurpose}{2}
+\bibcite{kyrkou2020emergencynet}{3}
 \bibcite{hwang2015multispectral}{4}
 \bibcite{jia2021llvip}{5}
-\bibcite{portmann2014people}{6}
-\bibcite{redmon2016you}{7}
-\bibcite{jocher2024yolo11}{8}
-\bibcite{broyles2022wisard}{9}
-\bibcite{lygouras2019unsupervised}{10}
+\bibcite{redmon2016you}{6}
+\bibcite{jocher2024yolo11}{7}
+\bibcite{broyles2022wisard}{8}
+\bibcite{lygouras2019unsupervised}{9}
+\bibcite{portmann2014people}{10}
 \bibcite{wald1945sequential}{11}
 \bibcite{richards2014fundamentals}{12}
 \bibcite{rabiner1975applications}{13}
-\bibcite{gu2023mamba}{14}
-\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces Recall-Weighted ($F_2$, $P \ge 0.95$) vs.\ Baseline $F_1$ Operating Points}}{6}{}\protected@file@percent }
+\bibcite{gu2024mamba}{14}
+\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces Recall-Weighted ($F_2$, Asymmetric Cost) vs.\ Baseline Operating Points}}{6}{}\protected@file@percent }
 \newlabel{tab:f2_sensitivity}{{V}{6}{}{table.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-G}}Sensitivity Analysis: Recall-Weighted Operational Regimes}{6}{}\protected@file@percent }
+\newlabel{sec:sensitivity_analysis}{{\mbox  {V-G}}{6}{}{subsection.5.7}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusion}{6}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{References}{6}{}\protected@file@percent }
 \gdef \@abspage@last{6}

@@ -26,13 +26,13 @@ P.~Rudol and P.~Doherty, ``Human body detection and geolocation for {UAV}
   search and rescue operations using color and thermal imagery,'' in
   \emph{Proceedings of the IEEE Aerospace Conference}, 2008, pp. 1--8.
 
-\bibitem{silvagni2017multipurpose}
-R.~Silvagni, A.~Tonoli, E.~Zenerino, and M.~Chiaberge, ``Multipurpose {UAV} for
+\bibitem{silvagni2016multipurpose}
+M.~Silvagni, A.~Tonoli, E.~Zenerino, and M.~Chiaberge, ``Multipurpose {UAV} for
   search and rescue operations in mountain avalanche events: Design
   considerations,'' \emph{Geomatics, Natural Hazards and Risk}, vol.~8, no.~1,
   pp. 18--33, 2016.
 
-\bibitem{kyrkou2021emergencynet}
+\bibitem{kyrkou2020emergencynet}
 C.~Kyrkou and T.~Theocharides, ``{EmergencyNet}: Efficient aerial image
   classification for drone-based emergency monitoring using atrous
   convolutional feature fusion,'' \emph{IEEE Journal of Selected Topics in
@@ -51,12 +51,6 @@ X.~Jia, C.~Zhu, M.~Li, W.~Tang, and W.~Zhou, ``{LLVIP}: A visible-infrared
   International Conference on Computer Vision Workshops (ICCVW)}, 2021, pp.
   3489--3497.
 
-\bibitem{portmann2014people}
-D.~Portmann, S.~Lynen, M.~Chli, and R.~Siegwart, ``People detection and
-  tracking from aerial thermal views,'' in \emph{Proceedings of the IEEE
-  International Conference on Robotics and Automation (ICRA)}, 2014, pp.
-  1794--1800.
-
 \bibitem{redmon2016you}
 J.~Redmon, S.~Divvala, R.~Girshick, and A.~Farhadi, ``You only look once:
   Unified, real-time object detection,'' in \emph{Proceedings of the IEEE
@@ -64,10 +58,9 @@ J.~Redmon, S.~Divvala, R.~Girshick, and A.~Farhadi, ``You only look once:
   779--788.
 
 \bibitem{jocher2024yolo11}
-\BIBentryALTinterwordspacing
-G.~Jocher and J.~Qiu, ``Ultralytics {YOLO11},'' 2024. [Online]. Available:
-  \url{https://github.com/ultralytics/ultralytics}
-\BIBentrySTDinterwordspacing
+G.~Jocher and J.~Qiu, ``Ultralytics {YOLO11},''
+  \url{https://github.com/ultralytics/ultralytics}, 2024, [Online]. Accessed:
+  Oct. 2024.
 
 \bibitem{broyles2022wisard}
 D.~Broyles, C.~R. Hayner, and K.~Leung, ``{WiSARD}: A labeled visual and
@@ -76,10 +69,16 @@ D.~Broyles, C.~R. Hayner, and K.~Leung, ``{WiSARD}: A labeled visual and
   Robots and Systems (IROS)}, 2022, pp. 9467--9474.
 
 \bibitem{lygouras2019unsupervised}
-V.~Lygouras, N.~Santavas, A.~Taitzoglou, K.~Tarchanidis, A.~Mitropoulos, and
+E.~Lygouras, N.~Santavas, A.~Taitzoglou, K.~Tarchanidis, A.~Mitropoulos, and
   A.~Gasteratos, ``Unsupervised human detection with an embedded vision system
   on a fully autonomous {UAV} for search and rescue operations,''
   \emph{Sensors}, vol.~19, no.~16, p. 3542, 2019.
+
+\bibitem{portmann2014people}
+J.~Portmann, S.~Lynen, M.~Chli, and R.~Siegwart, ``People detection and
+  tracking from aerial thermal views,'' in \emph{Proceedings of the IEEE
+  International Conference on Robotics and Automation (ICRA)}, 2014, pp.
+  1794--1800.
 
 \bibitem{wald1945sequential}
 A.~Wald, ``Sequential tests of statistical hypotheses,'' \emph{The Annals of
@@ -96,9 +95,12 @@ L.~R. Rabiner, M.~R. Sambur, and C.~E. Schmidt, ``Applications of a nonlinear
   Acoustics, Speech, and Signal Processing}, vol.~23, no.~6, pp. 552--557,
   1975.
 
-\bibitem{gu2023mamba}
+\bibitem{gu2024mamba}
+\BIBentryALTinterwordspacing
 A.~Gu and T.~Dao, ``Mamba: Linear-time sequence modeling with selective state
   spaces,'' in \emph{Proceedings of the First Conference on Language Modeling
-  (COLM)}, 2024, also arXiv:2312.00752.
+  (COLM)}, 2024, also arXiv:2312.00752. [Online]. Available:
+  \url{https://openreview.net/forum?id=AL1fq05o7H}
+\BIBentrySTDinterwordspacing
 
 \end{thebibliography}
