@@ -1,0 +1,260 @@
+[
+ {
+  "biome": "desert",
+  "video": "desert_RGB_positive_2_right.mp4",
+  "frames": [
+   {
+    "id": "strip_desert_positive_2_right_f001",
+    "frame": 1,
+    "box": [
+     252.8,
+     318.9,
+     293.3,
+     408.5
+    ]
+   },
+   {
+    "id": "strip_desert_positive_2_right_f033",
+    "frame": 33,
+    "box": [
+     250.0,
+     330.3,
+     293.3,
+     419.9
+    ]
+   },
+   {
+    "id": "strip_desert_positive_2_right_f065",
+    "frame": 65,
+    "box": [
+     263.7,
+     329.6,
+     310.6,
+     426.6
+    ]
+   },
+   {
+    "id": "strip_desert_positive_2_right_f101",
+    "frame": 101,
+    "box": [
+     317.9,
+     329.6,
+     364.8,
+     442.7
+    ]
+   },
+   {
+    "id": "strip_desert_positive_2_right_f133",
+    "frame": 133,
+    "box": [
+     349.8,
+     333.7,
+     397.8,
+     446.8
+    ]
+   },
+   {
+    "id": "strip_desert_positive_2_right_f169",
+    "frame": 169,
+    "box": [
+     360.5,
+     344.5,
+     416.4,
+     457.6
+    ]
+   },
+   {
+    "id": "strip_desert_positive_2_right_f201",
+    "frame": 201,
+    "box": [
+     365.2,
+     361.5,
+     426.5,
+     480.2
+    ]
+   },
+   {
+    "id": "strip_desert_positive_2_right_f237",
+    "frame": 237,
+    "box": [
+     395.4,
+     380.4,
+     459.4,
+     520.5
+    ]
+   }
+  ]
+ },
+ {
+  "biome": "forest",
+  "video": "forest_RGB_positive_1_right.mp4",
+  "frames": [
+   {
+    "id": "strip_forest_positive_1_right_f025",
+    "frame": 25,
+    "box": [
+     383.8,
+     272.2,
+     446.8,
+     410.8
+    ]
+   },
+   {
+    "id": "strip_forest_positive_1_right_f053",
+    "frame": 53,
+    "box": [
+     1.0,
+     269.3,
+     47.9,
+     423.9
+    ]
+   },
+   {
+    "id": "strip_forest_positive_1_right_f085",
+    "frame": 85,
+    "box": [
+     1.0,
+     270.9,
+     35.7,
+     434.2
+    ]
+   },
+   {
+    "id": "strip_forest_positive_1_right_f113",
+    "frame": 113,
+    "box": [
+     1.0,
+     270.9,
+     45.5,
+     444.8
+    ]
+   },
+   {
+    "id": "strip_forest_positive_1_right_f145",
+    "frame": 145,
+    "box": [
+     1.0,
+     270.9,
+     56.7,
+     457.0
+    ]
+   },
+   {
+    "id": "strip_forest_positive_1_right_f173",
+    "frame": 173,
+    "box": [
+     1.0,
+     270.9,
+     65.5,
+     467.2
+    ]
+   },
+   {
+    "id": "strip_forest_positive_1_right_f205",
+    "frame": 205,
+    "box": [
+     1.0,
+     270.9,
+     46.7,
+     467.2
+    ]
+   },
+   {
+    "id": "strip_forest_positive_1_right_f237",
+    "frame": 237,
+    "box": [
+     1.0,
+     270.9,
+     36.2,
+     467.2
+    ]
+   }
+  ]
+ },
+ {
+  "biome": "snow",
+  "video": "snow_RGB_positive_11_right.mp4",
+  "frames": [
+   {
+    "id": "strip_snow_positive_11_right_f001",
+    "frame": 1,
+    "box": [
+     387.2,
+     120.5,
+     435.2,
+     187.7
+    ]
+   },
+   {
+    "id": "strip_snow_positive_11_right_f029",
+    "frame": 29,
+    "box": [
+     377.4,
+     150.0,
+     432.9,
+     226.8
+    ]
+   },
+   {
+    "id": "strip_snow_positive_11_right_f061",
+    "frame": 61,
+    "box": [
+     364.9,
+     185.6,
+     428.9,
+     270.7
+    ]
+   },
+   {
+    "id": "strip_snow_positive_11_right_f093",
+    "frame": 93,
+    "box": [
+     347.6,
+     226.4,
+     420.2,
+     314.1
+    ]
+   },
+   {
+    "id": "strip_snow_positive_11_right_f125",
+    "frame": 125,
+    "box": [
+     321.5,
+     277.2,
+     400.4,
+     383.9
+    ]
+   },
+   {
+    "id": "strip_snow_positive_11_right_f157",
+    "frame": 157,
+    "box": [
+     271.9,
+     364.6,
+     377.7,
+     477.2
+    ]
+   },
+   {
+    "id": "strip_snow_positive_11_right_f189",
+    "frame": 189,
+    "box": [
+     174.5,
+     465.2,
+     309.9,
+     584.3
+    ]
+   },
+   {
+    "id": "strip_snow_positive_11_right_f221",
+    "frame": 221,
+    "box": [
+     84.3,
+     586.7,
+     176.0,
+     639.0
+    ]
+   }
+  ]
+ }
+]

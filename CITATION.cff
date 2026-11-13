@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this code, please cite the paper below."
-title: "MMSAR: Lightweight Multimodal Person Detection and Temporal Post-Processing for Aerial Search and Rescue"
+title: "MMSAR: Causal Temporal Filtering for Reliable Alerts in Dual-Stream UAV Search and Rescue Detection"
 type: software
 authors:
   - family-names: "Ibrahim"
@@ -21,7 +21,7 @@ keywords:
   - Mamba
 preferred-citation:
   type: conference-paper
-  title: "Lightweight Multimodal Person Detection and Temporal Post-Processing for Aerial Search and Rescue"
+  title: "Causal Temporal Filtering for Reliable Alerts in Dual-Stream UAV Search and Rescue Detection"
   authors:
     - family-names: "Ibrahim"
       given-names: "Oumar Mamoun"

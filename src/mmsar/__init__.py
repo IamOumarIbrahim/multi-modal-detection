@@ -1,3 +1,4 @@
-"""MMSAR: Multi-Modal Search-And-Rescue Detection Pipeline."""
+#   MMSAR - Causal Temporal Filtering for Dual-Stream UAV SAR Detection
+#        Oumar Ibrahim U22200741
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"

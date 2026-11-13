@@ -1,29 +1,16 @@
-"""Late fusion module for combining multi-modal detection confidence scores."""
+#   MMSAR - late fusion of the two detector streams
+#        Oumar Ibrahim U22200741
 
-from typing import Sequence
 
-
-def late_fusion(
-    c_rgb: Sequence[float],
-    c_thermal: Sequence[float],
-) -> list[float]:
-    """Compute late fusion of RGB and Thermal confidence scores using max-fusion.
-
-    Formula: s[n] = max(c_rgb[n], c_thermal[n])
-
-    Args:
-        c_rgb: Sequence of frame-level confidence scores from the RGB detector.
-        c_thermal: Sequence of frame-level confidence scores from the Thermal detector.
-
-    Returns:
-        List of fused confidence scores per frame.
-
-    Raises:
-        ValueError: If c_rgb and c_thermal have differing lengths.
-    """
+# s[n] = max(c_rgb[n], c_thermal[n])
+def late_fusion(c_rgb, c_thermal):
     if len(c_rgb) != len(c_thermal):
-        raise ValueError(
-            f"Stream length mismatch: c_rgb has length {len(c_rgb)} "
-            f"but c_thermal has length {len(c_thermal)}"
-        )
-    return [max(r, t) for r, t in zip(c_rgb, c_thermal)]
+        raise ValueError("rgb and thermal streams have different length")
+
+    fused = []
+    for i in range(len(c_rgb)):
+        if c_rgb[i] >= c_thermal[i]:
+            fused.append(c_rgb[i])
+        else:
+            fused.append(c_thermal[i])
+    return fused

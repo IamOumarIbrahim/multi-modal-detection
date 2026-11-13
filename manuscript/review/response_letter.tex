@@ -1,0 +1,122 @@
+\documentclass[10pt]{article}
+
+%% ------------------------------------------------------------------
+%% Packages
+%% ------------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[top=0.6in, bottom=0.6in, left=0.65in, right=0.65in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{needspace}
+\usepackage{titlesec}
+\usepackage{titling}   % must be loaded BEFORE authblk
+\usepackage{authblk}   % otherwise titling overrides \author[..]{..}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\def\UrlBreaks{\do\/\do-}
+
+%% ------------------------------------------------------------------
+%% Layout
+%% ------------------------------------------------------------------
+% Compact title block
+\setlength{\droptitle}{-3.2em}
+\pretitle{\begin{center}\large\bfseries}
+\posttitle{\end{center}\vspace{-1.4em}}
+\preauthor{\begin{center}\small}
+\postauthor{\end{center}\vspace{-1.4em}}
+\predate{\begin{center}\footnotesize}
+\postdate{\end{center}\vspace{-1.8em}}
+\setlength{\affilsep}{0.15em}
+
+% Compact section headings
+\titleformat*{\section}{\large\bfseries}
+\titlespacing*{\section}{0pt}{6pt}{2pt}
+
+\setlength{\parindent}{0pt}
+
+%% ------------------------------------------------------------------
+%% Title and authors
+%% ------------------------------------------------------------------
+\title{Response to Reviewers: ICSPIS 2026 Camera-Ready Revision\\
+\normalsize Paper \#1571354510: `Causal Temporal Filtering for Reliable Alerts in Dual-Stream UAV Search and Rescue Detection'}
+
+\author[1]{Oumar Mamoun Ibrahim}
+\author[1]{Mohamad Khairi bin Ishak}
+
+\affil[1]{Department of Computer Engineering, University of Sharjah, Sharjah, UAE}
+\affil[ ]{\footnotesize Emails: \texttt{\{U22200741, mishak\}@sharjah.ac.ae}}
+
+\date{October 2026}
+
+%% ------------------------------------------------------------------
+%% Document
+%% ------------------------------------------------------------------
+\begin{document}
+
+\maketitle
+\small
+
+% ===== BEGIN RESPONSE TO REVIEWERS =====
+\newcounter{rcomment}
+\newcommand{\currev}{}
+\newcommand{\reviewer}[1]{%
+  \section*{Reviewer #1}%
+  \renewcommand{\currev}{#1}%
+  \setcounter{rcomment}{0}}
+\newenvironment{rquote}{%
+  \begin{list}{}{\setlength{\leftmargin}{1.5em}\setlength{\rightmargin}{1.5em}%
+    \setlength{\topsep}{2pt}\setlength{\partopsep}{0pt}\setlength{\parsep}{0pt}}%
+  \item[]\itshape}{\end{list}}
+\newcommand{\rcomment}[1]{%
+  \stepcounter{rcomment}%
+  \par\needspace{4\baselineskip}\addvspace{0.6em}%
+  \noindent\textbf{Comment \currev.\thercomment}%
+  \begin{rquote}#1\end{rquote}%
+  \noindent\textbf{Response.}\ }
+
+\section*{General Remarks}
+
+We thank the reviewers for their constructive feedback on our accepted paper. All revisions have been incorporated into the final camera-ready manuscript within the strict 6-page limit. Changes are marked in {\color{blue}blue} in \texttt{main-highlighted.pdf}, while the clean camera-ready PDF is provided as \texttt{main.pdf}.
+
+%% ------------------------------------------------------------------
+\reviewer{1}
+
+\rcomment{The pseudo-TIR channel is a 256-level LUT remap of the same synthetic RGB frames, so both streams are deterministic functions of identical pixels. A LUT cannot recover information that shadow, saturation, or occlusion destroyed in the source frame, yet Section V.A argues that fusion ``compensates for complementary dropouts'' when one sensor is ``blinded by environmental interference.'' The per-stream differences in Table II reflect two detectors trained on differently colorized copies of one image set, not genuine spectral complementarity.}
+We fully agree. All claims of radiometric emissivity, thermal crossover, and physical spectral complementarity have been removed. We reframed the experiment in the Introduction (Section~I), Fig.~1, Section~V.A, and Limitations (Section~V.F) strictly as late fusion of two correlated edge representations derived from identical pixels via a deterministic 256-level lookup table ($Y = 0.299R + 0.587G + 0.114B$) that induces distinct detector errors.
+
+\rcomment{With 13 positive tiles in the held-out split, the 92.3\% versus 84.6\% recall difference is one tile, and the biome-stratified rates in Table IV rest on 4--5 tiles each. A single p-value (0.4922, M2 vs M5) is reported to support a claim of no significant gain that is made across all learned-versus-classical comparisons. Please report the full set of tests with a multiple-comparison correction, state the flight time underlying the FA/min denominators, and consider bootstrap confidence intervals on alert recall so readers can see how wide they are.}
+Added. In Table~III and Section~V.B, we now report 95\% bootstrap confidence intervals ([76.9\%, 100.0\%] vs.\ [61.5\%, 100.0\%]), explicitly note that the recall gap represents a single tile (12/13 vs.\ 11/13), and report independent parent-video recall (identical at 88.9\%, 8/9 parents across all classical filters). Section~V.C includes the full set of pairwise Wilcoxon signed-rank tests with Holm-Bonferroni corrections (all parent $p > 0.39$, all episode $p \ge 0.1709$). Total flight time ($T_{\text{flight}} = 3.868$\,min across 5,570 frames) and per-biome sample counts are now explicitly documented in Section~III.D, Section~V.D, and Table~IV.
+
+\rcomment{The 73$\times$--500$\times$ runtime gap is measured between filters costing 0.3\,$\mu$s and 151\,$\mu$s, against a frame budget of 41.7\,ms (Eq.~1) dominated by two YOLO11n forward passes that are never timed. Even the slowest filter consumes roughly 0.4\% of that budget, so the practical case against learned models is memory footprint and the need for training data rather than latency. Please report $T_{\text{detect}}$ and $T_{\text{fusion}}$ so Eq.~(1) can actually be checked, and adjust the framing accordingly.}
+Added. Component execution times are now reported in Section~I, Eq.~(1), and Section~V.C: $T_{\text{detect}} \approx 10.2$\,ms GPU ($40.0$\,ms CPU) and $T_{\text{fusion}} < 0.001$\,ms. We also reframed the discussion in Section~I and Section~V.C: since all filters consume $<0.4\%$ of the 41.7\,ms frame budget, the case against learned models on this edge task centers on memory footprint (512\,B state vs.\ 20\,B), training data overhead, and hyperparameter sensitivity rather than frame deadline violations.
+
+%% ------------------------------------------------------------------
+\reviewer{2}
+
+\rcomment{This paper presents a relevant and interesting study on improving UAV search-and-rescue alerts using causal temporal filtering. The comparison between simple filters and learned sequence models is clearly explained, and the results are useful for low-power edge systems. The paper would be stronger with testing on real RGB--thermal data and embedded UAV hardware, since the current experiments rely mainly on synthetic videos and pseudo-thermal images.}
+Thank you. We have explicitly stated the operational scope and constraints in Section~V.F (Limitations) regarding synthetic video and desktop GPU benchmarking. We also outlined embedded flight trials on an NVIDIA Jetson Orin Nano under real aerodynamic turbulence as immediate future work in the Abstract, Section~V.F, and Section~VI.
+
+\rcomment{The relatively small test set should also be considered when interpreting the results.}
+Agreed. We contextualized the test set size in Section~V.B, V.D, and V.F by reporting bootstrap confidence intervals, noting single-tile sensitivity, and emphasizing that parent-video alert recall is identical across classical methods.
+
+\rcomment{Some additional details about the generated data and detector setup would improve reproducibility. Overall, this is a clear and promising contribution with practical value.}
+Added. Section~IV, Table~I, and Section~III.C now provide the generative video models (Gemini 3.8 Flash, Grok), prompt parameters (30--50\,m AGL, 30--45$^\circ$ camera depression), exact parent/tile counts (45 parent videos, 90 tiles), detector training settings (SGD cosine decay, 60 epochs), sequence model hyperparameters, and public repository link (\url{https://github.com/IamOumarIbrahim/multi-modal-detection}).
+
+%% ------------------------------------------------------------------
+\reviewer{3}
+
+\rcomment{The pseudo-TIR stream is produced deterministically from RGB luminance and therefore contains no independent thermal or spectral information. The manuscript should either reframe the experiment as fusion of two correlated RGB-derived representations or validate the proposed approach using genuine paired RGB-thermal data. Claims concerning thermal crossover, temperature contrast, and complementary sensor failures should be removed unless supported by real thermal measurements.}
+Fully addressed. As noted in our response to Comment~1.1, all thermal/spectral crossover claims have been removed, and the study is strictly reframed as late fusion of two correlated representations derived from identical pixels via a 256-level LUT.
+
+\rcomment{The authors should also strengthen reproducibility by specifying the exact video-generation models, prompts, seeds, number of parent videos, clip-selection criteria, detector settings, confidence-stream construction, and complete Mamba/GRU training configurations.}
+Fully addressed. All generation parameters, detector training settings, sequence model architectures, and confidence stream definitions are detailed in Section~III.B, Section~III.C, Section~IV, and Table~I (see response to Comment~2.3).
+
+\rcomment{Evaluation on real UAV data and embedded hardware is strongly recommended, as the current conclusions are based on a small synthetic test set containing only 13 positive tiles.}
+Acknowledged and addressed. We contextualized the small test set with bootstrap intervals and parent-level recall, added a dedicated Limitations subsection (Section~V.F), and outlined embedded Jetson Orin Nano flight experiments as future work (see responses to Comments~1.2 and 2.1).
+
+\rcomment{Finally, the statistical methodology and timing definitions require reconciliation (e.g., filter buffer span vs. total integration duration vs. alert latency).}
+Reconciled. Section~III.C, Section~III.D, and Fig.~1 now explicitly distinguish the filter buffer span ($T_{\text{span}} = (W-1)T_s = 166.7$\,ms for $W=5$) from total integration duration ($W T_s = 208.3$\,ms) and operational alert latency (188.9--592.3\,ms), which includes detector confidence ramp-up. We also added an ethical statement footnote for the synthetic video corpus.
+
+% ===== END RESPONSE TO REVIEWERS =====
+
+\end{document}

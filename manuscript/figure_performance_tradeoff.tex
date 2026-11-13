@@ -1,0 +1,120 @@
+\begin{tikzpicture}
+\begin{axis}[
+  width=9.2cm,
+  height=6.0cm,
+  view={58}{22},
+  xmin=0, xmax=10.5,
+  ymin=82, ymax=96,
+  zmode=log,
+  zmin=0.01, zmax=550,
+  zminorticks=false,
+  xtick={0, 2, 4, 6, 8, 10},
+  ytick={84, 88, 92, 96},
+  ztick={0.01, 0.1, 1, 10, 100},
+  zticklabels={$0.01$, $0.1$, $1$, $10$, $100$},
+  xlabel={\textbf{False Alerts / min}},
+  ylabel={\textbf{Alert Recall (\%)}},
+zlabel={\textbf{Runtime ($\mu\text{s}$, log)}},
+  xlabel style={font=\scriptsize, yshift=-10pt},
+  ylabel style={font=\scriptsize, yshift=-14pt},
+  zlabel style={font=\scriptsize, xshift=-34pt},
+  tick label style={font=\tiny},
+  axis line style={semithick, black!65},
+  grid=major,
+  grid style={line width=0.35pt, draw=black!18, dashed},
+  clip=false
+]
+
+  % 1. Directional Improvement Arrows
+  \draw[-{Stealth[length=4.5pt, width=3.5pt]}, semithick, black!55] 
+    (axis cs:8.5, 78.0, 0.01) -- (axis cs:1.5, 78.0, 0.01)
+    node[pos=0.5, sloped, below=1.5pt, font=\tiny\bfseries, text=black!60] {Better ($\leftarrow$)};
+
+  \draw[-{Stealth[length=4.5pt, width=3.5pt]}, semithick, black!55, yshift=-4pt] 
+    (axis cs:12.5, 84.5, 0.01) -- (axis cs:12.5, 94.5, 0.01)
+    node[pos=0.5, sloped, below=1.5pt, font=\tiny\bfseries, text=black!60] {Better ($\rightarrow$)};
+
+  \draw[{Stealth[length=4.5pt, width=3.5pt]}-, semithick, black!55] 
+    (axis cs:0, 78.5, 0.03) -- (axis cs:0, 78.5, 80.0)
+    node[pos=0.5, sloped, above=2pt, font=\tiny\bfseries, text=black!60, fill=white, inner sep=1pt] {Better ($\downarrow$)};
+
+  % 2. Depth Drop Lines
+  \draw[dashed, black!55,     line width=1.1pt] (axis cs:9.0, 92.3, 0.01) -- (axis cs:9.0, 92.3, 0.02);
+  \draw[dashed, teal!85!black, line width=1.1pt] (axis cs:2.1, 84.6, 0.01) -- (axis cs:2.1, 84.6, 0.30);
+  \draw[dashed, teal!85!black, line width=1.1pt] (axis cs:3.6, 92.3, 0.01) -- (axis cs:3.6, 92.3, 0.52);
+  \draw[dashed, red!75!black,  line width=1.1pt] (axis cs:3.7, 86.2, 0.01) -- (axis cs:3.7, 86.2, 21.8);
+  \draw[dashed, red!75!black,  line width=1.1pt] (axis cs:1.7, 87.7, 0.01) -- (axis cs:1.7, 87.7, 150.6);
+
+  % 3. Sub-Microsecond Pareto Frontier
+  \addplot3[
+    color=teal!85!black,
+    line width=1.4pt,
+    dashed
+  ] coordinates {
+    (2.1, 84.6, 0.30)
+    (3.6, 92.3, 0.52)
+  };
+
+  \node[font=\tiny\bfseries, text=teal!85!black, fill=white, inner sep=1.5pt, sloped, above] 
+    at (axis cs:2.75, 87.8, 0.38) {Pareto Frontier};
+
+  % 4. Method Markers & Annotations
+  \addplot3[
+    only marks,
+    mark=square*,
+    mark size=2.5pt,
+    draw=teal!90!black,
+    fill=teal!25,
+    line width=0.7pt
+  ] coordinates {
+    (2.1, 84.6, 0.30)
+    (3.6, 92.3, 0.52)
+  };
+
+  \node[
+    draw=orange!90!black,
+    line width=1.2pt,
+    circle,
+    inner sep=5.5pt
+  ] at (axis cs:3.6, 92.3, 0.52) {};
+
+  \node[font=\scriptsize, anchor=north west, fill=white, inner sep=1.2pt] 
+[xshift=6pt, yshift=15pt] at (axis cs:2.1, 84.6, 0.035) {\textbf{M2}: Moving Avg ($0.30\,\mu\text{s}$) \textbf{\textcolor{teal!85!black}{[Fewest FA]}}};
+
+  \node[font=\scriptsize, anchor=west, fill=white, fill opacity=0.9, text opacity=1, inner sep=1.5pt] 
+at (axis cs:3.95, 92.3, 0.42) {\textbf{M3/M4}: Median / Cons. ($0.5\,\mu\text{s}$) \textbf{\textcolor{orange!90!black}{[Recall-Preserving]}}};
+
+  \addplot3[
+    only marks,
+    mark=*,
+    mark size=2.5pt,
+    draw=red!75!black,
+    fill=red!20,
+    line width=0.7pt
+  ] coordinates {
+    (1.7, 87.7, 150.6)
+    (3.7, 86.2, 21.8)
+  };
+
+  \node[font=\scriptsize, anchor=south, fill=white, inner sep=1.2pt] 
+    at (axis cs:1.7, 87.7, 185.0) {\textbf{M5}: Mamba ($151\,\mu\text{s}$)};
+
+  \node[font=\scriptsize, anchor=south west, fill=white, fill opacity=0.9, text opacity=1, inner sep=1.4pt] 
+    at (axis cs:3.9, 86.2, 26.0) {\textbf{M6}: GRU ($22\,\mu\text{s}$)};
+
+  \addplot3[
+    only marks,
+    mark=triangle*,
+    mark size=2.7pt,
+    draw=black!65,
+    fill=black!20,
+    line width=0.7pt
+  ] coordinates {
+    (9.0, 92.3, 0.02)
+  };
+
+  \node[font=\scriptsize, anchor=south, fill=white, inner sep=1.2pt] 
+    at (axis cs:9.0, 92.3, 0.035) {\textbf{M1}: Raw ($0.02\,\mu\text{s}$)};
+
+\end{axis}
+\end{tikzpicture}

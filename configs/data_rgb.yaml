@@ -1,4 +1,6 @@
-path: C:/Dev/repos/Public repos/research/multi-modal-detection
+# dataset for the rgb detector; written by scripts/split_dataset_episodes.py
+# path is replaced with the absolute repo root by scripts/train_full_detectors.py
+path: .
 train: data/splits/train_rgb.txt
 val: data/splits/val_rgb.txt
 test: data/splits/test_rgb.txt

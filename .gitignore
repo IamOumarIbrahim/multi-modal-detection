@@ -1,20 +1,53 @@
+# local assistant notes
 AGENT.md
-docs/manuscript/official_template/
-prompt.md
 AGENT/
+prompt.md
+* - Copy*
+
+# raw and generated data stay local (see data/README.md)
+videos/
 data/raw/**/*.mp4
 data/raw/**/*.mov
 data/processed/**
 !data/processed/.gitkeep
 data/*.zip
+data/wisard_test/
+
+# keep only the cleaned Label Studio export, it is the source of every label
+data/annotations/raw_exports/*
+!data/annotations/raw_exports/project_2_rgb_annotations_adjusted.json
+
+# weights stay local; the detector confidences are kept so every table can be re-run
 *.pt
-data/annotations/**
+runs/detect/*_cache.json
+!runs/detect/unified_confidences_cache.json
+runs/detect/_resolved_data_*.yaml
+runs/detect/yolo11n_*/
+runs/smoke_test/
+
+# LaTeX build output (main.pdf and main.bbl are kept)
+manuscript/**/*.aux
+manuscript/**/*.log
+manuscript/**/*.blg
+manuscript/**/*.out
+manuscript/**/*.fls
+manuscript/**/*.fdb_latexmk
+manuscript/**/*.synctex.gz
+figures/_tikz/build/
+
+# media renders (intermediate files)
+media/
+figures/_blender/*.blend1
+
+scratch/
+tmp/
 .venv/
+.pytest_cache/
 __pycache__/
 *.egg-info/
-videos/
-scratch/
-data/wisard_test/
-*.synctex.gz
-runs/detect/*_cache.json
-* - Copy*
+
+# Exclude huge files
+processed.zip
+*.zip
+Present/*.pptx
+*.pptx

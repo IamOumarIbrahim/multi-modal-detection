@@ -1,95 +1,57 @@
-﻿"""Dataset episode splitting and sequence shuffling pipeline (Option B).
+﻿#   MMSAR - step 4: train / val / test split (Option B, grouped by parent video)
+#        Oumar Ibrahim U22200741
 
-Implements canonical parent-video grouped partitioning, 240-frame sequence bundling,
-and seeded snippet shuffling with anti-adjacency guards across Desert, Forest, and Snow.
-Guarantees 100% cross-modal parity between RGB and Thermal modalities.
-"""
-
-from __future__ import annotations
+# the left and right tile of one source video always land in the same split
+# rgb and thermal tiles of the same video also stay together (canonical parent)
+# positives are spread by difficulty (target presence rate), negatives 60/20/20 with seed 0
+# output  data/splits/dataset_episodes_split.json
+#         data/splits/{train,val,test}_{rgb,thermal}.txt   (frame lists for YOLO)
+#         configs/data_rgb.yaml, configs/data_thermal.yaml
 
 import json
 import random
 import re
-from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any
 
 import cv2
 import yaml
 
 
-@dataclass
-class EpisodeMetadata:
-    """Metadata for an atomic video episode snippet."""
-
-    episode_id: str
-    parent_video_id: str
-    canonical_parent_id: str
-    tile_position: str  # 'left' or 'right'
-    biome: str  # 'desert', 'forest', or 'snow'
-    scenario: str  # 'positive', 'negative'
-    modality: str  # 'rgb' or 'thermal'
-    frame_count: int
-    start_frame: int
-    end_frame: int
-    fps: int
-    video_path: str
-
-
-def shuffle_with_anti_adjacency(
-    episodes: list[EpisodeMetadata],
-    seed: int = 0,
-    min_distance: int = 2,
-    max_attempts: int = 1000,
-) -> list[EpisodeMetadata]:
-    """Shuffle episodes using seed 0 while enforcing an anti-adjacency constraint.
-
-    Guarantees that left and right snippets derived from the same parent video
-    are separated by at least min_distance slots in the queue.
-    """
+# shuffle until sibling tiles are at least min_distance apart in the feed order
+def shuffle_with_anti_adjacency(episodes, seed=0, min_distance=2, max_attempts=1000):
     rng = random.Random(seed)
-    n = len(episodes)
-    if n <= 2:
-        shuffled = list(episodes)
-        rng.shuffle(shuffled)
-        return shuffled
+    if len(episodes) <= 2:
+        out = list(episodes)
+        rng.shuffle(out)
+        return out
 
-    for _ in range(max_attempts):
-        candidate = list(episodes)
-        rng.shuffle(candidate)
+    for attempt in range(max_attempts):
+        cand = list(episodes)
+        rng.shuffle(cand)
 
-        valid = True
-        positions: dict[str, list[int]] = {}
-        for idx, ep in enumerate(candidate):
-            positions.setdefault(ep.canonical_parent_id, []).append(idx)
+        positions = {}
+        for idx in range(len(cand)):
+            positions.setdefault(cand[idx]["canonical_parent_id"], []).append(idx)
 
-        for parent_id, idxs in positions.items():
-            if len(idxs) > 1:
-                for i in range(len(idxs) - 1):
-                    dist = abs(idxs[i + 1] - idxs[i])
-                    if dist < min_distance:
-                        valid = False
-                        break
-            if not valid:
+        ok = True
+        for parent in positions:
+            idxs = positions[parent]
+            for i in range(len(idxs) - 1):
+                if abs(idxs[i + 1] - idxs[i]) < min_distance:
+                    ok = False
+                    break
+            if not ok:
                 break
+        if ok:
+            return cand
 
-        if valid:
-            return candidate
-
-    fallback = list(episodes)
-    rng.shuffle(fallback)
-    return fallback
+    out = list(episodes)
+    rng.shuffle(out)
+    return out
 
 
-def compute_episode_metrics(
-    labels_root: Path,
-    biome: str,
-    scenario: str,
-    modality: str,
-    episode_id: str,
-    frame_count: int = 240,
-) -> dict[str, Any]:
-    """Compute target presence rate and scale metrics for an episode from label files."""
+# target presence and box size from the label files of one clip
+def compute_episode_metrics(labels_root, biome, scenario, modality, episode_id, frame_count=240):
     if scenario != "positive":
         return {
             "target_presence_rate": 0.0,
@@ -106,416 +68,334 @@ def compute_episode_metrics(
         labels_root / biome / "positive" / modality,
         labels_root / episode_id,
     ]
-
-    label_files: list[Path] = []
+    files = []
     for d in search_dirs:
         if d.is_dir():
-            files = sorted(d.glob(f"{episode_id}_frame_*.txt"))
-            if not files:
-                files = sorted(d.glob("frame_*.txt"))
-            if files:
-                label_files = files
+            found = sorted(d.glob(f"{episode_id}_frame_*.txt"))
+            if len(found) == 0:
+                found = sorted(d.glob("frame_*.txt"))
+            if len(found) > 0:
+                files = found
                 break
+    if len(files) == 0:
+        files = sorted(labels_root.glob(f"**/{episode_id}_frame_*.txt"))
 
-    if not label_files:
-        label_files = sorted(labels_root.glob(f"**/{episode_id}_frame_*.txt"))
-
-    target_frame_count = 0
-    box_areas: list[float] = []
-    box_widths: list[float] = []
-    box_heights: list[float] = []
-
-    for f in label_files:
+    hits = 0
+    areas = []
+    widths = []
+    heights = []
+    for f in files:
         if f.stat().st_size > 0:
-            target_frame_count += 1
-            try:
-                lines = f.read_text(encoding="utf-8").strip().splitlines()
-                for line in lines:
-                    parts = line.strip().split()
-                    if len(parts) >= 5:
-                        w = float(parts[3]) * 640.0
-                        h = float(parts[4]) * 640.0
-                        box_widths.append(w)
-                        box_heights.append(h)
-                        box_areas.append(w * h)
-            except Exception:
-                pass
+            hits += 1
+            for line in f.read_text(encoding="utf-8").strip().splitlines():
+                parts = line.strip().split()
+                if len(parts) >= 5:
+                    w = float(parts[3]) * 640.0
+                    h = float(parts[4]) * 640.0
+                    widths.append(w)
+                    heights.append(h)
+                    areas.append(w * h)
 
-    effective_frames = max(1, frame_count if frame_count > 0 else len(label_files))
-    presence_rate = target_frame_count / effective_frames
-    mean_area = float(sum(box_areas) / len(box_areas)) if box_areas else 0.0
-    mean_w = float(sum(box_widths) / len(box_widths)) if box_widths else 0.0
-    mean_h = float(sum(box_heights) / len(box_heights)) if box_heights else 0.0
-    coverage_pct = (mean_area / (640.0 * 640.0)) * 100.0
+    n = frame_count
+    if n <= 0:
+        n = len(files)
+    if n < 1:
+        n = 1
+    presence = hits / n
 
-    if presence_rate < 0.70 or (mean_area > 0 and mean_area < 5000):
+    mean_area = 0.0
+    mean_w = 0.0
+    mean_h = 0.0
+    if len(areas) > 0:
+        mean_area = float(sum(areas) / len(areas))
+        mean_w = float(sum(widths) / len(widths))
+        mean_h = float(sum(heights) / len(heights))
+
+    flag = "open_high_contrast"
+    if presence < 0.70 or (mean_area > 0 and mean_area < 5000):
         flag = "occluded_low_contrast"
-    else:
-        flag = "open_high_contrast"
 
     return {
-        "target_presence_rate": round(presence_rate, 4),
-        "target_frame_count": target_frame_count,
+        "target_presence_rate": round(presence, 4),
+        "target_frame_count": hits,
         "mean_bbox_area_px": round(mean_area, 1),
         "mean_bbox_width_px": round(mean_w, 1),
         "mean_bbox_height_px": round(mean_h, 1),
-        "frame_coverage_pct": round(coverage_pct, 4),
+        "frame_coverage_pct": round((mean_area / (640.0 * 640.0)) * 100.0, 4),
         "difficulty_flag": flag,
     }
 
 
-def derive_positive_split_floor(total_positive_parents: int, val_ratio: float = 0.20) -> int:
-    """Derive minimum positive parent count per split dynamically from pool size."""
+# at least one positive parent in val and in test, more when the pool is bigger
+def derive_positive_split_floor(total_positive_parents, val_ratio=0.20):
     return max(1, int(total_positive_parents * val_ratio))
 
 
-def allocate_positive_parents_dynamically(
-    positive_parent_difficulties: dict[str, float],
-    val_ratio: float = 0.20,
-    test_ratio: float = 0.20,
-) -> dict[str, str]:
-    """Allocate positive parents across splits ensuring dynamic floors and difficulty balancing."""
-    n_parents = len(positive_parent_difficulties)
-    if n_parents == 0:
+# easiest parents first, handed out val, test, val, test ... the rest goes to train
+def allocate_positive_parents_dynamically(positive_parent_difficulties, val_ratio=0.20, test_ratio=0.20):
+    n = len(positive_parent_difficulties)
+    if n == 0:
         return {}
 
-    floor = derive_positive_split_floor(n_parents, val_ratio)
-    sorted_parents = sorted(
-        positive_parent_difficulties.items(),
-        key=lambda kv: kv[1],
-        reverse=True,
-    )
-    parent_ids = [p[0] for p in sorted_parents]
+    floor = derive_positive_split_floor(n, val_ratio)
+    ranked = sorted(positive_parent_difficulties.items(), key=presence_of, reverse=True)
+    pool = []
+    for p in ranked:
+        pool.append(p[0])
 
     val_target = floor
     test_target = floor
-    remaining = n_parents - (val_target + test_target)
-
-    if remaining >= 2:
+    left = n - (val_target + test_target)
+    if left >= 2:
         test_target += 1
-        remaining -= 1
-    if remaining >= 3:
+        left -= 1
+    if left >= 3:
         val_target += 1
-        remaining -= 1
+        left -= 1
 
-    remaining_pool = list(parent_ids)
-    eval_allocated: dict[str, list[str]] = {"val": [], "test": []}
-
+    val = []
+    test = []
     toggle = 0
-    while (len(eval_allocated["val"]) < val_target or len(eval_allocated["test"]) < test_target) and remaining_pool:
-        if len(eval_allocated["val"]) < val_target and toggle == 0:
-            eval_allocated["val"].append(remaining_pool.pop(0))
-        elif len(eval_allocated["test"]) < test_target and toggle == 1:
-            eval_allocated["test"].append(remaining_pool.pop(0))
-        elif len(eval_allocated["test"]) < test_target:
-            eval_allocated["test"].append(remaining_pool.pop(0))
-        elif len(eval_allocated["val"]) < val_target:
-            eval_allocated["val"].append(remaining_pool.pop(0))
+    while (len(val) < val_target or len(test) < test_target) and len(pool) > 0:
+        if len(val) < val_target and toggle == 0:
+            val.append(pool.pop(0))
+        elif len(test) < test_target and toggle == 1:
+            test.append(pool.pop(0))
+        elif len(test) < test_target:
+            test.append(pool.pop(0))
+        elif len(val) < val_target:
+            val.append(pool.pop(0))
         toggle = 1 - toggle
 
-    train_allocated = list(remaining_pool)
-
-    assignment: dict[str, str] = {}
-    for p in eval_allocated["val"]:
+    assignment = {}
+    for p in val:
         assignment[p] = "val"
-    for p in eval_allocated["test"]:
+    for p in test:
         assignment[p] = "test"
-    for p in train_allocated:
+    for p in pool:
         assignment[p] = "train"
-
     return assignment
 
 
-def allocate_negative_parents_dynamically(
-    negative_parents: list[str],
-    train_ratio: float = 0.60,
-    val_ratio: float = 0.20,
-    seed: int = 0,
-) -> dict[str, str]:
-    """Allocate negative parents matching 60/20/20 ratio under Option B grouping."""
-    rng = random.Random(seed)
-    shuffled = sorted(negative_parents)
-    rng.shuffle(shuffled)
+def presence_of(item):
+    return item[1]
 
-    n = len(shuffled)
+
+def allocate_negative_parents_dynamically(negative_parents, train_ratio=0.60, val_ratio=0.20, seed=0):
+    rng = random.Random(seed)
+    parents = sorted(negative_parents)
+    rng.shuffle(parents)
+
+    n = len(parents)
     n_train = max(1, int(round(n * train_ratio)))
-    n_val = max(1, int(round(n * val_ratio))) if n >= 3 else 0
+    n_val = 0
+    if n >= 3:
+        n_val = max(1, int(round(n * val_ratio)))
     n_test = n - n_train - n_val
     if n_test <= 0 and n >= 2:
         n_test = 1
         if n_train > 1:
             n_train -= 1
 
-    assignment: dict[str, str] = {}
-    for p in shuffled[:n_train]:
+    assignment = {}
+    for p in parents[:n_train]:
         assignment[p] = "train"
-    for p in shuffled[n_train : n_train + n_val]:
+    for p in parents[n_train : n_train + n_val]:
         assignment[p] = "val"
-    for p in shuffled[n_train + n_val :]:
+    for p in parents[n_train + n_val :]:
         assignment[p] = "test"
     return assignment
 
 
 def split_episodes(
-    raw_root: Path = Path("data/raw"),
-    labels_root: Path = Path("data/processed/labels"),
-    splits_out_dir: Path = Path("data/splits"),
-    train_ratio: float = 0.60,
-    val_ratio: float = 0.20,
-    test_ratio: float = 0.20,
-    seed: int = 0,
-) -> dict[str, Any]:
-    """Partition the dataset dynamically using Option B parent-video grouped episodic splitting."""
+    raw_root=Path("data/raw"),
+    labels_root=Path("data/processed/labels"),
+    splits_out_dir=Path("data/splits"),
+    train_ratio=0.60,
+    val_ratio=0.20,
+    test_ratio=0.20,
+    seed=0,
+):
     splits_out_dir.mkdir(parents=True, exist_ok=True)
 
-    all_videos = sorted(raw_root.glob("*/*/*/*.mp4"))
-    episodes_by_canonical_parent: dict[str, list[EpisodeMetadata]] = {}
-    episode_metrics_map: dict[str, dict[str, Any]] = {}
-
-    for vid_path in all_videos:
-        stem = vid_path.stem
+    by_parent = {}
+    ep_metrics = {}
+    for vid in sorted(raw_root.glob("*/*/*/*.mp4")):
+        stem = vid.stem
         if stem.endswith("_left"):
-            parent_id = stem[:-5]
-            tile_pos = "left"
+            parent = stem[:-5]
+            tile = "left"
         elif stem.endswith("_right"):
-            parent_id = stem[:-6]
-            tile_pos = "right"
+            parent = stem[:-6]
+            tile = "right"
         else:
             continue
 
-        scenario = vid_path.parent.parent.name
-        modality = vid_path.parent.name
-        biome = vid_path.parent.parent.parent.name
-        canonical_parent_id = re.sub(r"_(RGB|Thermal)_", "_", parent_id)
+        modality = vid.parent.name
+        scenario = vid.parent.parent.name
+        biome = vid.parent.parent.parent.name
+        # desert_RGB_positive_1 and desert_Thermal_positive_1 -> desert_positive_1
+        canonical = re.sub(r"_(RGB|Thermal)_", "_", parent)
 
-        cap = cv2.VideoCapture(str(vid_path))
-        f_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        cap = cv2.VideoCapture(str(vid))
+        n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         cap.release()
-        if f_count <= 0:
-            f_count = 240
+        if n_frames <= 0:
+            n_frames = 240
 
-        ep_id = f"{parent_id}_{tile_pos}"
-        ep = EpisodeMetadata(
-            episode_id=ep_id,
-            parent_video_id=parent_id,
-            canonical_parent_id=canonical_parent_id,
-            tile_position=tile_pos,
-            biome=biome,
-            scenario=scenario,
-            modality=modality,
-            frame_count=f_count,
-            start_frame=0,
-            end_frame=f_count - 1,
-            fps=24,
-            video_path=str(vid_path.as_posix()),
-        )
-        episodes_by_canonical_parent.setdefault(canonical_parent_id, []).append(ep)
+        ep_id = f"{parent}_{tile}"
+        ep = {
+            "episode_id": ep_id,
+            "parent_video_id": parent,
+            "canonical_parent_id": canonical,
+            "tile_position": tile,
+            "biome": biome,
+            "scenario": scenario,
+            "modality": modality,
+            "frame_count": n_frames,
+            "start_frame": 0,
+            "end_frame": n_frames - 1,
+            "fps": 24,
+            "video_path": str(vid.as_posix()),
+        }
+        by_parent.setdefault(canonical, []).append(ep)
+        ep_metrics[ep_id] = compute_episode_metrics(labels_root, biome, scenario, modality, ep_id, n_frames)
 
-        metrics = compute_episode_metrics(
-            labels_root=labels_root,
-            biome=biome,
-            scenario=scenario,
-            modality=modality,
-            episode_id=ep_id,
-            frame_count=f_count,
-        )
-        episode_metrics_map[ep_id] = metrics
-
-    # Segregate canonical parents by biome and scenario
-    biome_positive_parents: dict[str, dict[str, float]] = {}
-    biome_negative_parents: dict[str, list[str]] = {}
-
-    for c_id, ep_list in sorted(episodes_by_canonical_parent.items()):
-        sample_ep = ep_list[0]
-        biome = sample_ep.biome
-        scenario = sample_ep.scenario
-
-        if scenario == "positive":
-            presence_rates = [
-                episode_metrics_map[e.episode_id]["target_presence_rate"]
-                for e in ep_list
-                if e.modality == "rgb"
-            ]
-            avg_presence = sum(presence_rates) / max(1, len(presence_rates))
-            biome_positive_parents.setdefault(biome, {})[c_id] = avg_presence
+    # positive parents are ranked by the mean rgb presence rate of their tiles
+    pos_parents = {}
+    neg_parents = {}
+    for canonical in sorted(by_parent):
+        eps = by_parent[canonical]
+        biome = eps[0]["biome"]
+        if eps[0]["scenario"] == "positive":
+            rates = []
+            for e in eps:
+                if e["modality"] == "rgb":
+                    rates.append(ep_metrics[e["episode_id"]]["target_presence_rate"])
+            pos_parents.setdefault(biome, {})[canonical] = sum(rates) / max(1, len(rates))
         else:
-            biome_negative_parents.setdefault(biome, []).append(c_id)
+            neg_parents.setdefault(biome, []).append(canonical)
 
-    canonical_partition_assignment: dict[str, str] = {}
-    dynamic_floors: dict[str, int] = {}
+    assignment = {}
+    floors = {}
+    for biome in pos_parents:
+        floors[biome] = derive_positive_split_floor(len(pos_parents[biome]), val_ratio)
+        assignment.update(allocate_positive_parents_dynamically(pos_parents[biome], val_ratio, test_ratio))
+    for biome in neg_parents:
+        assignment.update(allocate_negative_parents_dynamically(neg_parents[biome], train_ratio, val_ratio, seed))
 
-    for biome, pos_dict in biome_positive_parents.items():
-        dynamic_floors[biome] = derive_positive_split_floor(len(pos_dict), val_ratio)
-        pos_assign = allocate_positive_parents_dynamically(
-            positive_parent_difficulties=pos_dict,
-            val_ratio=val_ratio,
-            test_ratio=test_ratio,
-        )
-        canonical_partition_assignment.update(pos_assign)
-
-    for biome, neg_list in biome_negative_parents.items():
-        neg_assign = allocate_negative_parents_dynamically(
-            negative_parents=neg_list,
-            train_ratio=train_ratio,
-            val_ratio=val_ratio,
-            seed=seed,
-        )
-        canonical_partition_assignment.update(neg_assign)
-
-    # Assign episodes to splits (grouping by modality)
-    partition_assigned_rgb: dict[str, list[EpisodeMetadata]] = {"train": [], "val": [], "test": []}
-    partition_assigned_thermal: dict[str, list[EpisodeMetadata]] = {"train": [], "val": [], "test": []}
-
-    for c_id, ep_list in sorted(episodes_by_canonical_parent.items()):
-        split_name = canonical_partition_assignment.get(c_id, "train")
-        for ep in ep_list:
-            if ep.modality == "rgb":
-                partition_assigned_rgb[split_name].append(ep)
+    rgb_split = {"train": [], "val": [], "test": []}
+    th_split = {"train": [], "val": [], "test": []}
+    for canonical in sorted(by_parent):
+        name = assignment.get(canonical, "train")
+        for ep in by_parent[canonical]:
+            if ep["modality"] == "rgb":
+                rgb_split[name].append(ep)
             else:
-                partition_assigned_thermal[split_name].append(ep)
+                th_split[name].append(ep)
 
-    # Anti-adjacency shuffling within each partition for RGB and Thermal
-    all_splits: dict[str, list[dict[str, Any]]] = {"train": [], "val": [], "test": []}
+    all_splits = {"train": [], "val": [], "test": []}
+    for name in ["train", "val", "test"]:
+        for group in [rgb_split[name], th_split[name]]:
+            ordered = shuffle_with_anti_adjacency(group, seed=seed, min_distance=2)
+            for i in range(len(ordered)):
+                ep = dict(ordered[i])
+                ep["feed_order_index"] = i
+                ep["metrics"] = ep_metrics.get(ep["episode_id"], {})
+                all_splits[name].append(ep)
 
-    for split_name in ["train", "val", "test"]:
-        rgb_eps = shuffle_with_anti_adjacency(partition_assigned_rgb[split_name], seed=seed, min_distance=2)
-        th_eps = shuffle_with_anti_adjacency(partition_assigned_thermal[split_name], seed=seed, min_distance=2)
-
-        for order_idx, ep in enumerate(rgb_eps):
-            ep_dict = asdict(ep)
-            ep_dict["feed_order_index"] = order_idx
-            ep_dict["metrics"] = episode_metrics_map.get(ep.episode_id, {})
-            all_splits[split_name].append(ep_dict)
-
-        for order_idx, ep in enumerate(th_eps):
-            ep_dict = asdict(ep)
-            ep_dict["feed_order_index"] = order_idx
-            ep_dict["metrics"] = episode_metrics_map.get(ep.episode_id, {})
-            all_splits[split_name].append(ep_dict)
-
-    # Difficulty balance summary
-    split_difficulty_summary: dict[str, Any] = {}
-    for s_name, eps in all_splits.items():
-        pos_eps = [e for e in eps if e.get("scenario") == "positive" and e.get("modality") == "rgb"]
-        if pos_eps:
-            rates = [e["metrics"]["target_presence_rate"] for e in pos_eps]
+    balance = {}
+    for name in all_splits:
+        eps = all_splits[name]
+        n_rgb = 0
+        rates = []
+        for e in eps:
+            if e["modality"] == "rgb":
+                n_rgb += 1
+                if e["scenario"] == "positive":
+                    rates.append(e["metrics"]["target_presence_rate"])
+        mean_rate = 0.0
+        if len(rates) > 0:
             mean_rate = sum(rates) / len(rates)
-        else:
-            mean_rate = 0.0
-        split_difficulty_summary[s_name] = {
-            "total_episodes_rgb": len([e for e in eps if e.get("modality") == "rgb"]),
-            "positive_episodes_rgb": len(pos_eps),
+        balance[name] = {
+            "total_episodes_rgb": n_rgb,
+            "positive_episodes_rgb": len(rates),
             "mean_target_presence_rate": round(mean_rate, 4),
         }
 
-    summary: dict[str, Any] = {
+    total = 0
+    for name in all_splits:
+        total += len(all_splits[name])
+
+    summary = {
         "strategy": "Option B: Parent-Video Grouped Episodic Partitioning",
         "split_ratios": {"train": train_ratio, "val": val_ratio, "test": test_ratio},
         "seed": seed,
         "anti_adjacency_min_distance": 2,
-        "dynamic_floors_per_biome": dynamic_floors,
-        "total_canonical_parent_videos": len(episodes_by_canonical_parent),
-        "total_episodes": sum(len(p) for p in all_splits.values()),
+        "dynamic_floors_per_biome": floors,
+        "total_canonical_parent_videos": len(by_parent),
+        "total_episodes": total,
         "partitions": {
             "train_count": len(all_splits["train"]),
             "val_count": len(all_splits["val"]),
             "test_count": len(all_splits["test"]),
         },
-        "split_difficulty_balance": split_difficulty_summary,
-        "canonical_parent_partition_assignment": canonical_partition_assignment,
+        "split_difficulty_balance": balance,
+        "canonical_parent_partition_assignment": assignment,
         "episodes": all_splits,
     }
 
     out_file = splits_out_dir / "dataset_episodes_split.json"
     out_file.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
-
-    manifest_file = splits_out_dir / "dataset_episodes_split_manifest.json"
-    manifest_file.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
-
-    # Generate YOLO frame lists and YAML configs
-    generate_yolo_split_manifests(all_splits, splits_out_dir)
-
+    write_yolo_lists(all_splits, splits_out_dir)
     return summary
 
 
-def generate_yolo_split_manifests(all_splits: dict[str, list[dict[str, Any]]], splits_out_dir: Path) -> None:
-    """Generate YOLO training file lists and data configs for RGB and Thermal."""
-    repo_root = Path(".").resolve()
-    images_base = Path("data/processed/images")
-
-    frame_counts = {"rgb": {"train": 0, "val": 0, "test": 0}, "thermal": {"train": 0, "val": 0, "test": 0}}
-    biome_counts = {
-        b: {"train": 0, "val": 0, "test": 0}
-        for b in ["desert", "forest", "snow"]
-    }
-
-    for split_name in ["train", "val", "test"]:
+# one repo-relative image path per line, in feed order, plus the two dataset yaml files
+# (relative paths keep the lists portable; scripts are always run from the repo root)
+def write_yolo_lists(all_splits, splits_out_dir):
+    images = Path("data/processed/images")
+    counts = {}
+    for name in ["train", "val", "test"]:
         for mod in ["rgb", "thermal"]:
-            eps = [e for e in all_splits[split_name] if e["modality"] == mod]
-            img_paths: list[str] = []
+            paths = []
+            for ep in all_splits[name]:
+                if ep["modality"] != mod:
+                    continue
+                folder = images / ep["biome"] / ep["scenario"] / mod
+                for f in sorted(folder.glob(f"{ep['episode_id']}_frame_*.png")):
+                    paths.append(f.as_posix())
+            out = splits_out_dir / f"{name}_{mod}.txt"
+            out.write_text("\n".join(paths) + "\n", encoding="utf-8")
+            counts[(name, mod)] = len(paths)
 
-            for ep in eps:
-                stem = ep["episode_id"]
-                biome = ep["biome"]
-                scen = ep["scenario"]
-                ep_im_dir = images_base / biome / scen / mod
-                frames = sorted(ep_im_dir.glob(f"{stem}_frame_*.png"))
-                for f in frames:
-                    img_paths.append(str(f.resolve().as_posix()))
-
-                frame_counts[mod][split_name] += len(frames)
-                if mod == "rgb":
-                    biome_counts[biome][split_name] += len(frames)
-
-            list_file = splits_out_dir / f"{split_name}_{mod}.txt"
-            list_file.write_text("\n".join(img_paths) + "\n", encoding="utf-8")
-            print(f"Generated {list_file.name}: {len(img_paths)} frames.")
-
-    configs_dir = Path("configs")
-    configs_dir.mkdir(parents=True, exist_ok=True)
-
+    Path("configs").mkdir(exist_ok=True)
+    # "path" is filled in with the absolute repo root by train_full_detectors.py at run time
     for mod in ["rgb", "thermal"]:
         cfg = {
-            "path": str(repo_root.as_posix()),
+            "path": ".",
             "train": f"data/splits/train_{mod}.txt",
             "val": f"data/splits/val_{mod}.txt",
             "test": f"data/splits/test_{mod}.txt",
             "names": {0: "Person_Detected"},
         }
-        cfg_file = configs_dir / f"data_{mod}.yaml"
-        with open(cfg_file, "w", encoding="utf-8") as fp:
-            yaml.safe_dump(cfg, fp, sort_keys=False)
-        print(f"Saved YOLO config: {cfg_file}")
+        with open(f"configs/data_{mod}.yaml", "w", encoding="utf-8") as f:
+            yaml.safe_dump(cfg, f, sort_keys=False)
 
-    print("\n" + "=" * 80)
-    print(" TABLE II FINAL FRAME COUNTS AUDIT (Option B: Desert + Forest + Snow)")
-    print("=" * 80)
-    print(f"{'Split':<8} {'RGB Frames':<14} {'Thermal Frames':<16} {'Desert (RGB)':<14} {'Forest (RGB)':<14} {'Snow (RGB)':<14}")
-    print("-" * 80)
-    for s in ["train", "val", "test"]:
-        r_f = frame_counts["rgb"][s]
-        t_f = frame_counts["thermal"][s]
-        des = biome_counts["desert"][s]
-        for_ = biome_counts["forest"][s]
-        snw = biome_counts["snow"][s]
-        print(f"{s:<8} {r_f:<14} {t_f:<16} {des:<14} {for_:<14} {snw:<14}")
-    print("-" * 80)
-    total_rgb = sum(frame_counts["rgb"].values())
-    total_th = sum(frame_counts["thermal"].values())
-    print(f"{'TOTAL':<8} {total_rgb:<14} {total_th:<16} {sum(biome_counts['desert'].values()):<14} {sum(biome_counts['forest'].values()):<14} {sum(biome_counts['snow'].values()):<14}")
-    print("=" * 80)
+    print("split    rgb frames   thermal frames")
+    for name in ["train", "val", "test"]:
+        print(f"{name:<8} {counts[(name, 'rgb')]:<12} {counts[(name, 'thermal')]}")
 
 
-def main() -> None:
-    print("=== MMSAR Option B: Canonical Parent-Grouped Dataset Episode Splitting ===")
+def main():
     summary = split_episodes()
-    print(f"\nStrategy:               {summary['strategy']}")
-    print(f"Total Canonical Parents:{summary['total_canonical_parent_videos']}")
-    print(f"Total Episodes:         {summary['total_episodes']} (90 RGB + 90 Thermal)")
-    print(f"Dynamic Floors (Biome): {summary['dynamic_floors_per_biome']}")
-    print(f"Train Episodes:         {summary['partitions']['train_count']}")
-    print(f"Val Episodes:           {summary['partitions']['val_count']}")
-    print(f"Test Episodes:          {summary['partitions']['test_count']}")
+    print()
+    print("----------------------")
+    print("Parent videos= ", summary["total_canonical_parent_videos"])
+    print("Train tiles= ", summary["partitions"]["train_count"])
+    print("Val tiles= ", summary["partitions"]["val_count"])
+    print("Test tiles= ", summary["partitions"]["test_count"])
+    print("----------------------")
 
 
 if __name__ == "__main__":

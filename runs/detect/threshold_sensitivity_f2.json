@@ -2,6 +2,7 @@
   "M1": {
     "precision": 0.757,
     "recall_frame": 0.824,
+    "f1_frame": 0.789,
     "tile_recall_pct": 100.0,
     "detected_pos": 13,
     "total_pos_tiles": 13,
@@ -13,6 +14,7 @@
   "M2": {
     "precision": 0.727,
     "recall_frame": 0.842,
+    "f1_frame": 0.781,
     "tile_recall_pct": 100.0,
     "detected_pos": 13,
     "total_pos_tiles": 13,
@@ -24,6 +26,7 @@
   "M3": {
     "precision": 0.801,
     "recall_frame": 0.825,
+    "f1_frame": 0.812,
     "tile_recall_pct": 100.0,
     "detected_pos": 13,
     "total_pos_tiles": 13,
@@ -35,6 +38,7 @@
   "M4": {
     "precision": 0.804,
     "recall_frame": 0.82,
+    "f1_frame": 0.812,
     "tile_recall_pct": 100.0,
     "detected_pos": 13,
     "total_pos_tiles": 13,

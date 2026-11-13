@@ -1,0 +1,62 @@
+\begin{tikzpicture}
+\begin{axis}[
+    name=plot_fa,
+    ybar,
+    bar width=6.5pt,
+    width=6.4cm,
+    height=3.8cm,
+    ymin=0, ymax=32,
+    ylabel={\textbf{False Alerts / min}},
+    symbolic x coords={M1, M2, M3, M4},
+    xtick=data,
+    xticklabels={\textbf{M1}, \textbf{M2}, \textbf{M3}, \textbf{M4}},
+    nodes near coords,
+    every node near coord/.append style={font=\tiny, /pgf/number format/fixed, /pgf/number format/precision=1},
+    tick label style={font=\scriptsize},
+    ylabel style={font=\scriptsize},
+    title={\textbf{(a) False Alerts / min ($\downarrow$)}},
+    title style={font=\scriptsize, yshift=-3pt},
+    grid=major,
+    grid style={line width=0.3pt, draw=black!15, dashed},
+    enlarge x limits=0.22,
+    legend to name=sharedlegend,
+    legend columns=2,
+    legend style={font=\scriptsize, /tikz/every even column/.append style={column sep=0.5cm}}
+]
+\addplot[fill=teal!35, draw=teal!85] coordinates {(M1, 9.0) (M2, 2.1) (M3, 3.6) (M4, 3.6)};
+\addplot[fill=orange!30, draw=orange!90, postaction={pattern=north east lines, pattern color=orange!90}] coordinates {(M1, 28.5) (M2, 3.4) (M3, 5.4) (M4, 5.1)};
+\legend{Baseline ($F_1$), Recall-Weighted ($F_2$)}
+\end{axis}
+
+\begin{axis}[
+    name=plot_f1,
+    at={(plot_fa.east)},
+    anchor=west,
+    xshift=1.1cm,
+    ybar,
+    bar width=6.5pt,
+    width=6.4cm,
+    height=3.8cm,
+    ymin=0.60, ymax=0.90,
+    ytick={0.60, 0.70, 0.80, 0.90},
+    ylabel={\textbf{Frame $F_1$-Score}},
+    symbolic x coords={M1, M2, M3, M4},
+    xtick=data,
+    xticklabels={\textbf{M1}, \textbf{M2}, \textbf{M3}, \textbf{M4}},
+    nodes near coords,
+    every node near coord/.append style={font=\tiny, /pgf/number format/fixed, /pgf/number format/precision=2},
+    tick label style={font=\scriptsize},
+    ylabel style={font=\scriptsize},
+    title={\textbf{(b) Frame $F_1$-Score ($\uparrow$)}},
+    title style={font=\scriptsize, yshift=-3pt},
+    grid=major,
+    grid style={line width=0.3pt, draw=black!15, dashed},
+    enlarge x limits=0.22
+]
+\addplot[fill=teal!35, draw=teal!85] coordinates {(M1, 0.81) (M2, 0.78) (M3, 0.81) (M4, 0.80)};
+\addplot[fill=orange!30, draw=orange!90, postaction={pattern=north east lines, pattern color=orange!90}] coordinates {(M1, 0.69) (M2, 0.76) (M3, 0.79) (M4, 0.79)};
+\end{axis}
+
+% Moved higher by increasing offset to 0.55cm
+\node[above=0.55cm of $(plot_fa.north)!0.5!(plot_f1.north)$] {\ref{sharedlegend}};
+\end{tikzpicture}

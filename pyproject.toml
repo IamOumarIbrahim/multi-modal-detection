@@ -4,26 +4,27 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mmsar"
-version = "0.1.0"
-description = "Multi-Modal Search-And-Rescue Detection Pipeline"
+version = "1.0.0"
+description = "Causal temporal filtering for reliable alerts in dual-stream UAV search and rescue detection"
 readme = "README.md"
+license = { text = "Apache-2.0" }
 requires-python = ">=3.11"
 dependencies = [
+    "numpy",
+    "scipy",
     "torch",
     "ultralytics",
     "opencv-python",
+    "imageio-ffmpeg",
     "pyyaml",
-    "typer",
-    "label-studio-sdk",
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest",
-]
-
-[project.scripts]
-mmsar = "mmsar.cli:app"
+dev = ["pytest"]
+figures = ["matplotlib>=3.8"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

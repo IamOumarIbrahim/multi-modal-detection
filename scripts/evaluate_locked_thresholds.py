@@ -1,160 +1,285 @@
-"""Compute verified metrics across all methods and biomes under locked thresholds."""
+#   MMSAR - paper Tables III and IV (fixed tau* per method)
+#        Oumar Ibrahim U22200741
+
+# the tau* values below are the ones reported in the paper, they are inputs here
+# (they are not re-derived, the val F1 sweep in evaluate_mmsar_unified.py gives others)
+# M5 / M6 are trained on the train split, 40 epochs, 5 seeds
+# frame F1 CI = bootstrap over test clips of the pooled frame F1 (B = 1000)
+# output  runs/detect/locked_benchmark_results.json
 
 import json
+import re
+from pathlib import Path
+
 import numpy as np
 from scipy import stats
-import random
 
-from mmsar.postprocessing.baseline import BaselinePostProcessor
-from mmsar.postprocessing.moving_average import MovingAveragePostProcessor
-from mmsar.postprocessing.median_filter import MedianFilterPostProcessor
-from mmsar.postprocessing.history_tracking import HistoryTrackingPostProcessor
-from mmsar.metrics.frame_metrics import calculate_frame_metrics
-from mmsar.metrics.alarm_metrics import count_alarm_false_triggers, calculate_time_to_alarm, _extract_events
+from mmsar.evaluation import (
+    bootstrap_ci,
+    load_cache,
+    minutes,
+    pooled_f1_ci,
+    score_decisions,
+    target_alerted,
+)
+from mmsar.filters import BaselineFilter, HistoryConsensusFilter, MedianFilter, MovingAverageFilter
+from mmsar.metrics import count_false_alerts
+from mmsar.sequence_models import SequenceFilter
 
-def compute_bootstrap_ci(data: list[float], b_iterations: int = 1000, alpha: float = 0.05, seed: int = 42):
-    rng = random.Random(seed)
-    n = len(data)
-    boot_means = []
-    for _ in range(b_iterations):
-        sample = [data[rng.randint(0, n - 1)] for _ in range(n)]
-        boot_means.append(sum(sample) / n)
-    boot_means.sort()
-    lower = boot_means[int((alpha / 2.0) * b_iterations)]
-    upper = boot_means[int((1.0 - alpha / 2.0) * b_iterations)]
-    return round(float(np.mean(data)), 4), round(lower, 4), round(upper, 4)
+SEEDS = [42, 101, 2024, 777, 999]
+BIOMES = ["desert", "forest", "snow"]
 
-def main():
-    with open("runs/detect/unified_confidences_cache.json") as f:
-        d = json.load(f)
+METHODS = {
+    "M1": ("Baseline Raw Thresholding", BaselineFilter(), 0.43, "0.02 $\\mu$s", "0 B ($O(1)$)"),
+    "M2": ("Five-Frame Moving Average", MovingAverageFilter(5), 0.57, "0.30 $\\mu$s", "20 B ($O(1)$)"),
+    "M3": ("Five-Frame Median Filter", MedianFilter(5), 0.49, "0.42 $\\mu$s", "20 B ($O(W)$)"),
+    "M4": ("Five-Frame History Consensus", HistoryConsensusFilter(5, hits=3), 0.49, "0.63 $\\mu$s", "5 B ($O(W)$)"),
+}
+LEARNED = {
+    "M5": ("Learned Mamba-SSSM", "mamba", 0.73, "150.59 $\\mu$s", "512 B"),
+    "M6": ("Learned GRU Baseline", "gru", 0.50, "21.80 $\\mu$s", "64 B"),
+}
 
-    test_fused = d["test_fused_seqs"]
-    test_gt = d["test_gt_seqs"]
-    test_biomes = d["test_biomes"]
 
-    total_frames = sum(len(s) for s in test_fused)
-    total_minutes = total_frames / (24 * 60)
-    pos_idxs = [i for i, g in enumerate(test_gt) if sum(g) > 0]
-    total_pos_tiles = len(pos_idxs)
+# clip ids in the same order as the cache (first time each clip shows up in the list)
+def test_parents():
+    ids = []
+    for line in Path("data/splits/test_rgb.txt").read_text(encoding="utf-8").splitlines():
+        m = re.search(r"/([^/]+)_frame_\d+\.png", line.strip())
+        if m and m.group(1) not in ids:
+            ids.append(m.group(1))
+    parents = []
+    for e in ids:
+        parents.append(re.sub(r"_(left|right)$", "", e))
+    return parents
 
-    biomes = ["desert", "forest", "snow"]
-    biome_names = {"desert": "Arid Desert", "forest": "Temperate Forest", "snow": "Snow/Alpine"}
 
-    methods = {
-        "M1": ("Baseline Raw Thresholding", BaselinePostProcessor(), 0.43, "0.02 $\\mu$s", "0 B ($O(1)$)"),
-        "M2": ("Five-Frame Moving Average", MovingAveragePostProcessor(5), 0.57, "0.30 $\\mu$s", "20 B ($O(1)$)"),
-        "M3": ("Five-Frame Median Filter", MedianFilterPostProcessor(5), 0.49, "0.42 $\\mu$s", "20 B ($O(W)$)"),
-        "M4": ("Five-Frame History Consensus", HistoryTrackingPostProcessor(5, required_hits=3), 0.49, "0.63 $\\mu$s", "5 B ($O(W)$)"),
+def fp_frames(pred, gt):
+    n = 0
+    for i in range(len(gt)):
+        if pred[i] == 1 and gt[i] == 0:
+            n += 1
+    return n
+
+
+# one method, one set of decisions -> one row of Table III plus its Table IV rows
+def table_row(decisions, test_gt, test_biomes, parents, test_min):
+    s = score_decisions(decisions, test_gt, test_biomes, BIOMES)
+    pos = s["pos_idx"]
+
+    hits = []
+    for i in pos:
+        if target_alerted(decisions[i], test_gt[i]):
+            hits.append(100.0)
+        else:
+            hits.append(0.0)
+    _, rec_low, rec_high = bootstrap_ci(hits)
+
+    # a parent video counts as found if either of its two tiles raised an alert
+    pos_parents = []
+    for i in pos:
+        if parents[i] not in pos_parents:
+            pos_parents.append(parents[i])
+    found = 0
+    for p in pos_parents:
+        for i in pos:
+            if parents[i] == p and target_alerted(decisions[i], test_gt[i]):
+                found += 1
+                break
+
+    f1_low, f1_high = pooled_f1_ci(decisions, test_gt)
+
+    per_biome = {}
+    for b in BIOMES:
+        rec = 0.0
+        if s["pos_by_biome"][b] > 0:
+            rec = (s["det_by_biome"][b] / s["pos_by_biome"][b]) * 100.0
+        per_biome[b] = {
+            "recall_pct": round(rec, 1),
+            "det_pos": s["det_by_biome"][b],
+            "total_pos": s["pos_by_biome"][b],
+            "fa_events": s["fa_by_biome"][b],
+            "fa_rate": round(s["fa_by_biome"][b] / s["minutes_by_biome"][b], 2),
+            "fp_frames": s["fp_by_biome"][b],
+        }
+
+    return {
+        "tile_recall_pct": round((s["detected"] / len(pos)) * 100.0, 1),
+        "tile_recall_ci": [round(rec_low, 1), round(rec_high, 1)],
+        "det_pos": s["detected"],
+        "total_pos": len(pos),
+        "parent_recall": f"{found}/{len(pos_parents)}",
+        "precision": round(s["frame"]["precision"], 3),
+        "recall": round(s["frame"]["recall"], 3),
+        "f1": round(s["frame"]["f1"], 3),
+        "f1_ci": [round(f1_low, 3), round(f1_high, 3)],
+        "fa_events": s["fa_events"],
+        "fa_rate": round(s["fa_events"] / test_min, 1),
+        "fp_frames": int(s["frame"]["fp"]),
+        "mean_delay_frames": round(s["mean_delay_frames"], 1),
+        "mean_delay_ms": round(s["mean_delay_ms"], 1),
+        "ep_f1s": s["episode_f1s"],
+        "per_biome": per_biome,
     }
 
-    print("=" * 80)
-    print(" VERIFIED LOCKED BENCHMARK RESULTS")
-    print("=" * 80)
-    print(f"Total test frames: {total_frames} ({total_minutes:.3f} min), Positive tiles: {total_pos_tiles}/24\n")
 
-    m1_fp_total = None
+def mean_std(values):
+    return round(float(np.mean(values)), 3), round(float(np.std(values, ddof=1)), 3)
+
+
+def main():
+    cache = load_cache()
+    test_fused = cache["test_fused_seqs"]
+    test_gt = cache["test_gt_seqs"]
+    test_biomes = cache["test_biomes"]
+    parents = test_parents()
+    test_min = minutes(test_fused)
+    if len(parents) != len(test_fused):
+        raise ValueError("data/splits/test_rgb.txt does not match the confidence cache")
+
     results = {}
+    decisions = {}
+    for key in METHODS:
+        label, filt, tau, runtime, state = METHODS[key]
+        dec = []
+        for s in test_fused:
+            dec.append(filt.decide(s, tau))
+        decisions[key] = dec
 
-    for key, (label, proc, tau, runtime_str, state_str) in methods.items():
-        decisions = [proc.decide(s, tau) for s in test_fused]
-        y_true = [v for s in test_gt for v in s]
-        y_pred = [v for s in decisions for v in s]
-        fm = calculate_frame_metrics(y_true, y_pred)
+        row = table_row(dec, test_gt, test_biomes, parents, test_min)
+        row["label"] = label
+        row["tau"] = tau
+        row["runtime_str"] = runtime
+        row["state_str"] = state
+        results[key] = row
 
-        # Tile recall
-        det_pos = sum(1 for i in pos_idxs if sum(p and g for p, g in zip(decisions[i], test_gt[i])) > 0)
-        tile_recall_pct = (det_pos / total_pos_tiles) * 100.0
+    # false alarm suppression ratio = FP frames removed relative to raw thresholding
+    m1_fp = results["M1"]["fp_frames"]
+    for key in results:
+        results[key]["fasr"] = round(((m1_fp - results[key]["fp_frames"]) / m1_fp) * 100.0, 1)
 
-        # FA events and FP frames
-        fa_events = sum(len(_extract_events([pv if gv == 0 else 0 for pv, gv in zip(decisions[i], test_gt[i])])) for i in range(len(test_gt)))
-        fa_rate = fa_events / total_minutes
-        fp_frames = int(fm["fp"])
+    train_fused = cache["train_fused_seqs"]
+    train_gt = cache["train_gt_seqs"]
+    for key in LEARNED:
+        label, kind, tau, runtime, state = LEARNED[key]
+        rows = []
+        for seed in SEEDS:
+            model = SequenceFilter(kind=kind, seed=seed)
+            model.fit(train_fused, train_gt, epochs=40, lr=0.01)
+            dec = []
+            for s in test_fused:
+                dec.append(model.decide(s, tau))
+            rows.append(table_row(dec, test_gt, test_biomes, parents, test_min))
 
-        if key == "M1":
-            m1_fp_total = fp_frames
-            fasr = 0.0
-        else:
-            fasr = ((m1_fp_total - fp_frames) / m1_fp_total) * 100.0
-
-        # Latency
-        delays = []
-        for i in pos_idxs:
-            res_lat = calculate_time_to_alarm(test_gt[i], decisions[i], fps=24.0)
-            delays.extend(res_lat["delays_frames"])
-        mean_delay_frames = float(np.mean(delays)) if delays else 0.0
-        mean_delay_ms = (mean_delay_frames / 24.0) * 1000.0
-
-        # Bootstrap CI on episode F1
-        ep_f1s = [calculate_frame_metrics(test_gt[i], decisions[i])["f1"] for i in range(len(test_gt))]
-        _, ci_low, ci_high = compute_bootstrap_ci(ep_f1s)
-
-        # Per-biome breakdown
-        per_biome = {}
-        for b in biomes:
-            b_idxs = [i for i, bm in enumerate(test_biomes) if bm == b]
-            b_dur_min = sum(len(test_fused[i]) for i in b_idxs) / (24 * 60)
-            b_pos_idxs = [i for i in b_idxs if sum(test_gt[i]) > 0]
-            b_det_pos = sum(1 for i in b_pos_idxs if sum(p and g for p, g in zip(decisions[i], test_gt[i])) > 0)
-            b_rec_pct = (b_det_pos / len(b_pos_idxs)) * 100.0 if b_pos_idxs else 0.0
-            b_fa_events = sum(len(_extract_events([pv if gv == 0 else 0 for pv, gv in zip(decisions[i], test_gt[i])])) for i in b_idxs)
-            b_fa_rate = b_fa_events / b_dur_min
-            b_fp_frames = sum(sum(p == 1 and g == 0 for p, g in zip(decisions[i], test_gt[i])) for i in b_idxs)
-            per_biome[b] = {
-                "recall_pct": round(b_rec_pct, 1),
-                "det_pos": b_det_pos,
-                "total_pos": len(b_pos_idxs),
-                "fa_events": b_fa_events,
-                "fa_rate": round(b_fa_rate, 2),
-                "fp_frames": b_fp_frames,
-            }
+        rec = []
+        f1 = []
+        fa = []
+        fp = []
+        delay = []
+        lows = []
+        highs = []
+        for r in rows:
+            # use the unrounded recall so the mean is not off by rounding
+            rec.append(r["det_pos"] / r["total_pos"] * 100.0)
+            f1.append(r["f1"])
+            fa.append(r["fa_events"] / test_min)
+            fp.append(r["fp_frames"])
+            delay.append(r["mean_delay_ms"])
+            lows.append(r["f1_ci"][0])
+            highs.append(r["f1_ci"][1])
+        mean_fp = float(np.mean(fp))
 
         results[key] = {
             "label": label,
             "tau": tau,
-            "tile_recall_pct": round(tile_recall_pct, 1),
-            "det_pos": det_pos,
-            "total_pos": total_pos_tiles,
-            "f1": round(fm["f1"], 3),
-            "ci_low": round(ci_low, 3),
-            "ci_high": round(ci_high, 3),
-            "fa_events": fa_events,
-            "fa_rate": round(fa_rate, 1),
-            "fp_frames": fp_frames,
-            "fasr": round(fasr, 1),
-            "mean_delay_frames": round(mean_delay_frames, 1),
-            "mean_delay_ms": round(mean_delay_ms, 1),
-            "runtime_str": runtime_str,
-            "state_str": state_str,
-            "ep_f1s": ep_f1s,
-            "per_biome": per_biome,
+            "seeds": SEEDS,
+            "tile_recall_pct": mean_std(rec),
+            "f1": mean_std(f1),
+            "f1_ci": [round(float(np.mean(lows)), 3), round(float(np.mean(highs)), 3)],
+            "fa_rate": mean_std(fa),
+            "fp_frames": mean_std(fp),
+            "fasr": round(((m1_fp - mean_fp) / m1_fp) * 100.0, 1),
+            "mean_delay_ms": round(float(np.mean(delay)), 1),
+            "parent_recall": [r["parent_recall"] for r in rows],
+            "runtime_str": runtime,
+            "state_str": state,
+            "seed_results": rows,
         }
 
-        print(f"[{key}] {label}")
-        print(f"  Val tau*: {tau:.2f}")
-        print(f"  Alert Recall: {tile_recall_pct:.1f}% ({det_pos}/{total_pos_tiles})")
-        print(f"  Frame F1: {fm['f1']:.3f} [{ci_low:.3f}, {ci_high:.3f}] (P={fm['precision']:.3f}, R={fm['recall']:.3f})")
-        print(f"  FA/min: {fa_rate:.1f} ({fa_events} events across {total_minutes:.2f} min)")
-        print(f"  FP Frames: {fp_frames} (FASR: {fasr:.1f}%)")
-        print(f"  Latency: {mean_delay_ms:.1f} ms ({mean_delay_frames:.1f} frames)")
-        print(f"  Per-biome:")
-        for b in biomes:
-            pb = per_biome[b]
-            print(f"    {b:7s}: Recall={pb['recall_pct']:5.1f}% ({pb['det_pos']}/{pb['total_pos']}) | FA/min={pb['fa_rate']:5.2f} | FP={pb['fp_frames']:2d}")
-        print()
+    # mission savings vs raw thresholding, every avoided false alert is one hover we skip
+    # hover 280 W for 20 s = 5.6 kJ, telemetry 1.2 kB per alert (45 kB with a thumbnail)
+    savings = {}
+    for key in ["M2", "M3", "M4"]:
+        savings[key] = {}
+        for b in BIOMES:
+            m1b = results["M1"]["per_biome"][b]
+            mb = results[key]["per_biome"][b]
+            avoided = m1b["fa_events"] - mb["fa_events"]
+            fp_avoided = m1b["fp_frames"] - mb["fp_frames"]
+            savings[key][b] = {
+                "fa_events_avoided": avoided,
+                "fp_frames_avoided": fp_avoided,
+                "fp_frames_avoided_pct": round(fp_avoided / m1b["fp_frames"] * 100.0, 1),
+                "bandwidth_kb": round(avoided * 1.2, 1),
+                "bandwidth_thumb_kb": round(avoided * 45.0, 1),
+                "battery_kj": round(avoided * 5.6, 1),
+                "flight_time_min": round(avoided * 5.6 * 1000.0 / 280.0 / 60.0, 1),
+            }
+    results["savings_vs_m1"] = savings
 
-    # Episode-level paired tests
-    m1_f1s = results["M1"]["ep_f1s"]
-    m2_f1s = results["M2"]["ep_f1s"]
-    diffs = [b - a for a, b in zip(m1_f1s, m2_f1s)]
-    w_res = stats.wilcoxon(diffs, alternative="two-sided")
-    print(f"Episode-Level Paired Wilcoxon Test (M2 vs M1):")
-    print(f"  Mean delta F1: {np.mean(diffs):+.4f}")
-    print(f"  Statistic W = {w_res.statistic:.2f}, p-value = {w_res.pvalue:.5f}")
+    # paired wilcoxon M2 vs M1 over the 24 test clips
+    tests = {}
+    for name in ["fp_frames", "fa_events", "f1"]:
+        a = []
+        b = []
+        for i in range(len(test_gt)):
+            if name == "fp_frames":
+                a.append(fp_frames(decisions["M1"][i], test_gt[i]))
+                b.append(fp_frames(decisions["M2"][i], test_gt[i]))
+            elif name == "fa_events":
+                a.append(count_false_alerts(test_gt[i], decisions["M1"][i]))
+                b.append(count_false_alerts(test_gt[i], decisions["M2"][i]))
+            else:
+                a.append(results["M1"]["ep_f1s"][i])
+                b.append(results["M2"]["ep_f1s"][i])
+        diffs = []
+        for i in range(len(a)):
+            diffs.append(b[i] - a[i])
+        res = stats.wilcoxon(diffs, alternative="two-sided")
+        tests[f"m2_vs_m1_{name}"] = {"W": float(res.statistic), "p_value": round(float(res.pvalue), 4)}
+    results["wilcoxon"] = tests
 
-    # Export to JSON
-    with open("runs/detect/locked_benchmark_results.json", "w") as f:
+    print(f"test: {sum(len(s) for s in test_fused)} frames, {test_min:.3f} min")
+    print()
+    print("method  tau   recall           parents  F1 [95% CI]              FA/min  FP   latency")
+    for key in ["M1", "M2", "M3", "M4"]:
+        r = results[key]
+        print(f"{key}      {r['tau']:.2f}  {r['tile_recall_pct']:5.1f}% [{r['tile_recall_ci'][0]}, {r['tile_recall_ci'][1]}]"
+              f"  {r['parent_recall']}     {r['f1']:.3f} [{r['f1_ci'][0]:.3f}, {r['f1_ci'][1]:.3f}]"
+              f"     {r['fa_rate']:4.1f}   {r['fp_frames']:3d}  {r['mean_delay_ms']} ms")
+    for key in ["M5", "M6"]:
+        r = results[key]
+        print(f"{key}      {r['tau']:.2f}  {r['tile_recall_pct'][0]:.1f} +- {r['tile_recall_pct'][1]:.1f}%"
+              f"           {r['f1'][0]:.3f} +- {r['f1'][1]:.3f} [{r['f1_ci'][0]:.3f}, {r['f1_ci'][1]:.3f}]"
+              f"  {r['fa_rate'][0]:.1f} +- {r['fa_rate'][1]:.1f}  {r['fp_frames'][0]:.0f}  {r['mean_delay_ms']} ms")
+    print()
+    print("per biome (Table IV)")
+    for b in BIOMES:
+        for key in ["M1", "M2", "M3", "M4"]:
+            pb = results[key]["per_biome"][b]
+            print(f"  {b:<7} {key}  {pb['det_pos']}/{pb['total_pos']}  FA/min {pb['fa_rate']:5.2f}  FP {pb['fp_frames']}")
+    print()
+    for name in tests:
+        print(f"wilcoxon {name}: W = {tests[name]['W']}, p = {tests[name]['p_value']}")
+
+    out = Path("runs/detect/locked_benchmark_results.json")
+    with open(out, "w") as f:
         json.dump(results, f, indent=2)
-    print("\nSaved locked results to runs/detect/locked_benchmark_results.json")
+    print()
+    print("----------------------")
+    print("Saved= ", out)
+    print("----------------------")
+
 
 if __name__ == "__main__":
     main()

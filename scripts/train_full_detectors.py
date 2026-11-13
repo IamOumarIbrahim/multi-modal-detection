@@ -1,106 +1,102 @@
-"""Full Training Pipeline for YOLO11n-RGB and YOLO11n-Thermal on Combined MMSAR Dataset."""
+#   MMSAR - step 5: train the two YOLO11n detectors (rgb and pseudo-thermal)
+#        Oumar Ibrahim U22200741
 
-import os
+# settings come from configs/hyperparams.yaml, data from configs/data_{rgb,thermal}.yaml
+# weights end up in runs/detect/yolo11n_{rgb,thermal}_60e/weights/best.pt
+# --smoke runs 2 epochs on rgb only to check the setup and time one epoch
+
+import json
 import sys
 import time
-import json
 from pathlib import Path
+
 import torch
+import yaml
 from ultralytics import YOLO
 
 
-def main():
-    print("=" * 80)
-    print(" STARTING FULL DUAL-DETECTOR TRAINING (YOLO11n-RGB & YOLO11n-Thermal)")
-    print("=" * 80)
-    print(f"PyTorch Version: {torch.__version__}")
-    print(f"CUDA Available:  {torch.cuda.is_available()}")
+ROOT = Path(__file__).resolve().parents[1]
+
+
+# ultralytics resolves a relative dataset "path" against its own datasets folder,
+# so write a copy of the dataset yaml with the absolute repo root filled in
+def dataset_yaml(mod):
+    with open(ROOT / f"configs/data_{mod}.yaml", encoding="utf-8") as f:
+        cfg = yaml.safe_load(f)
+    cfg["path"] = ROOT.as_posix()
+    out = ROOT / "runs" / "detect" / f"_resolved_data_{mod}.yaml"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with open(out, "w", encoding="utf-8") as f:
+        yaml.safe_dump(cfg, f, sort_keys=False)
+    return str(out)
+
+
+def train_one(mod, hp, epochs, project, name):
+    device = "cpu"
     if torch.cuda.is_available():
-        print(f"Device Name:     {torch.cuda.get_device_name(0)}")
-        print(f"Total VRAM:      {torch.cuda.get_device_properties(0).total_memory / (1024**3):.2f} GB")
+        device = 0
 
-    start_time_all = time.time()
+    model = YOLO(hp["weights"])
+    t0 = time.time()
+    model.train(
+        data=dataset_yaml(mod),
+        epochs=epochs,
+        batch=hp["batch"],
+        imgsz=hp["imgsz"],
+        device=device,
+        workers=hp["workers"],
+        project=project,
+        name=name,
+        exist_ok=True,
+        verbose=True,
+        cos_lr=hp["cos_lr"],
+        lr0=hp["lr0"],
+        lrf=hp["lrf"],
+        seed=hp["seed"],
+    )
+    return time.time() - t0
+
+
+def main():
+    with open("configs/hyperparams.yaml", encoding="utf-8") as f:
+        hp = yaml.safe_load(f)
+
+    print("torch", torch.__version__, " cuda:", torch.cuda.is_available())
+    if torch.cuda.is_available():
+        print("gpu:", torch.cuda.get_device_name(0))
+
+    if "--smoke" in sys.argv:
+        secs = train_one("rgb", hp, 2, "runs/smoke_test", "yolo11n_rgb_smoke")
+        print()
+        print("----------------------")
+        print("Seconds per epoch= ", round(secs / 2, 1))
+        print("Projected full run (h)= ", round(secs / 2 * hp["epochs"] / 3600, 2))
+        print("----------------------")
+        return
+
     summary = {}
+    total = 0
+    for mod in ["rgb", "thermal"]:
+        name = f"yolo11n_{mod}_{hp['epochs']}e"
+        secs = train_one(mod, hp, hp["epochs"], "runs/detect", name)
+        total += secs
+        summary[mod] = {
+            "training_time_seconds": round(secs, 2),
+            "training_time_minutes": round(secs / 60.0, 2),
+            "weights_path": str(Path(f"runs/detect/{name}/weights/best.pt").resolve()),
+        }
+        print(f"{mod} done in {secs / 60.0:.1f} min")
 
-    # -------------------------------------------------------------------------
-    # 1. Train YOLO11n-RGB (60 Epochs)
-    # -------------------------------------------------------------------------
-    print("\n" + "=" * 80)
-    print(" [PHASE 1/2] TRAINING YOLO11n-RGB (60 EPOCHS)")
-    print("=" * 80)
-    t0_rgb = time.time()
-    model_rgb = YOLO("yolo11n.pt")
-    results_rgb = model_rgb.train(
-        data="configs/data_rgb.yaml",
-        epochs=60,
-        batch=16,
-        imgsz=640,
-        device=0 if torch.cuda.is_available() else "cpu",
-        workers=2,
-        project="runs/detect",
-        name="yolo11n_rgb_60e",
-        exist_ok=True,
-        verbose=True,
-        cos_lr=True,
-        lr0=0.01,
-        lrf=0.01,
-    )
-    time_rgb = time.time() - t0_rgb
-    summary["rgb"] = {
-        "training_time_seconds": round(time_rgb, 2),
-        "training_time_minutes": round(time_rgb / 60.0, 2),
-        "weights_path": str(Path("runs/detect/yolo11n_rgb_60e/weights/best.pt").resolve()),
-    }
-    print(f"YOLO11n-RGB training completed in {time_rgb / 60.0:.2f} minutes.")
-
-    # -------------------------------------------------------------------------
-    # 2. Train YOLO11n-Thermal (60 Epochs)
-    # -------------------------------------------------------------------------
-    print("\n" + "=" * 80)
-    print(" [PHASE 2/2] TRAINING YOLO11n-Thermal (60 EPOCHS)")
-    print("=" * 80)
-    t0_thermal = time.time()
-    model_thermal = YOLO("yolo11n.pt")
-    results_thermal = model_thermal.train(
-        data="configs/data_thermal.yaml",
-        epochs=60,
-        batch=16,
-        imgsz=640,
-        device=0 if torch.cuda.is_available() else "cpu",
-        workers=2,
-        project="runs/detect",
-        name="yolo11n_thermal_60e",
-        exist_ok=True,
-        verbose=True,
-        cos_lr=True,
-        lr0=0.01,
-        lrf=0.01,
-    )
-    time_thermal = time.time() - t0_thermal
-    summary["thermal"] = {
-        "training_time_seconds": round(time_thermal, 2),
-        "training_time_minutes": round(time_thermal / 60.0, 2),
-        "weights_path": str(Path("runs/detect/yolo11n_thermal_60e/weights/best.pt").resolve()),
-    }
-    print(f"YOLO11n-Thermal training completed in {time_thermal / 60.0:.2f} minutes.")
-
-    # -------------------------------------------------------------------------
-    # Summary
-    # -------------------------------------------------------------------------
-    total_time = time.time() - start_time_all
-    summary["total_training_time_minutes"] = round(total_time / 60.0, 2)
-    summary["total_training_time_hours"] = round(total_time / 3600.0, 2)
-
-    os.makedirs("runs/detect", exist_ok=True)
-    summary_path = "runs/detect/training_summary.json"
-    with open(summary_path, "w") as f:
+    summary["total_training_time_minutes"] = round(total / 60.0, 2)
+    summary["total_training_time_hours"] = round(total / 3600.0, 2)
+    Path("runs/detect").mkdir(parents=True, exist_ok=True)
+    with open("runs/detect/training_summary.json", "w") as f:
         json.dump(summary, f, indent=2)
 
-    print("\n" + "=" * 80)
-    print(" ALL DETECTOR TRAINING FINISHED SUCCESSFULLY!")
-    print(f" Total wall clock: {total_time / 60.0:.2f} min ({total_time / 3600.0:.2f} hours)")
-    print(f" Summary saved to: {summary_path}")
-    print("=" * 80)
+    print()
+    print("----------------------")
+    print("Total training (h)= ", summary["total_training_time_hours"])
+    print("----------------------")
 
 
 if __name__ == "__main__":

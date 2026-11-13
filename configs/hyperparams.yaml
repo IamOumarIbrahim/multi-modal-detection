@@ -1,99 +1,16 @@
-# MMSAR Main Benchmark Run Protocol & Hyperparameters Configuration
-# Reference: YOLO11n Desert SAR Detection - Multi-Seed Rigor Protocol
+#   MMSAR - detector training settings (read by scripts/train_full_detectors.py)
+#        Oumar Ibrahim U22200741
 
-# -----------------------------------------------------------------------------
-# Training & Hardware Settings (Section 2)
-# -----------------------------------------------------------------------------
-batch: 16
+# these are the exact arguments the paper detectors were trained with
+# anything not listed here is left at the ultralytics default
+# (optimizer "auto" picks SGD for this run length, amp mixed precision is on)
+
+weights: yolo11n.pt     # COCO pretrained start point, same for both streams
 epochs: 60
-early_stopping: false
-patience: 20
-early_stopping_monitor: "val/loss"
+batch: 16
 imgsz: 640
-amp: false
-device: 0
-log_training_time: true
-log_peak_vram: true
-
-# -----------------------------------------------------------------------------
-# Multi-Seed Protocol (Section 2)
-# -----------------------------------------------------------------------------
-seeds:
-  - 42
-min_seeds: 1
-
-# -----------------------------------------------------------------------------
-# Optimizer & Learning Rate Schedule (Section 2)
-# -----------------------------------------------------------------------------
-optimizer: "SGD"
-momentum: 0.937
-weight_decay: 0.0005
+workers: 2
+cos_lr: true
 lr0: 0.01
 lrf: 0.01
-warmup_epochs: 3
-cos_lr: true
-
-# -----------------------------------------------------------------------------
-# Data Augmentations (Section 2)
-# -----------------------------------------------------------------------------
-mosaic: 1.0
-hsv_h: 0.015
-hsv_s: 0.7
-hsv_v: 0.4
-fliplr: 0.5
-
-# -----------------------------------------------------------------------------
-# Model Architectures & Experimental Arms (Section 3)
-# -----------------------------------------------------------------------------
-primary_model: "yolo11n.yaml"
-include_optional: false
-
-experimental_arms:
-  arm_1_main_model:
-    name: "Main Model"
-    model: "yolo11n.yaml"
-    curriculum: "full"
-    split: "rebalanced"
-    optimizer: "SGD"
-    tta: false
-    description: "YOLO11n, full curriculum, rebalanced split"
-
-# -----------------------------------------------------------------------------
-# Dataset & Split Protocol (Section 1)
-# -----------------------------------------------------------------------------
-dataset_split_protocol:
-  strategy: "Option B parent-video grouped episodic"
-  visual_leakage: 0
-  dynamic_allocation: true
-  floor_policy: "runtime_derived"
-  floor_derivation_rule: "max(2, floor(total_positive_episodes * val_ratio))"
-  val_test_priority_routing: true
-  balance_difficulty: true
-  difficulty_metrics:
-    - "target_presence_rate"
-    - "occlusion_contrast_flag"
-  archive_manifest: true
-  manifest_output_path: "data/splits/dataset_episodes_split.json"
-
-# -----------------------------------------------------------------------------
-# Evaluation, Diagnostics & Safeguards (Sections 4, 5 & 6)
-# -----------------------------------------------------------------------------
-evaluation:
-  multi_seed_aggregate: true
-  per_episode_breakdown: true
-  latency_sample_frames: 1000
-  bootstrap_ci_iterations: 1000
-  full_pr_curve: true
-  separate_fp_breakdown: true
-  qualitative_failure_gallery: true
-  empirical_iou_jitter_check: true
-  confidence_calibration_check: true
-  ood_spot_check: true
-
-safeguards:
-  no_hardcoded_metrics: true
-  duplicate_metric_diff_check: true
-  no_templated_verdict_strings: true
-  raw_val_log_archiving: true
-  raw_val_log_dir: "runs/detect"
-
+seed: 0                 # ultralytics default, written here so it is visible
